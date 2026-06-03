@@ -291,7 +291,17 @@ class BumdesSettingResource extends Resource
     public static function getPages(): array
     {
         return [
+            'index' => Pages\ListBumdesSettings::route('/'),
             'edit' => Pages\EditBumdesSetting::route('/{record}/edit'),
         ];
+    }
+
+    /**
+     * Redirect navigation to edit page directly
+     */
+    public static function getNavigationUrl(): string
+    {
+        $settings = BumdesSetting::getSettings();
+        return static::getUrl('edit', ['record' => $settings]);
     }
 }
