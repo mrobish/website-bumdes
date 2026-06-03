@@ -28,6 +28,12 @@ class VillageInfoResource extends Resource
     
     protected static ?string $navigationLabel = 'Info Desa';
     
+    // Sembunyikan dari sidebar - sudah digabung ke Identitas BUMDes
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+    
     protected static ?string $modelLabel = 'Informasi Desa';
     
     protected static ?string $navigationGroup = 'Pengaturan';
