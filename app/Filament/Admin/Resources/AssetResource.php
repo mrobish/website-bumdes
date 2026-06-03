@@ -18,7 +18,7 @@ class AssetResource extends Resource
     protected static ?string $navigationLabel = 'Aset Tetap';
     protected static ?string $pluralModelLabel = 'Daftar Aset';
     protected static ?string $modelLabel = 'Aset';
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {

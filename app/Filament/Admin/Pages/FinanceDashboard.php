@@ -19,6 +19,11 @@ class FinanceDashboard extends Page
     protected static ?int $navigationSort = 1;
     protected static string $view = 'filament.pages.finance-dashboard';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
     public ?string $bulan = null;
     public array $data = [];
     public int $draftCount = 0;

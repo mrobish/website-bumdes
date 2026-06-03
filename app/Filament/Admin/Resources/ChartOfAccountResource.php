@@ -20,9 +20,14 @@ class ChartOfAccountResource extends Resource
     
     protected static ?string $modelLabel = 'Chart of Accounts';
     
-    protected static ?string $navigationGroup = 'Keuangan';
+    protected static ?string $navigationGroup = '💰 Keuangan';
     
     protected static ?int $navigationSort = 1;
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
 
     public static function form(Form $form): Form
     {

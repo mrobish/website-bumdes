@@ -14,7 +14,7 @@ class BumdesStructureResource extends Resource
 {
     protected static ?string $model = BumdesStructure::class;
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
-    protected static ?string $navigationGroup = 'Pengaturan';
+    protected static ?string $navigationGroup = '⚙️ Pengaturan';
     protected static ?string $navigationLabel = 'Struktur Kepengurusan';
     protected static ?string $modelLabel = 'Struktur Kepengurusan';
     protected static ?string $pluralModelLabel = 'Struktur Kepengurusan';

@@ -36,7 +36,7 @@ class VillageInfoResource extends Resource
     
     protected static ?string $modelLabel = 'Informasi Desa';
     
-    protected static ?string $navigationGroup = 'Pengaturan';
+    protected static ?string $navigationGroup = '📂 Pengaturan';
     
     protected static ?int $navigationSort = 1;
 

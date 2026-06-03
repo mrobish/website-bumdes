@@ -22,9 +22,9 @@ class ProductResource extends Resource
     
     protected static ?string $modelLabel = 'Produk';
     
-    protected static ?string $navigationGroup = 'Konten';
+    protected static ?string $navigationGroup = '📰 Konten';
     
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {

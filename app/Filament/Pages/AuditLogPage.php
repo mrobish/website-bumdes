@@ -11,10 +11,10 @@ class AuditLogPage extends Page
 {
     protected static string $view = 'filament.pages.audit-log';
     protected static ?string $navigationIcon = 'heroicon-o-shield-check';
-    protected static ?string $navigationGroup = 'Laporan';
+    protected static ?string $navigationGroup = '👤 User & Akses';
     protected static ?string $navigationLabel = 'Audit Log';
     protected static ?string $title = 'Jejak Audit';
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 3;
 
     // Filters
     public string $dateFrom = '';

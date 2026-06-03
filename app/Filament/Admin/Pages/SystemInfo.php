@@ -10,7 +10,7 @@ class SystemInfo extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-server-stack';
 
-    protected static ?string $navigationGroup = '⚙️ System';
+    protected static ?string $navigationGroup = '🔧 Sistem';
 
     protected static ?string $navigationLabel = 'Informasi System';
 
@@ -18,7 +18,7 @@ class SystemInfo extends Page
 
     protected static ?string $slug = 'system-info';
 
-    protected static ?int $navigationSort = 100;
+    protected static ?int $navigationSort = 1;
 
     protected static string $view = 'filament.pages.system-info';
 

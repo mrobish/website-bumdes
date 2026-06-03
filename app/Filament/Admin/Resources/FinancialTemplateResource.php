@@ -19,7 +19,7 @@ class FinancialTemplateResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-arrow-up';
 
-    protected static ?string $navigationGroup = '💰 Keuangan';
+    protected static ?string $navigationGroup = '📊 Laporan';
 
     protected static ?string $navigationLabel = 'Template Laporan';
 
@@ -27,7 +27,7 @@ class FinancialTemplateResource extends Resource
 
     protected static ?string $modelLabel = 'Template';
 
-    protected static ?int $navigationSort = 8;
+    protected static ?int $navigationSort = 7;
 
     public static function form(Form $form): Form
     {

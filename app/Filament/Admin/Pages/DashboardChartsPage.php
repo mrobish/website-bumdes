@@ -16,11 +16,11 @@ use Illuminate\Support\Facades\DB;
 class DashboardChartsPage extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
-    protected static ?string $navigationGroup = 'Dashboard';
-    protected static ?string $navigationLabel = 'Dashboard';
+    protected static ?string $navigationGroup = '📊 Dashboard';
+    protected static ?string $navigationLabel = 'Dashboard Keuangan';
     protected static ?string $title = 'Dashboard Keuangan';
     protected static ?string $slug = 'dashboard-charts';
-    protected static ?int $navigationSort = 0;
+    protected static ?int $navigationSort = 1;
     protected static string $view = 'filament.pages.dashboard-charts';
 
     public ?string $period = null;

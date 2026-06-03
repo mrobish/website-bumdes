@@ -22,7 +22,7 @@ class FinancialUploadResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-arrow-up';
 
-    protected static ?string $navigationGroup = '💰 Keuangan';
+    protected static ?string $navigationGroup = '⚙️ Pengaturan';
 
     protected static ?string $navigationLabel = 'Upload Laporan';
 
@@ -30,7 +30,7 @@ class FinancialUploadResource extends Resource
 
     protected static ?string $modelLabel = 'Upload';
 
-    protected static ?int $navigationSort = 9;
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {

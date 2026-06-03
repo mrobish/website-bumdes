@@ -14,11 +14,11 @@ class BusinessUnitResource extends Resource
 {
     protected static ?string $model = BusinessUnit::class;
     protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
-    protected static ?string $navigationGroup = 'Manajemen';
+    protected static ?string $navigationGroup = '🏢 Manajemen';
     protected static ?string $navigationLabel = 'Unit Usaha';
     protected static ?string $modelLabel = 'Unit Usaha';
     protected static ?string $pluralModelLabel = 'Unit Usaha';
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {

@@ -8,6 +8,11 @@ use Filament\Widgets\FilamentInfoWidget;
 
 class Dashboard extends BaseDashboard
 {
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false; // Hidden - use DashboardChartsPage instead
+    }
+
     public function getWidgets(): array
     {
         return [

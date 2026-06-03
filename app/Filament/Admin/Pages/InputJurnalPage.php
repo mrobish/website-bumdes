@@ -20,7 +20,7 @@ class InputJurnalPage extends Page implements HasForms
 
     protected static string $view = 'filament.pages.input-jurnal';
     protected static ?string $navigationIcon = 'heroicon-o-pencil-square';
-    protected static ?string $navigationGroup = 'Keuangan';
+    protected static ?string $navigationGroup = '💰 Keuangan';
     protected static ?string $navigationLabel = 'Input Jurnal';
     protected static ?string $title = 'Input Jurnal';
     protected static ?int $navigationSort = 1;

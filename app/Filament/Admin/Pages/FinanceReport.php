@@ -16,11 +16,16 @@ class FinanceReport extends Page
     
     protected static ?string $title = 'Laporan Keuangan';
     
-    protected static ?string $navigationGroup = 'Keuangan';
+    protected static ?string $navigationGroup = '💰 Keuangan';
     
     protected static ?int $navigationSort = 4;
     
     protected static string $view = 'filament.admin.pages.finance-report';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
 
     public ?int $year = null;
     

@@ -17,11 +17,11 @@ class BackupPage extends Page implements HasForms
     use InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-down-tray';
-    protected static ?string $navigationGroup = 'Sistem';
+    protected static ?string $navigationGroup = '🔧 Sistem';
     protected static ?string $navigationLabel = 'Backup';
     protected static ?string $title = 'Backup & Restore';
     protected static ?string $slug = 'backup-restore';
-    protected static ?int $navigationSort = 90;
+    protected static ?int $navigationSort = 3;
     protected static string $view = 'filament.pages.backup';
 
     public array $backups = [];

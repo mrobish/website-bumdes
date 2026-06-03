@@ -15,11 +15,11 @@ class CapitalContributionResource extends Resource
 {
     protected static ?string $model = CapitalContribution::class;
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
-    protected static ?string $navigationGroup = 'Keuangan';
+    protected static ?string $navigationGroup = '💰 Keuangan';
     protected static ?string $navigationLabel = 'Penyertaan Modal';
     protected static ?string $modelLabel = 'Penyertaan Modal';
     protected static ?string $pluralModelLabel = 'Penyertaan Modal';
-    protected static ?int $navigationSort = 12;
+    protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
     {

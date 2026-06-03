@@ -15,13 +15,13 @@ class BudgetCategoryPage extends Page
 
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
-    protected static ?string $navigationGroup = 'Keuangan';
+    protected static ?string $navigationGroup = '⚙️ Master Data';
 
     protected static ?string $navigationLabel = 'Anggaran';
 
     protected static ?string $title = 'Anggaran per Kategori';
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 3;
 
     public int $year = 0;
 

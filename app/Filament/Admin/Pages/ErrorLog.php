@@ -15,7 +15,7 @@ class ErrorLog extends Page implements HasForms
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
-    protected static ?string $navigationGroup = '⚙️ System';
+    protected static ?string $navigationGroup = '🔧 Sistem';
 
     protected static ?string $navigationLabel = 'Error Log';
 
@@ -23,7 +23,7 @@ class ErrorLog extends Page implements HasForms
 
     protected static ?string $slug = 'error-log';
 
-    protected static ?int $navigationSort = 101;
+    protected static ?int $navigationSort = 2;
 
     protected static string $view = 'filament.pages.error-log';
 

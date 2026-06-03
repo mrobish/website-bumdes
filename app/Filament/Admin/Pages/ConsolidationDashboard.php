@@ -10,11 +10,16 @@ use Filament\Pages\Page;
 class ConsolidationDashboard extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
-    protected static ?string $navigationGroup = 'Keuangan';
+    protected static ?string $navigationGroup = '💰 Keuangan';
     protected static ?string $navigationLabel = 'Dashboard Konsolidasi';
     protected static ?string $title = 'Dashboard Konsolidasi BUMDes';
     protected static ?int $navigationSort = 4;
     protected static string $view = 'filament.admin.pages.consolidation-dashboard';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
 
     public $units = [];
     public $totalRevenue = 0;

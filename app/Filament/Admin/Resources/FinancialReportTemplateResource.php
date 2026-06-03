@@ -14,11 +14,16 @@ class FinancialReportTemplateResource extends Resource
 {
     protected static ?string $model = FinancialReportTemplate::class;
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
-    protected static ?string $navigationGroup = 'Keuangan';
+    protected static ?string $navigationGroup = '💰 Keuangan';
     protected static ?string $navigationLabel = 'Template Laporan';
     protected static ?string $modelLabel = 'Template Laporan';
     protected static ?string $pluralModelLabel = 'Template Laporan';
     protected static ?int $navigationSort = 8;
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
 
     public static function form(Form $form): Form
     {

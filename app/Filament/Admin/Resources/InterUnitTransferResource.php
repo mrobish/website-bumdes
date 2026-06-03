@@ -22,7 +22,7 @@ class InterUnitTransferResource extends Resource
     protected static ?string $navigationLabel = 'Transfer Antar Unit';
     protected static ?string $pluralModelLabel = 'Transfer Antar Unit';
     protected static ?string $modelLabel = 'Transfer';
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 5;
 
     public static function form(Form $form): Form
     {

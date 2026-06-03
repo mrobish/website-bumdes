@@ -13,7 +13,7 @@ class BumdesSettingResource extends Resource
 {
     protected static ?string $model = BumdesSetting::class;
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
-    protected static ?string $navigationGroup = 'Pengaturan';
+    protected static ?string $navigationGroup = '⚙️ Pengaturan';
     protected static ?string $navigationLabel = 'Identitas BUMDes';
     protected static ?string $modelLabel = 'Identitas BUMDes';
     protected static ?string $pluralModelLabel = 'Pengaturan BUMDes';

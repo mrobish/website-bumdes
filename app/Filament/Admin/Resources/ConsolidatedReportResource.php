@@ -14,11 +14,16 @@ class ConsolidatedReportResource extends Resource
 {
     protected static ?string $model = ConsolidatedReport::class;
     protected static ?string $navigationIcon = 'heroicon-o-document-chart-bar';
-    protected static ?string $navigationGroup = 'Keuangan';
+    protected static ?string $navigationGroup = '💰 Keuangan';
     protected static ?string $navigationLabel = 'Laporan Konsolidasi';
     protected static ?string $modelLabel = 'Laporan Konsolidasi';
     protected static ?string $pluralModelLabel = 'Laporan Konsolidasi';
     protected static ?int $navigationSort = 7;
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
 
     public static function form(Form $form): Form
     {

@@ -16,11 +16,16 @@ class InterAccountTransferResource extends Resource
 {
     protected static ?string $model = InterAccountTransfer::class;
     protected static ?string $navigationIcon = 'heroicon-o-arrows-right-left';
-    protected static ?string $navigationGroup = 'Keuangan';
+    protected static ?string $navigationGroup = '💰 Keuangan';
     protected static ?string $navigationLabel = 'Transfer Antar Unit (RAK)';
     protected static ?string $modelLabel = 'Transfer Antar Unit';
     protected static ?string $pluralModelLabel = 'Transfer Antar Unit';
     protected static ?int $navigationSort = 6;
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
 
     public static function form(Form $form): Form
     {

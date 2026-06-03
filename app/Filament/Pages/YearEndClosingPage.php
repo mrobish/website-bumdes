@@ -11,10 +11,10 @@ class YearEndClosingPage extends Page
 {
     protected static string $view = 'filament.pages.year-end-closing';
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
-    protected static ?string $navigationGroup = 'Keuangan';
+    protected static ?string $navigationGroup = '💰 Keuangan';
     protected static ?string $navigationLabel = 'Tutup Buku';
     protected static ?string $title = 'Tutup Buku Tahunan';
-    protected static ?int $navigationSort = 15;
+    protected static ?int $navigationSort = 7;
 
     // Step management
     public int $currentStep = 1;

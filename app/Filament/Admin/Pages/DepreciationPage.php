@@ -14,7 +14,7 @@ class DepreciationPage extends Page
     protected static ?string $navigationGroup = '💰 Keuangan';
     protected static ?string $navigationLabel = 'Depresiasi';
     protected static ?string $title = 'Depresiasi Aset';
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 6;
 
     public int $year = 0;
     public int $month = 0;
