@@ -731,16 +731,18 @@ class FinancialTemplateService
 
             ['name' => 'Realisasi Anggaran', 'slug' => 'realisasi-anggaran', 'description' => 'Realisasi anggaran per program', 'type' => 'realisasi_anggaran', 'frequency' => 'bulanan',
              'columns' => json_encode([
-                ['key' => 'kode_akun', 'name' => 'Kode Akun', 'type' => 'text', 'width' => 15],
-                ['key' => 'uraian', 'name' => 'Uraian (*)', 'type' => 'text', 'width' => 35, 'rules' => ['required']],
+                ['key' => 'kode_akun', 'name' => 'Kode Akun (*)', 'type' => 'text', 'width' => 15, 'rules' => ['required']],
+                ['key' => 'nama_akun', 'name' => 'Nama Akun', 'type' => 'text', 'width' => 28],
+                ['key' => 'uraian', 'name' => 'Uraian (*)', 'type' => 'text', 'width' => 30, 'rules' => ['required']],
                 ['key' => 'anggaran', 'name' => 'Anggaran (Rp) (*)', 'type' => 'number', 'width' => 20, 'rules' => ['required', 'numeric']],
                 ['key' => 'realisasi', 'name' => 'Realisasi (Rp) (*)', 'type' => 'number', 'width' => 20, 'rules' => ['required', 'numeric']],
                 ['key' => 'persentase', 'name' => 'Persentase (%)', 'type' => 'number', 'width' => 15],
                 ['key' => 'selisih', 'name' => 'Selisih (Rp)', 'type' => 'number', 'width' => 18],
              ]),
              'sample_data' => json_encode([
-                ['kode_akun' => '5101', 'uraian' => 'Beban gaji karyawan', 'anggaran' => 15000000, 'realisasi' => 15000000, 'persentase' => 0, 'selisih' => 0],
-                ['kode_akun' => '5103', 'uraian' => 'Beban listrik', 'anggaran' => 2400000, 'realisasi' => 2000000, 'persentase' => 0, 'selisih' => 0],
+                ['kode_akun' => '5101', 'nama_akun' => '', 'uraian' => 'Beban gaji karyawan', 'anggaran' => 15000000, 'realisasi' => 15000000, 'persentase' => 0, 'selisih' => 0],
+                ['kode_akun' => '5103', 'nama_akun' => '', 'uraian' => 'Beban listrik', 'anggaran' => 2400000, 'realisasi' => 2000000, 'persentase' => 0, 'selisih' => 0],
+                ['kode_akun' => '5104', 'nama_akun' => '', 'uraian' => 'Beban air', 'anggaran' => 1200000, 'realisasi' => 1000000, 'persentase' => 0, 'selisih' => 0],
              ]), 'sort_order' => 7],
 
             ['name' => 'CAT (Catatan Atas Laporan Keuangan)', 'slug' => 'cat-laporan', 'description' => 'Catatan atas laporan keuangan SAK EMKM', 'type' => 'cat', 'frequency' => 'tahunan',
