@@ -19,7 +19,7 @@
         {{-- Database Info --}}
         <x-filament::section>
             <x-slot name="heading">
-                <x-heroicon-o-database class="w-5 h-5 mr-2 inline" />
+                <x-heroicon-o-server-stack class="w-5 h-5 mr-2 inline" />
                 Database
             </x-slot>
             <div class="space-y-2">
@@ -35,7 +35,7 @@
         {{-- Disk Info --}}
         <x-filament::section>
             <x-slot name="heading">
-                <x-heroicon-o-hard-drive class="w-5 h-5 mr-2 inline" />
+                <x-heroicon-o-server-stack class="w-5 h-5 mr-2 inline" />
                 Disk Space
             </x-slot>
             <div class="space-y-2">
