@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Asset;
 use App\Models\DepreciationLog;
 use App\Models\JournalEntry;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 
 class DepreciationService
@@ -22,7 +23,7 @@ class DepreciationService
         $processed = 0;
 
         foreach ($assets as $asset) {
-            $depreciableAmount = $asset->purchase_price - $asset->salvage_value;
+            $depreciableAmount = $asset->purchase_price - ($asset->salvage_value ?? 0);
             $accumulated = $asset->accumulated_depreciation ?? 0;
             
             if ($accumulated >= $depreciableAmount) {
@@ -32,7 +33,7 @@ class DepreciationService
 
             $monthlyDepreciation = $depreciableAmount / $asset->useful_life_months;
 
-            // Pro-rate if purchase month
+            // Pro-rate if purchase day > 15
             $purchaseDate = \Carbon\Carbon::parse($asset->purchase_date);
             if ($purchaseDate->year == $year && $purchaseDate->month == $month && $purchaseDate->day > 15) {
                 $daysInMonth = $purchaseDate->daysInMonth;
@@ -42,12 +43,28 @@ class DepreciationService
 
             $remainingDepreciable = $depreciableAmount - $accumulated;
             $monthlyDepreciation = min($monthlyDepreciation, $remainingDepreciable);
+            $monthlyDepreciation = round($monthlyDepreciation, 2);
 
             if ($monthlyDepreciation <= 0) continue;
 
             DB::transaction(function () use ($asset, $monthlyDepreciation, $year, $month) {
-                $journalEntry = JournalEntry::create([
-                    'transaction_id' => null,
+                // 1. Create transaction record first
+                $transaction = Transaction::create([
+                    'transaction_date' => "$year-$month-28",
+                    'type' => 'expense',
+                    'amount' => $monthlyDepreciation,
+                    'description' => "Depresiasi Aset: {$asset->name}",
+                    'reference_number' => "DEP-$year-" . str_pad($month, 2, '0', STR_PAD_LEFT) . "-" . $asset->asset_code,
+                    'unit_id' => $asset->business_unit_id,
+                    'account_id' => 1, // Kas (simplified)
+                    'category_id' => null,
+                    'status' => 'posted',
+                    'created_by' => 1,
+                ]);
+
+                // 2. Create journal entries with transaction_id
+                JournalEntry::create([
+                    'transaction_id' => $transaction->id,
                     'entry_date' => "$year-$month-28",
                     'entry_type' => 'depreciation',
                     'account_code' => '6104',
@@ -65,7 +82,7 @@ class DepreciationService
                 };
 
                 JournalEntry::create([
-                    'transaction_id' => null,
+                    'transaction_id' => $transaction->id,
                     'entry_date' => "$year-$month-28",
                     'entry_type' => 'depreciation',
                     'account_code' => $contraCode,
@@ -76,17 +93,19 @@ class DepreciationService
                     'fiscal_year' => $year,
                 ]);
 
+                // 3. Update asset accumulated depreciation
                 $newAccumulated = $accumulated + $monthlyDepreciation;
                 $asset->update([
                     'accumulated_depreciation' => $newAccumulated,
                     'current_book_value' => $asset->purchase_price - $newAccumulated,
                 ]);
 
+                // 4. Log depreciation
                 DepreciationLog::create([
                     'asset_id' => $asset->id,
                     'run_date' => "$year-$month-28",
                     'depreciation_amount' => $monthlyDepreciation,
-                    'journal_entry_id' => $journalEntry->id,
+                    'journal_entry_id' => $transaction->id,
                     'fiscal_year' => $year,
                 ]);
             });
