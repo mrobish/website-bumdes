@@ -21,10 +21,11 @@ class DepreciationService
 
         $totalDepreciation = 0;
         $processed = 0;
+        $details = [];
 
         foreach ($assets as $asset) {
             $depreciableAmount = $asset->purchase_price - ($asset->salvage_value ?? 0);
-            $accumulated = $asset->accumulated_depreciation ?? 0;
+            $accumulated = $asset->getAccumulatedDepreciation();
             
             if ($accumulated >= $depreciableAmount) {
                 $asset->update(['status' => 'fully_depreciated']);
@@ -47,7 +48,7 @@ class DepreciationService
 
             if ($monthlyDepreciation <= 0) continue;
 
-            $beginningBookValue = $asset->current_book_value ?? ($asset->purchase_price - $accumulated);
+            $beginningBookValue = $asset->getCurrentBookValue();
             $newAccumulated = $accumulated + $monthlyDepreciation;
             $endingBookValue = $asset->purchase_price - $newAccumulated;
             $period = $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT);
@@ -57,7 +58,7 @@ class DepreciationService
                 $transaction = Transaction::create([
                     'transaction_number' => "DEP-$period-" . substr($asset->asset_code, -3),
                     'transaction_date' => "$year-$month-28",
-                    'type' => 'adjustment',
+                    'type' => 'expense',
                     'amount' => $monthlyDepreciation,
                     'description' => "Depresiasi Aset: {$asset->name}",
                     'reference_number' => "DEP-$period-" . $asset->asset_code,
@@ -99,13 +100,7 @@ class DepreciationService
                     'fiscal_year' => $year,
                 ]);
 
-                // 4. Update asset
-                $asset->update([
-                    'accumulated_depreciation' => $newAccumulated,
-                    'current_book_value' => $endingBookValue,
-                ]);
-
-                // 5. Log depreciation
+                // 4. Log depreciation (NOT updating asset directly - method calculates from log)
                 AssetDepreciation::create([
                     'asset_id' => $asset->id,
                     'depreciation_date' => "$year-$month-28",
@@ -115,13 +110,24 @@ class DepreciationService
                     'accumulated_depreciation' => $newAccumulated,
                     'ending_book_value' => $endingBookValue,
                     'journal_entry_id' => $transaction->id,
+                    'status' => 'posted',
                 ]);
             });
 
             $totalDepreciation += $monthlyDepreciation;
             $processed++;
+            $details[] = [
+                'asset' => $asset->name,
+                'depreciation' => $monthlyDepreciation,
+                'accumulated' => $accumulated + $monthlyDepreciation,
+                'book_value' => $endingBookValue,
+            ];
         }
 
-        return ['processed' => $processed, 'total_depreciation' => $totalDepreciation];
+        return [
+            'processed' => $processed, 
+            'total_depreciation' => $totalDepreciation,
+            'details' => $details,
+        ];
     }
 }

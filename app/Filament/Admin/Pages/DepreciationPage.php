@@ -36,12 +36,12 @@ class DepreciationPage extends Page
             ->get()
             ->map(fn ($asset) => [
                 'name' => $asset->name,
-                'unit' => $asset->unit->name ?? '-',
+                'unit' => $asset->businessUnit->name ?? '-',
                 'purchase_price' => $asset->purchase_price,
                 'useful_life' => $asset->useful_life_months,
-                'accumulated' => $asset->accumulated_depreciation,
-                'book_value' => $asset->current_book_value,
-                'monthly' => ($asset->purchase_price - $asset->salvage_value) / max($asset->useful_life_months, 1),
+                'accumulated' => $asset->getAccumulatedDepreciation(),
+                'book_value' => $asset->getCurrentBookValue(),
+                'monthly' => $asset->getMonthlyDepreciation(),
             ])
             ->toArray();
 

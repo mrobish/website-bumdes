@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CapitalContribution extends Model
@@ -54,6 +55,7 @@ class CapitalContribution extends Model
     public function businessUnit(): BelongsTo { return $this->belongsTo(BusinessUnit::class); }
     public function creator(): BelongsTo { return $this->belongsTo(User::class, 'created_by'); }
     public function approver(): BelongsTo { return $this->belongsTo(User::class, 'approved_by'); }
+    public function loanPayments(): HasMany { return $this->hasMany(LoanPayment::class); }
 
     // Scopes
     public function scopeActive($query) { return $query->whereIn('status', ['active', 'received', 'disbursed']); }
