@@ -20,29 +20,30 @@ class FinancialTemplateService
 
         // ── Ambil data BUMDes dari settings ──
         $bumdes = BumdesSetting::first();
-        $namaBumdes = strtoupper($bumdes->bumdes_name ?? $bumdes->village_name ?? 'BUMDes');
-        $alamat = trim(($bumdes->bumdes_address ?? '') . ', Desa ' . ($bumdes->village_name ?? '') . ', Kec. ' . ($bumdes->bumdes_district ?? '') . ', Kab. ' . ($bumdes->bumdes_regency ?? '') . ', Prov. ' . ($bumdes->bumdes_province ?? ''));
+        $kop1 = $bumdes->pdf_header_line1 ?? '';
+        $kop2 = $bumdes->pdf_header_line2 ?? '';
+        $kop3 = $bumdes->pdf_header_line3 ?? strtoupper($bumdes->bumdes_name ?? 'BUMDes');
+        $alamat = $bumdes->pdf_footer_text ?? trim(($bumdes->village_name ?? '') . ', Kec. ' . ($bumdes->bumdes_district ?? '') . ', Kab. ' . ($bumdes->bumdes_regency ?? '') . ', Prov. ' . ($bumdes->bumdes_province ?? ''));
         $email = $bumdes->email ?? '';
         $columns = is_string($template->columns) ? json_decode($template->columns, true) : ($template->columns ?? []);
         $lastCol = $this->getColumnLetter(count($columns));
         $headerRow = 5;
 
-        // ── KOP SURAT: Nama BUMDes, Alamat, Email ──
-        $sheet->setCellValue('A1', $namaBumdes);
-        $sheet->getStyle('A1')->applyFromArray(['font' => ['bold' => true, 'size' => 14], 'alignment' => ['horizontal' => 'center']]);
+        // ── KOP SURAT dari form Kop PDF ──
+        $sheet->setCellValue('A1', $kop1);
+        $sheet->getStyle('A1')->applyFromArray(['font' => ['bold' => true, 'size' => 12], 'alignment' => ['horizontal' => 'center']]);
         $sheet->mergeCells("A1:{$lastCol}1");
 
-        $sheet->setCellValue('A2', $alamat);
-        $sheet->getStyle('A2')->applyFromArray(['font' => ['size' => 10], 'alignment' => ['horizontal' => 'center']]);
+        $sheet->setCellValue('A2', $kop2);
+        $sheet->getStyle('A2')->applyFromArray(['font' => ['bold' => true, 'size' => 11], 'alignment' => ['horizontal' => 'center']]);
         $sheet->mergeCells("A2:{$lastCol}2");
 
-        $sheet->setCellValue('A3', $email);
-        $sheet->getStyle('A3')->applyFromArray(['font' => ['size' => 10], 'color' => ['rgb' => '3498DB'], 'alignment' => ['horizontal' => 'center']]);
+        $sheet->setCellValue('A3', $kop3);
+        $sheet->getStyle('A3')->applyFromArray(['font' => ['bold' => true, 'size' => 14, 'underline' => 'single'], 'alignment' => ['horizontal' => 'center']]);
         $sheet->mergeCells("A3:{$lastCol}3");
 
-        // Garis pemisah
-        $sheet->setCellValue('A4', str_repeat('─', 80));
-        $sheet->getStyle('A4')->applyFromArray(['font' => ['size' => 8], 'alignment' => ['horizontal' => 'center']]);
+        $sheet->setCellValue('A4', $alamat . ($email ? " | Email: {$email}" : ''));
+        $sheet->getStyle('A4')->applyFromArray(['font' => ['size' => 9], 'alignment' => ['horizontal' => 'center']]);
         $sheet->mergeCells("A4:{$lastCol}4");
 
         // ── JUDUL LAPORAN ──
