@@ -22,6 +22,8 @@ class FinancialTransaction extends Model
         'description',
         'reference',
         'attachment',
+        'business_unit_id',
+        'attachments',
         'created_by',
         'approved_by',
         'status',
@@ -31,6 +33,7 @@ class FinancialTransaction extends Model
     protected $casts = [
         'transaction_date' => 'date',
         'amount' => 'decimal:2',
+        'attachments' => 'array',
     ];
 
     protected static function booted(): void
@@ -72,6 +75,12 @@ class FinancialTransaction extends Model
         return $this->belongsTo(ChartOfAccount::class, 'counter_account_id');
     }
 
+    // Relationship: business unit
+    public function businessUnit(): BelongsTo
+    {
+        return $this->belongsTo(BusinessUnit::class);
+    }
+
     // Relationship: creator
     public function creator(): BelongsTo
     {
@@ -106,6 +115,12 @@ class FinancialTransaction extends Model
     public function scopeCurrentYear($query)
     {
         return $query->whereYear('transaction_date', now()->year);
+    }
+
+    // Scope: by business unit
+    public function scopeForUnit($query, int $unitId)
+    {
+        return $query->where('business_unit_id', $unitId);
     }
 
     // Get formatted amount

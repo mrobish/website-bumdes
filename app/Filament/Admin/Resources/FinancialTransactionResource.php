@@ -4,6 +4,7 @@ namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\FinancialTransactionResource\Pages;
 use App\Models\FinancialTransaction;
+use App\Models\BusinessUnit;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -50,6 +51,17 @@ class FinancialTransactionResource extends Resource
                             ->disabled()
                             ->dehydrated(false),
                     ])->columns(3),
+                
+                Forms\Components\Section::make('Unit Usaha')
+                    ->schema([
+                        Forms\Components\Select::make('business_unit_id')
+                            ->label('Unit Usaha')
+                            ->options(BusinessUnit::active()->pluck('name', 'id'))
+                            ->required()
+                            ->default(1) // Default ke Induk
+                            ->searchable()
+                            ->preload(),
+                    ]),
                 
                 Forms\Components\Section::make('Akun')
                     ->schema([
@@ -107,6 +119,13 @@ class FinancialTransactionResource extends Resource
                             ->directory('transactions')
                             ->maxSize(5120),
                         
+                        Forms\Components\FileUpload::make('attachments')
+                            ->label('Bukti Nota/Struk')
+                            ->multiple()
+                            ->maxFiles(5)
+                            ->image()
+                            ->directory('transactions/attachments'),
+                        
                         Forms\Components\Textarea::make('notes')
                             ->label('Catatan')
                             ->rows(2),
@@ -127,6 +146,14 @@ class FinancialTransactionResource extends Resource
                     ->label('Tanggal')
                     ->date('d M Y')
                     ->sortable(),
+                
+                Tables\Columns\TextColumn::make('businessUnit.name')
+                    ->label('Unit')
+                    ->badge()
+                    ->color(fn (?string $state): string => match ($state) {
+                        'BUMDes Induk (Pusat)' => 'warning',
+                        default => 'success',
+                    }),
                 
                 Tables\Columns\TextColumn::make('type')
                     ->label('Tipe')
@@ -159,6 +186,9 @@ class FinancialTransactionResource extends Resource
                     ->label('Oleh'),
             ])
             ->filters([
+                Tables\Filters\SelectFilter::make('business_unit_id')
+                    ->label('Unit Usaha')
+                    ->options(BusinessUnit::pluck('name', 'id')),
                 Tables\Filters\SelectFilter::make('type')
                     ->options([
                         'pemasukan' => 'Pemasukan',
