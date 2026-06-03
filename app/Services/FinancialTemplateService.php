@@ -21,7 +21,7 @@ class FinancialTemplateService
         // ── Ambil data BUMDes dari settings ──
         $bumdes = BumdesSetting::first();
         $namaBumdes = strtoupper($bumdes->bumdes_name ?? $bumdes->village_name ?? 'BUMDes');
-        $alamat = trim(($bumdes->bumdes_address ?? '') . ', Kec. ' . ($bumdes->bumdes_district ?? '') . ', Kab. ' . ($bumdes->bumdes_regency ?? '') . ', Prov. ' . ($bumdes->bumdes_province ?? ''));
+        $alamat = trim(($bumdes->bumdes_address ?? '') . ', Desa ' . ($bumdes->village_name ?? '') . ', Kec. ' . ($bumdes->bumdes_district ?? '') . ', Kab. ' . ($bumdes->bumdes_regency ?? '') . ', Prov. ' . ($bumdes->bumdes_province ?? ''));
         $email = $bumdes->email ?? '';
         $columns = is_string($template->columns) ? json_decode($template->columns, true) : ($template->columns ?? []);
         $lastCol = $this->getColumnLetter(count($columns));
