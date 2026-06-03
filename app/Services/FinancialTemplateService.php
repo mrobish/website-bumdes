@@ -155,8 +155,10 @@ class FinancialTemplateService
         $this->createPetunjukSheet($spreadsheet, $template, $akunItems);
 
         $fileName = 'templates/' . $template->slug . '-template.xlsx';
+        $filePath = storage_path('app/' . $fileName);
         $writer = new Xlsx($spreadsheet);
-        $writer->save(storage_path('app/' . $fileName));
+        $writer->save($filePath);
+        chmod($filePath, 0666);
         return $fileName;
     }
 
