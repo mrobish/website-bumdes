@@ -65,7 +65,7 @@ class FinancialTemplateService
         $sheet->mergeCells('A3:' . $this->getLastColumn($template) . '3');
 
         // Set headers
-        $columns = $template->columns ?? [];
+        $columns = is_string($template->columns) ? json_decode($template->columns, true) : ($template->columns ?? []);
         $headerRow = 5;
         foreach ($columns as $col => $header) {
             $cell = $this->getColumnLetter($col + 1) . $headerRow;
@@ -75,7 +75,7 @@ class FinancialTemplateService
         }
 
         // Add sample data if exists
-        $sampleData = $template->sample_data ?? [];
+        $sampleData = is_string($template->sample_data) ? json_decode($template->sample_data, true) : ($template->sample_data ?? []);
         if (!empty($sampleData)) {
             $sampleRow = $headerRow + 1;
             foreach ($sampleData as $row) {
@@ -146,7 +146,7 @@ class FinancialTemplateService
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(storage_path('app/' . $filePath));
         $sheet = $spreadsheet->getActiveSheet();
 
-        $columns = $template->columns ?? [];
+        $columns = is_string($template->columns) ? json_decode($template->columns, true) : ($template->columns ?? []);
         $data = [];
         $errors = [];
         $startRow = 6; // Skip header rows
@@ -233,7 +233,7 @@ class FinancialTemplateService
      */
     protected function getLastColumn(FinancialTemplate $template): string
     {
-        $columns = $template->columns ?? [];
+        $columns = is_string($template->columns) ? json_decode($template->columns, true) : ($template->columns ?? []);
         return $this->getColumnLetter(count($columns));
     }
 

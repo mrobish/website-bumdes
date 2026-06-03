@@ -135,7 +135,7 @@ class FinancialUploadResource extends Resource
                     ->icon('heroicon-o-check-circle')
                     ->color('info')
                     ->requiresConfirmation()
-                    ->modalTitle('Validasi Laporan')
+                    ->modalHeading('Validasi Laporan')
                     ->modalDescription('Yakin ingin memvalidasi laporan ini?')
                     ->visible(fn ($record) => $record->status === 'pending')
                     ->action(function ($record) {
@@ -155,7 +155,7 @@ class FinancialUploadResource extends Resource
                     ->icon('heroicon-o-check-badge')
                     ->color('success')
                     ->requiresConfirmation()
-                    ->modalTitle('Setujui Laporan')
+                    ->modalHeading('Setujui Laporan')
                     ->modalDescription('Yakin ingin menyetujui laporan ini?')
                     ->visible(fn ($record) => $record->status === 'validated')
                     ->action(function ($record) {
@@ -175,7 +175,7 @@ class FinancialUploadResource extends Resource
                     ->icon('heroicon-o-x-circle')
                     ->color('danger')
                     ->requiresConfirmation()
-                    ->modalTitle('Tolak Laporan')
+                    ->modalHeading('Tolak Laporan')
                     ->modalDescription('Yakin ingin menolak laporan ini?')
                     ->visible(fn ($record) => in_array($record->status, ['pending', 'validated']))
                     ->action(function ($record) {
