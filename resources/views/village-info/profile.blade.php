@@ -438,4 +438,66 @@
         @endif
     </div>
 </section>
+
+<!-- Peta Interaktif -->
+@if($villageInfo && ($villageInfo->latitude || $villageInfo->coordinates))
+<section class="bg-white py-12">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden" data-aos="fade-up">
+            <div class="bg-primary-600 text-white p-6">
+                <h2 class="text-2xl font-bold"><i class="fas fa-map-marked-alt mr-3"></i>Peta Desa</h2>
+            </div>
+            <div class="p-6">
+                <div id="village-map" class="w-full h-96 rounded-xl z-0"></div>
+                <div class="mt-4 flex flex-wrap gap-4 text-sm text-gray-600">
+                    @if($villageInfo->address)
+                        <span><i class="fas fa-map-marker-alt mr-2 text-primary-600"></i>{{ $villageInfo->address }}</span>
+                    @endif
+                    @if($villageInfo->latitude && $villageInfo->longitude)
+                        <span><i class="fas fa-crosshairs mr-2 text-primary-600"></i>Koordinat: {{ $villageInfo->latitude }}, {{ $villageInfo->longitude }}</span>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Koordinat desa (default: Aceh Selatan jika tidak ada data)
+        const lat = {{ $villageInfo->latitude ?? 3.2951 }};
+        const lng = {{ $villageInfo->longitude ?? 97.1223 }};
+        const villageName = '{{ $villageInfo->village_name ?? "Desa" }}';
+        const address = '{{ $villageInfo->address ?? "" }}';
+        
+        // Inisialisasi peta
+        const map = L.map('village-map').setView([lat, lng], 14);
+        
+        // Tile layer OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        // Marker desa
+        const marker = L.marker([lat, lng]).addTo(map);
+        marker.bindPopup(`
+            <div class="text-center p-2">
+                <strong class="text-lg">${villageName}</strong><br>
+                <span class="text-sm text-gray-600">${address}</span>
+            </div>
+        `).openPopup();
+        
+        // Custom icon
+        const villageIcon = L.divIcon({
+            html: '<div class="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center shadow-lg"><i class="fas fa-home text-white"></i></div>',
+            iconSize: [40, 40],
+            iconAnchor: [20, 40],
+            className: ''
+        });
+        marker.setIcon(villageIcon);
+    });
+</script>
+@endpush
+@endif
 @endsection

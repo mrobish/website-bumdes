@@ -80,13 +80,13 @@
 <!-- Quick Access Section -->
 <section class="bg-gray-50 py-16">
     <div class="max-w-7xl mx-auto px-4">
-        <div class="text-center mb-12">
+        <div class="text-center mb-12" data-aos="fade-up">
             <h2 class="text-3xl font-bold text-gray-800 mb-4">Layanan Kami</h2>
             <p class="text-gray-600 max-w-2xl mx-auto">Akses informasi dan layanan desa dengan mudah</p>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <a href="/profil-desa" class="bg-white rounded-xl p-6 shadow-md card-hover text-center">
+            <a href="/profil-desa" class="bg-white rounded-xl p-6 shadow-md card-hover text-center" data-aos="fade-up" data-aos-delay="100">
                 <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <i class="fas fa-building text-2xl text-primary-600"></i>
                 </div>
@@ -94,7 +94,7 @@
                 <p class="text-sm text-gray-600">Informasi lengkap tentang desa</p>
             </a>
             
-            <a href="/bumdes" class="bg-white rounded-xl p-6 shadow-md card-hover text-center">
+            <a href="/bumdes" class="bg-white rounded-xl p-6 shadow-md card-hover text-center" data-aos="fade-up" data-aos-delay="200">
                 <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <i class="fas fa-store text-2xl text-green-600"></i>
                 </div>
@@ -126,7 +126,7 @@
 <section class="bg-white py-16">
     <div class="max-w-7xl mx-auto px-4">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
+            <div data-aos="fade-right">
                 <div class="inline-block px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-medium mb-4">
                     Tentang Desa
                 </div>
@@ -141,7 +141,7 @@
                     </div>
                 @endif
             </div>
-            <div class="relative">
+            <div class="relative" data-aos="fade-left">
                 @if($villageInfo->banner_path)
                     <img src="{{ asset('storage/' . $villageInfo->banner_path) }}" alt="{{ $villageInfo->village_name }}" class="rounded-xl shadow-lg w-full">
                 @else
@@ -160,7 +160,7 @@
 <section class="bg-gradient-to-r from-primary-800 to-primary-600 py-16">
     <div class="max-w-7xl mx-auto px-4">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div class="text-white">
+            <div class="text-white" data-aos="fade-right">
                 <div class="inline-block px-4 py-2 bg-white/10 rounded-full text-sm mb-4">
                     <i class="fas fa-store mr-2"></i> BUMDes
                 </div>
@@ -185,7 +185,7 @@
                     Pelajari Lebih Lanjut <i class="fas fa-arrow-right ml-2"></i>
                 </a>
             </div>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-2 gap-4" data-aos="fade-left">
                 @if($villageInfo && $villageInfo->bumdes_initial_capital)
                     <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center card-hover">
                         <i class="fas fa-coins text-3xl text-accent-400 mb-3"></i>
@@ -209,14 +209,14 @@
 @if($villageInfo && ($villageInfo->tourism_potential || $villageInfo->agriculture_potential || $villageInfo->fishery_potential))
 <section class="bg-gray-50 py-16">
     <div class="max-w-7xl mx-auto px-4">
-        <div class="text-center mb-12">
+        <div class="text-center mb-12" data-aos="fade-up">
             <h2 class="text-3xl font-bold text-gray-800 mb-4">Potensi Unggulan</h2>
             <p class="text-gray-600 max-w-2xl mx-auto">Sumber daya alam dan keunggulan desa kami</p>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @if($villageInfo->tourism_potential)
-                <div class="bg-white rounded-xl overflow-hidden shadow-md card-hover">
+                <div class="bg-white rounded-xl overflow-hidden shadow-md card-hover" data-aos="fade-up" data-aos-delay="100">
                     <div class="h-48 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
                         <i class="fas fa-mountain text-6xl text-white/80"></i>
                     </div>
@@ -228,7 +228,7 @@
             @endif
             
             @if($villageInfo->agriculture_potential)
-                <div class="bg-white rounded-xl overflow-hidden shadow-md card-hover">
+                <div class="bg-white rounded-xl overflow-hidden shadow-md card-hover" data-aos="fade-up" data-aos-delay="200">
                     <div class="h-48 bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
                         <i class="fas fa-seedling text-6xl text-white/80"></i>
                     </div>
@@ -240,7 +240,7 @@
             @endif
             
             @if($villageInfo->fishery_potential)
-                <div class="bg-white rounded-xl overflow-hidden shadow-md card-hover">
+                <div class="bg-white rounded-xl overflow-hidden shadow-md card-hover" data-aos="fade-up" data-aos-delay="300">
                     <div class="h-48 bg-gradient-to-br from-cyan-400 to-cyan-600 flex items-center justify-center">
                         <i class="fas fa-fish text-6xl text-white/80"></i>
                     </div>
@@ -264,28 +264,28 @@
 <!-- Statistics Section -->
 <section class="bg-white py-16">
     <div class="max-w-7xl mx-auto px-4">
-        <div class="text-center mb-12">
+        <div class="text-center mb-12" data-aos="fade-up">
             <h2 class="text-3xl font-bold text-gray-800 mb-4">Statistik Desa</h2>
             <p class="text-gray-600 max-w-2xl mx-auto">Data terkini tentang desa kami</p>
         </div>
         
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div class="stat-card rounded-xl p-6 text-center text-white card-hover">
+            <div class="stat-card rounded-xl p-6 text-center text-white card-hover" data-aos="zoom-in" data-aos-delay="100">
                 <i class="fas fa-users text-3xl mb-3 opacity-80"></i>
                 <h3 class="text-3xl font-bold mb-1">{{ number_format($villageInfo->total_population ?? 0) }}</h3>
                 <p class="text-sm opacity-80">Total Penduduk</p>
             </div>
-            <div class="stat-card rounded-xl p-6 text-center text-white card-hover">
+            <div class="stat-card rounded-xl p-6 text-center text-white card-hover" data-aos="zoom-in" data-aos-delay="200">
                 <i class="fas fa-venus-mars text-3xl mb-3 opacity-80"></i>
                 <h3 class="text-3xl font-bold mb-1">{{ number_format($villageInfo->male_population ?? 0) }} / {{ number_format($villageInfo->female_population ?? 0) }}</h3>
                 <p class="text-sm opacity-80">Laki-laki / Perempuan</p>
             </div>
-            <div class="stat-card rounded-xl p-6 text-center text-white card-hover">
+            <div class="stat-card rounded-xl p-6 text-center text-white card-hover" data-aos="zoom-in" data-aos-delay="300">
                 <i class="fas fa-home text-3xl mb-3 opacity-80"></i>
                 <h3 class="text-3xl font-bold mb-1">{{ number_format($villageInfo->total_family ?? 0) }}</h3>
                 <p class="text-sm opacity-80">Kepala Keluarga</p>
             </div>
-            <div class="stat-card rounded-xl p-6 text-center text-white card-hover">
+            <div class="stat-card rounded-xl p-6 text-center text-white card-hover" data-aos="zoom-in" data-aos-delay="400">
                 <i class="fas fa-map-marked-alt text-3xl mb-3 opacity-80"></i>
                 <h3 class="text-3xl font-bold mb-1">{{ number_format($villageInfo->area_total ?? 0, 0, ',', '.') }}</h3>
                 <p class="text-sm opacity-80">Luas (Ha)</p>
@@ -294,22 +294,22 @@
         
         <!-- Additional Stats -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
-            <div class="bg-gray-50 rounded-xl p-6 text-center card-hover">
+            <div class="bg-gray-50 rounded-xl p-6 text-center card-hover" data-aos="fade-up" data-aos-delay="100">
                 <i class="fas fa-school text-3xl text-primary-600 mb-3"></i>
                 <h3 class="text-2xl font-bold text-gray-800 mb-1">{{ $villageInfo->total_schools ?? 0 }}</h3>
                 <p class="text-sm text-gray-600">Fasilitas Pendidikan</p>
             </div>
-            <div class="bg-gray-50 rounded-xl p-6 text-center card-hover">
+            <div class="bg-gray-50 rounded-xl p-6 text-center card-hover" data-aos="fade-up" data-aos-delay="200">
                 <i class="fas fa-hospital text-3xl text-red-600 mb-3"></i>
                 <h3 class="text-2xl font-bold text-gray-800 mb-1">{{ $villageInfo->total_health_facilities ?? 0 }}</h3>
                 <p class="text-sm text-gray-600">Fasilitas Kesehatan</p>
             </div>
-            <div class="bg-gray-50 rounded-xl p-6 text-center card-hover">
+            <div class="bg-gray-50 rounded-xl p-6 text-center card-hover" data-aos="fade-up" data-aos-delay="300">
                 <i class="fas fa-mosque text-3xl text-green-600 mb-3"></i>
                 <h3 class="text-2xl font-bold text-gray-800 mb-1">{{ $villageInfo->total_mosques ?? 0 }}</h3>
                 <p class="text-sm text-gray-600">Masjid / Musholla</p>
             </div>
-            <div class="bg-gray-50 rounded-xl p-6 text-center card-hover">
+            <div class="bg-gray-50 rounded-xl p-6 text-center card-hover" data-aos="fade-up" data-aos-delay="400">
                 <i class="fas fa-bolt text-3xl text-yellow-600 mb-3"></i>
                 <h3 class="text-2xl font-bold text-gray-800 mb-1">{{ $villageInfo->electricity_coverage ?? 0 }}%</h3>
                 <p class="text-sm text-gray-600">Cakupan Listrik</p>
@@ -322,17 +322,17 @@
 @if(isset($latestNews) && $latestNews->count() > 0)
 <section class="bg-white py-16">
     <div class="max-w-7xl mx-auto px-4">
-        <div class="text-center mb-12">
+        <div class="text-center mb-12" data-aos="fade-up">
             <h2 class="text-3xl font-bold text-gray-800 mb-4">Berita Terbaru</h2>
             <p class="text-gray-600 max-w-2xl mx-auto">Informasi terkini dari desa kami</p>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             @foreach($latestNews as $item)
-                <article class="bg-gray-50 rounded-xl overflow-hidden card-hover">
+                <article class="bg-gray-50 rounded-xl overflow-hidden card-hover" data-aos="fade-up" data-aos-delay="{{ $loop->iteration * 100 }}">
                     <a href="{{ route('news.show', $item->slug) }}">
                         <div class="relative h-48">
-                            <img src="{{ $item->image_url }}" alt="{{ $item->title }}" class="w-full h-full object-cover">
+                            <img src="{{ $item->image_url }}" alt="{{ $item->title }}" class="w-full h-full object-cover" loading="lazy">
                             <div class="absolute top-4 left-4">
                                 <span class="px-3 py-1 bg-primary-600 text-white text-xs font-bold rounded-full">{{ $item->category }}</span>
                             </div>
@@ -368,17 +368,17 @@
 @if(isset($featuredProducts) && $featuredProducts->count() > 0)
 <section class="bg-gray-50 py-16">
     <div class="max-w-7xl mx-auto px-4">
-        <div class="text-center mb-12">
+        <div class="text-center mb-12" data-aos="fade-up">
             <h2 class="text-3xl font-bold text-gray-800 mb-4">Produk Unggulan</h2>
             <p class="text-gray-600 max-w-2xl mx-auto">Produk terbaik dari UMKM desa kami</p>
         </div>
         
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             @foreach($featuredProducts as $product)
-                <div class="bg-white rounded-xl overflow-hidden shadow-md card-hover">
+                <div class="bg-white rounded-xl overflow-hidden shadow-md card-hover" data-aos="fade-up" data-aos-delay="{{ $loop->iteration * 100 }}">
                     <a href="{{ route('products.show', $product->slug) }}">
                         <div class="relative aspect-square">
-                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
+                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-full h-full object-cover" loading="lazy">
                             @if($product->has_discount)
                                 <div class="absolute top-2 left-2">
                                     <span class="px-2 py-1 bg-red-500 text-white text-xs font-bold rounded-full">
@@ -408,7 +408,7 @@
             @endforeach
         </div>
         
-        <div class="text-center mt-8">
+        <div class="text-center mt-8" data-aos="fade-up">
             <a href="{{ route('products.index') }}" class="inline-block px-8 py-3 bg-primary-600 text-white rounded-lg font-bold hover:bg-primary-700 transition">
                 Lihat Semua Produk <i class="fas fa-arrow-right ml-2"></i>
             </a>
@@ -421,15 +421,15 @@
 @if(isset($latestGallery) && $latestGallery->count() > 0)
 <section class="bg-white py-16">
     <div class="max-w-7xl mx-auto px-4">
-        <div class="text-center mb-12">
+        <div class="text-center mb-12" data-aos="fade-up">
             <h2 class="text-3xl font-bold text-gray-800 mb-4">Galeri Terbaru</h2>
             <p class="text-gray-600 max-w-2xl mx-auto">Dokumentasi kegiatan dan potensi desa</p>
         </div>
         
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             @foreach($latestGallery as $item)
-                <a href="{{ route('gallery.show', $item->id) }}" class="relative group rounded-xl overflow-hidden aspect-square">
-                    <img src="{{ $item->image_url }}" alt="{{ $item->title }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                <a href="{{ route('gallery.show', $item->id) }}" class="relative group rounded-xl overflow-hidden aspect-square" data-aos="zoom-in" data-aos-delay="{{ $loop->iteration * 100 }}">
+                    <img src="{{ $item->image_url }}" alt="{{ $item->title }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-300" loading="lazy">
                     <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition flex items-center justify-center">
                         <div class="opacity-0 group-hover:opacity-100 transition text-center px-2">
                             <i class="fas fa-expand text-white text-xl mb-1"></i>
@@ -440,7 +440,7 @@
             @endforeach
         </div>
         
-        <div class="text-center mt-8">
+        <div class="text-center mt-8" data-aos="fade-up">
             <a href="{{ route('gallery.index') }}" class="inline-block px-8 py-3 bg-primary-600 text-white rounded-lg font-bold hover:bg-primary-700 transition">
                 Lihat Semua Galeri <i class="fas fa-arrow-right ml-2"></i>
             </a>
