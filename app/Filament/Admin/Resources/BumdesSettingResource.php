@@ -24,12 +24,10 @@ class BumdesSettingResource extends Resource
     {
         return $form
             ->schema([
-                Tabs::make('Identitas BUMDes')
-                    ->icon('heroicon-o-building-office-2')
+                Tabs::make('tabs')
                     ->schema([
                         // Tab 1: Identitas Dasar
                         Tabs\Tab::make('Identitas Dasar')
-                            ->icon('heroicon-o-information-circle')
                             ->schema([
                                 Forms\Components\Section::make('Informasi BUMDes')
                                     ->schema([
@@ -79,9 +77,8 @@ class BumdesSettingResource extends Resource
                         
                         // Tab 2: Alamat & Kontak
                         Tabs\Tab::make('Alamat & Kontak')
-                            ->icon('heroicon-o-map-pin')
                             ->schema([
-                                Forms\Components\Section::make('Alamat')
+                                Forms\Components\Section::make('Alamat BUMDes')
                                     ->schema([
                                         Forms\Components\Textarea::make('bumdes_address')
                                             ->label('Alamat Lengkap')
@@ -139,7 +136,6 @@ class BumdesSettingResource extends Resource
                         
                         // Tab 3: Media Sosial
                         Tabs\Tab::make('Media Sosial')
-                            ->icon('heroicon-o-globe-alt')
                             ->schema([
                                 Forms\Components\Section::make('Media Sosial')
                                     ->schema([
@@ -169,123 +165,120 @@ class BumdesSettingResource extends Resource
                                             ->prefix('https://twitter.com/'),
                                     ])->columns(2),
                             ]),
-                    ]),
-                
-                // Tab Logo & Foto
-                Tabs\Tab::make('Logo & Foto')
-                    ->icon('heroicon-o-photo')
-                    ->schema([
-                        Forms\Components\Section::make('Logo BUMDes')
-                            ->schema([
-                                Forms\Components\FileUpload::make('logo_path')
-                                    ->label('Logo BUMDes (Warna)')
-                                    ->image()
-                                    ->directory('bumdes/logo')
-                                    ->maxSize(2048)
-                                    ->helperText('Format: PNG/JPG, Ukuran: max 2MB'),
-                                
-                                Forms\Components\FileUpload::make('logo_white_path')
-                                    ->label('Logo BUMDes (Putih)')
-                                    ->image()
-                                    ->directory('bumdes/logo')
-                                    ->maxSize(2048)
-                                    ->helperText('Untuk background gelap'),
-                            ])->columns(2),
                         
-                        Forms\Components\Section::make('Foto Latar')
+                        // Tab 4: Logo & Foto
+                        Tabs\Tab::make('Logo & Foto')
                             ->schema([
-                                Forms\Components\FileUpload::make('kantor_photo_path')
-                                    ->label('Foto Kantor')
-                                    ->image()
-                                    ->directory('bumdes/foto')
-                                    ->maxSize(5120)
-                                    ->helperText('Untuk background website, ukuran: max 5MB'),
+                                Forms\Components\Section::make('Logo BUMDes')
+                                    ->schema([
+                                        Forms\Components\FileUpload::make('logo_path')
+                                            ->label('Logo BUMDes (Warna)')
+                                            ->image()
+                                            ->directory('bumdes/logo')
+                                            ->maxSize(2048)
+                                            ->helperText('Format: PNG/JPG, Ukuran: max 2MB'),
+                                        
+                                        Forms\Components\FileUpload::make('logo_white_path')
+                                            ->label('Logo BUMDes (Putih)')
+                                            ->image()
+                                            ->directory('bumdes/logo')
+                                            ->maxSize(2048)
+                                            ->helperText('Untuk background gelap'),
+                                    ])->columns(2),
                                 
-                                Forms\Components\FileUpload::make('kegiatan_photo_path')
-                                    ->label('Foto Kegiatan')
-                                    ->image()
-                                    ->directory('bumdes/foto')
-                                    ->maxSize(5120)
-                                    ->helperText('Untuk background halaman login, ukuran: max 5MB'),
-                            ])->columns(2),
-                        
-                        Forms\Components\Section::make('Tanda Tangan')
-                            ->schema([
-                                Forms\Components\FileUpload::make('signature_photo_path')
-                                    ->label('Foto Tanda Tangan')
-                                    ->image()
-                                    ->directory('bumdes/ttd')
-                                    ->maxSize(1024)
-                                    ->helperText('Untuk tanda tangan digital di PDF'),
-                            ]),
-                    ]),
-                
-                // Tab Kop PDF
-                Tabs\Tab::make('Kop PDF')
-                    ->icon('heroicon-o-document-text')
-                    ->schema([
-                        Forms\Components\Section::make('Header Surat/PDF')
-                            ->description('Data ini akan digunakan sebagai kop surat saat cetak laporan keuangan')
-                            ->schema([
-                                Forms\Components\TextInput::make('pdf_header_line1')
-                                    ->label('Baris 1 (Atas)')
-                                    ->placeholder('Contoh: PEMERINTAH KABUPATEN ACEH SELATAN'),
+                                Forms\Components\Section::make('Foto Latar')
+                                    ->schema([
+                                        Forms\Components\FileUpload::make('kantor_photo_path')
+                                            ->label('Foto Kantor')
+                                            ->image()
+                                            ->directory('bumdes/foto')
+                                            ->maxSize(5120)
+                                            ->helperText('Untuk background website, max 5MB'),
+                                        
+                                        Forms\Components\FileUpload::make('kegiatan_photo_path')
+                                            ->label('Foto Kegiatan')
+                                            ->image()
+                                            ->directory('bumdes/foto')
+                                            ->maxSize(5120)
+                                            ->helperText('Untuk background login, max 5MB'),
+                                    ])->columns(2),
                                 
-                                Forms\Components\TextInput::make('pdf_header_line2')
-                                    ->label('Baris 2 (Tengah)')
-                                    ->placeholder('Contoh: KECAMATAN BAKONGAN'),
-                                
-                                Forms\Components\TextInput::make('pdf_header_line3')
-                                    ->label('Baris 3 (Bawah)')
-                                    ->placeholder('Contoh: BUMDes KEUDE BAKONGAN'),
-                                
-                                Forms\Components\TextInput::make('pdf_footer_text')
-                                    ->label('Footer PDF')
-                                    ->placeholder('Contoh: Jl. Nasional No. 1, Keude Bakongan'),
+                                Forms\Components\Section::make('Tanda Tangan')
+                                    ->schema([
+                                        Forms\Components\FileUpload::make('signature_photo_path')
+                                            ->label('Foto Tanda Tangan')
+                                            ->image()
+                                            ->directory('bumdes/ttd')
+                                            ->maxSize(1024)
+                                            ->helperText('Untuk tanda tangan digital di PDF'),
+                                    ]),
                             ]),
                         
-                        Forms\Components\Section::make('Stempel Digital')
+                        // Tab 5: Kop PDF
+                        Tabs\Tab::make('Kop PDF')
                             ->schema([
-                                Forms\Components\FileUpload::make('pdf_stamp_path')
-                                    ->label('Stempel/Gambar')
-                                    ->image()
-                                    ->directory('bumdes/stempel')
-                                    ->maxSize(1024)
-                                    ->helperText('Gambar stempel untuk PDF (opsional)'),
-                            ]),
-                    ]),
-                
-                // Tab SEO
-                Tabs\Tab::make('SEO & Pengaturan')
-                    ->icon('heroicon-o-magnifying-glass')
-                    ->schema([
-                        Forms\Components\Section::make('SEO')
-                            ->schema([
-                                Forms\Components\TextInput::make('meta_title')
-                                    ->label('Meta Title')
-                                    ->maxLength(255)
-                                    ->helperText('Judul website di search engine'),
+                                Forms\Components\Section::make('Header Surat / PDF')
+                                    ->description('Data ini digunakan sebagai kop surat saat cetak laporan keuangan')
+                                    ->schema([
+                                        Forms\Components\TextInput::make('pdf_header_line1')
+                                            ->label('Baris 1 (Atas)')
+                                            ->placeholder('PEMERINTAH KABUPATEN ACEH SELATAN'),
+                                        
+                                        Forms\Components\TextInput::make('pdf_header_line2')
+                                            ->label('Baris 2 (Tengah)')
+                                            ->placeholder('KECAMATAN BAKONGAN'),
+                                        
+                                        Forms\Components\TextInput::make('pdf_header_line3')
+                                            ->label('Baris 3 (Bawah)')
+                                            ->placeholder('BUMDes KEUDE BAKONGAN'),
+                                        
+                                        Forms\Components\TextInput::make('pdf_footer_text')
+                                            ->label('Footer PDF')
+                                            ->placeholder('Jl. Nasional No. 1, Keude Bakongan'),
+                                    ]),
                                 
-                                Forms\Components\Textarea::make('meta_description')
-                                    ->label('Meta Description')
-                                    ->rows(3)
-                                    ->helperText('Deskripsi website di search engine'),
-                                
-                                Forms\Components\Textarea::make('meta_keywords')
-                                    ->label('Meta Keywords')
-                                    ->rows(2)
-                                    ->helperText('Kata kunci untuk SEO (pisahkan dengan koma)'),
+                                Forms\Components\Section::make('Stempel Digital')
+                                    ->schema([
+                                        Forms\Components\FileUpload::make('pdf_stamp_path')
+                                            ->label('Stempel/Gambar')
+                                            ->image()
+                                            ->directory('bumdes/stempel')
+                                            ->maxSize(1024)
+                                            ->helperText('Gambar stempel untuk PDF (opsional)'),
+                                    ]),
                             ]),
                         
-                        Forms\Components\Section::make('Pengaturan')
+                        // Tab 6: SEO
+                        Tabs\Tab::make('SEO & Pengaturan')
                             ->schema([
-                                Forms\Components\Toggle::make('is_active')
-                                    ->label('Aktif')
-                                    ->default(true),
+                                Forms\Components\Section::make('SEO')
+                                    ->schema([
+                                        Forms\Components\TextInput::make('meta_title')
+                                            ->label('Meta Title')
+                                            ->maxLength(255)
+                                            ->helperText('Judul website di search engine'),
+                                        
+                                        Forms\Components\Textarea::make('meta_description')
+                                            ->label('Meta Description')
+                                            ->rows(3)
+                                            ->helperText('Deskripsi website di search engine'),
+                                        
+                                        Forms\Components\Textarea::make('meta_keywords')
+                                            ->label('Meta Keywords')
+                                            ->rows(2)
+                                            ->helperText('Kata kunci untuk SEO (pisahkan dengan koma)'),
+                                    ]),
+                                
+                                Forms\Components\Section::make('Pengaturan')
+                                    ->schema([
+                                        Forms\Components\Toggle::make('is_active')
+                                            ->label('Aktif')
+                                            ->default(true),
+                                    ]),
                             ]),
-                    ]),
-            ])
-            ->columns(1);
+                    ])
+                    ->columns(1),
+            ]);
     }
 
     public static function getPages(): array
@@ -296,9 +289,6 @@ class BumdesSettingResource extends Resource
         ];
     }
 
-    /**
-     * Redirect navigation to edit page directly
-     */
     public static function getNavigationUrl(): string
     {
         $settings = BumdesSetting::getSettings();
