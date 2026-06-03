@@ -13,6 +13,7 @@ class Product extends Model
 
     protected $fillable = [
         'category_id',
+        'business_unit_id',
         'name',
         'slug',
         'description',
@@ -54,6 +55,12 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(ProductCategory::class, 'category_id');
+    }
+
+    // Relationship: business unit
+    public function businessUnit()
+    {
+        return $this->belongsTo(BusinessUnit::class, 'business_unit_id');
     }
 
     // Scope: published only

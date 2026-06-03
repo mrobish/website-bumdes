@@ -18,6 +18,7 @@ class News extends Model
         'content',
         'image',
         'category',
+        'business_unit_id',
         'is_featured',
         'is_published',
         'views',
@@ -59,6 +60,12 @@ class News extends Model
     public function scopeCategory($query, $category)
     {
         return $query->where('category', $category);
+    }
+
+    // Relationship: business unit
+    public function businessUnit()
+    {
+        return $this->belongsTo(BusinessUnit::class, 'business_unit_id');
     }
 
     // Get image URL

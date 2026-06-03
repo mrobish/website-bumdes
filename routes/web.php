@@ -6,6 +6,7 @@ use App\Http\Controllers\VillageInfoController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UnitController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +65,10 @@ Route::get('/galeri/{id}', [GalleryController::class, 'show'])->name('gallery.sh
 // Product Routes
 Route::get('/produk', [ProductController::class, 'index'])->name('products.index');
 Route::get('/produk/{slug}', [ProductController::class, 'show'])->name('products.show');
+
+// Unit Usaha Routes
+Route::get('/unit-usaha', [UnitController::class, 'index'])->name('units.index');
+Route::get('/unit-usaha/{slug}', [UnitController::class, 'show'])->name('units.show');
 
 // PWA Offline Transaction
 Route::get('/offline-transaksi', function () {

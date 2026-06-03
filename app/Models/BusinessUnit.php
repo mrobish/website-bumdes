@@ -5,16 +5,27 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Builder;
 
 class BusinessUnit extends Model
 {
     protected $fillable = [
         'code',
+        'slug',
         'name',
         'description',
         'type',
         'is_active',
         'sort_order',
+        'color',
+        'phone',
+        'email',
+        'address',
+        'image',
+        'about',
+        'manager',
+        'operating_hours',
+        'status',
     ];
 
     protected $casts = [
@@ -38,17 +49,17 @@ class BusinessUnit extends Model
     }
 
     // Scopes
-    public function scopeActive($query)
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }
 
-    public function scopeInduk($query)
+    public function scopeInduk(Builder $query): Builder
     {
         return $query->where('type', 'induk');
     }
 
-    public function scopeUnitUsaha($query)
+    public function scopeUnitUsaha(Builder $query): Builder
     {
         return $query->where('type', 'unit_usaha');
     }
@@ -62,5 +73,13 @@ class BusinessUnit extends Model
     public function getFullNameAttribute(): string
     {
         return $this->code . ' - ' . $this->name;
+    }
+
+    /**
+     * Get products for this unit
+     */
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class, 'business_unit_id');
     }
 }

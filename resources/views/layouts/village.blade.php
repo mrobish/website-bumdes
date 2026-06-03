@@ -139,6 +139,7 @@
                     <a href="/" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">Beranda</a>
                     <a href="/profil-desa" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">Profil Desa</a>
                     <a href="/bumdes" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">BUMDes</a>
+                    <a href="/unit-usaha" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">Unit Usaha</a>
                     <a href="/potensi" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">Potensi</a>
                     <a href="/berita" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">Berita</a>
                     <a href="/galeri" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">Galeri</a>
@@ -168,6 +169,9 @@
                 </a>
                 <a href="/bumdes" class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">
                     <i class="fas fa-store mr-3 w-5"></i> BUMDes
+                </a>
+                <a href="/unit-usaha" class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">
+                    <i class="fas fa-building mr-3 w-5"></i> Unit Usaha
                 </a>
                 <a href="/potensi" class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">
                     <i class="fas fa-mountain mr-3 w-5"></i> Potensi
