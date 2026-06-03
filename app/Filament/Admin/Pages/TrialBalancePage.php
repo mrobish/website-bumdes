@@ -16,7 +16,7 @@ class TrialBalancePage extends Page implements HasForms
     use InteractsWithForms;
 
     protected static string $view = 'filament.pages.trial-balance';
-    protected static ?string $navigationIcon = 'heroicon-o-balance';
+    protected static ?string $navigationIcon = 'heroicon-o-scale';
     protected static ?string $navigationGroup = '📊 Laporan';
     protected static ?string $navigationLabel = 'Neraca Saldo';
     protected static ?string $title = 'Neraca Saldo';
