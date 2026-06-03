@@ -645,111 +645,62 @@ class FinancialTemplateService
     public function seedDefaultTemplates(): void
     {
         $templates = [
-            ['name' => 'Jurnal Umum', 'slug' => 'jurnal-umum', 'description' => 'Jurnal umum untuk mencatat transaksi harian', 'type' => 'jurnal', 'frequency' => 'harian',
+            // ═══ HANYA 3 TEMPLATE YANG DIPERLUKAN ═══
+            // 1. Jurnal Umum → semua transaksi harian → import ke financial_transactions
+            // 2. Realisasi Anggaran → anggaran vs realisasi → simpan sebagai JSON
+            // 3. CAT → catatan atas laporan keuangan → simpan sebagai JSON
+            //
+            // LAPORAN LAINNYA (Buku Besar, Laba Rugi, Neraca, Arus Kas, Perubahan Modal)
+            // DIHITUNG OTOMATIS oleh FinancialAutoCalculateService dari data Jurnal.
+
+            ['name' => 'Jurnal Umum', 'slug' => 'jurnal-umum', 'description' => 'Jurnal umum bulanan - Input semua transaksi keuangan BUMDes. 1 baris = 1 sisi transaksi (debet ATAU kredit). Setiap transaksi minimal 2 baris (saldi).', 'type' => 'jurnal', 'frequency' => 'bulanan',
              'columns' => json_encode([
-                ['key' => 'tanggal', 'name' => 'Tanggal (*)', 'type' => 'date', 'width' => 15, 'rules' => ['required']],
+                ['key' => 'tanggal', 'name' => 'Tanggal (*)', 'type' => 'date', 'width' => 14, 'rules' => ['required']],
                 ['key' => 'no_ref', 'name' => 'No. Ref', 'type' => 'text', 'width' => 12],
-                ['key' => 'kode_akun', 'name' => 'Kode Akun (*)', 'type' => 'text', 'width' => 15, 'rules' => ['required']],
-                ['key' => 'nama_akun', 'name' => 'Nama Akun', 'type' => 'text', 'width' => 25],
-                ['key' => 'keterangan', 'name' => 'Keterangan (*)', 'type' => 'text', 'width' => 35, 'rules' => ['required']],
+                ['key' => 'kode_akun', 'name' => 'Kode Akun (*)', 'type' => 'text', 'width' => 14, 'rules' => ['required']],
+                ['key' => 'nama_akun', 'name' => 'Nama Akun', 'type' => 'text', 'width' => 24],
+                ['key' => 'keterangan', 'name' => 'Keterangan (*)', 'type' => 'text', 'width' => 32, 'rules' => ['required']],
                 ['key' => 'debet', 'name' => 'Debet (Rp)', 'type' => 'number', 'width' => 18],
                 ['key' => 'kredit', 'name' => 'Kredit (Rp)', 'type' => 'number', 'width' => 18],
              ]),
              'sample_data' => json_encode([
-                ['tanggal' => '01/01/2026', 'no_ref' => 'J-001', 'kode_akun' => '1101', 'nama_akun' => '', 'keterangan' => 'Setoran modal dari Desa', 'debet' => 50000000, 'kredit' => 0],
-                ['tanggal' => '01/01/2026', 'no_ref' => 'J-001', 'kode_akun' => '3101', 'nama_akun' => '', 'keterangan' => 'Setoran modal dari Desa', 'debet' => 0, 'kredit' => 50000000],
+                ['tanggal' => '01/01/2026', 'no_ref' => 'J-001', 'kode_akun' => '1101', 'nama_akun' => '', 'keterangan' => 'Setoran modal dari Pemerintah Desa', 'debet' => 50000000, 'kredit' => 0],
+                ['tanggal' => '01/01/2026', 'no_ref' => 'J-001', 'kode_akun' => '3101', 'nama_akun' => '', 'keterangan' => 'Setoran modal dari Pemerintah Desa', 'debet' => 0, 'kredit' => 50000000],
                 ['tanggal' => '05/01/2026', 'no_ref' => 'J-002', 'kode_akun' => '1101', 'nama_akun' => '', 'keterangan' => 'Penjualan produk UMKM', 'debet' => 10000000, 'kredit' => 0],
                 ['tanggal' => '05/01/2026', 'no_ref' => 'J-002', 'kode_akun' => '4101', 'nama_akun' => '', 'keterangan' => 'Penjualan produk UMKM', 'debet' => 0, 'kredit' => 10000000],
+                ['tanggal' => '10/01/2026', 'no_ref' => 'J-003', 'kode_akun' => '1101', 'nama_akun' => '', 'keterangan' => 'Pembelian bahan baku', 'debet' => 0, 'kredit' => 5000000],
+                ['tanggal' => '10/01/2026', 'no_ref' => 'J-003', 'kode_akun' => '5102', 'nama_akun' => '', 'keterangan' => 'Pembelian bahan baku', 'debet' => 5000000, 'kredit' => 0],
+                ['tanggal' => '15/01/2026', 'no_ref' => 'J-004', 'kode_akun' => '1101', 'nama_akun' => '', 'keterangan' => 'Pembayaran gaji karyawan', 'debet' => 0, 'kredit' => 8000000],
+                ['tanggal' => '15/01/2026', 'no_ref' => 'J-004', 'kode_akun' => '5101', 'nama_akun' => '', 'keterangan' => 'Pembayaran gaji karyawan', 'debet' => 8000000, 'kredit' => 0],
+                ['tanggal' => '20/01/2026', 'no_ref' => 'J-005', 'kode_akun' => '1101', 'nama_akun' => '', 'keterangan' => 'Pembayaran listrik', 'debet' => 0, 'kredit' => 500000],
+                ['tanggal' => '20/01/2026', 'no_ref' => 'J-005', 'kode_akun' => '5103', 'nama_akun' => '', 'keterangan' => 'Pembayaran listrik', 'debet' => 500000, 'kredit' => 0],
+                ['tanggal' => '31/01/2026', 'no_ref' => 'J-006', 'kode_akun' => '1101', 'nama_akun' => '', 'keterangan' => 'Pendapatan jasa konsultasi', 'debet' => 3000000, 'kredit' => 0],
+                ['tanggal' => '31/01/2026', 'no_ref' => 'J-006', 'kode_akun' => '4102', 'nama_akun' => '', 'keterangan' => 'Pendapatan jasa konsultasi', 'debet' => 0, 'kredit' => 3000000],
              ]), 'sort_order' => 1],
 
-            ['name' => 'Buku Besar', 'slug' => 'buku-besar', 'description' => 'Rekapitulasi per akun per bulan', 'type' => 'buku_besar', 'frequency' => 'bulanan',
+            // 2. Realisasi Anggaran → harus diinput manual karena anggaran terpisah dari transaksi
+            ['name' => 'Realisasi Anggaran', 'slug' => 'realisasi-anggaran', 'description' => 'Realisasi anggaran per program - Input bulanan. Anggaran ditetapkan terpisah dari transaksi.', 'type' => 'realisasi_anggaran', 'frequency' => 'bulanan',
              'columns' => json_encode([
-                ['key' => 'kode_akun', 'name' => 'Kode Akun (*)', 'type' => 'text', 'width' => 15, 'rules' => ['required']],
-                ['key' => 'nama_akun', 'name' => 'Nama Akun', 'type' => 'text', 'width' => 25],
-                ['key' => 'bulan', 'name' => 'Bulan (*)', 'type' => 'text', 'width' => 15, 'rules' => ['required']],
-                ['key' => 'saldo_awal', 'name' => 'Saldo Awal (Rp)', 'type' => 'number', 'width' => 18],
-                ['key' => 'total_debet', 'name' => 'Total Debet (Rp)', 'type' => 'number', 'width' => 18],
-                ['key' => 'total_kredit', 'name' => 'Total Kredit (Rp)', 'type' => 'number', 'width' => 18],
-                ['key' => 'saldo_akhir', 'name' => 'Saldo Akhir (Rp)', 'type' => 'number', 'width' => 18],
-             ]),
-             'sample_data' => json_encode([
-                ['kode_akun' => '1101', 'nama_akun' => '', 'bulan' => 'Januari 2026', 'saldo_awal' => 0, 'total_debet' => 60000000, 'total_kredit' => 8000000, 'saldo_akhir' => 0],
-             ]), 'sort_order' => 2],
-
-            ['name' => 'Laba Rugi', 'slug' => 'laba-rugi', 'description' => 'Laporan laba rugi SAK EMKM', 'type' => 'laba_rugi', 'frequency' => 'bulanan',
-             'columns' => json_encode([
-                ['key' => 'kode_akun', 'name' => 'Kode Akun (*)', 'type' => 'text', 'width' => 15, 'rules' => ['required']],
-                ['key' => 'nama_akun', 'name' => 'Nama Akun', 'type' => 'text', 'width' => 30],
-                ['key' => 'kategori', 'name' => 'Kategori', 'type' => 'text', 'width' => 15],
-                ['key' => 'jumlah', 'name' => 'Jumlah (Rp) (*)', 'type' => 'number', 'width' => 20, 'rules' => ['required', 'numeric']],
-             ]),
-             'sample_data' => json_encode([
-                ['kode_akun' => '4101', 'nama_akun' => '', 'kategori' => '', 'jumlah' => 100000000],
-                ['kode_akun' => '4102', 'nama_akun' => '', 'kategori' => '', 'jumlah' => 25000000],
-                ['kode_akun' => '5101', 'nama_akun' => '', 'kategori' => '', 'jumlah' => 15000000],
-                ['kode_akun' => '5103', 'nama_akun' => '', 'kategori' => '', 'jumlah' => 2000000],
-             ]), 'sort_order' => 3],
-
-            ['name' => 'Neraca', 'slug' => 'neraca', 'description' => 'Laporan posisi keuangan', 'type' => 'neraca', 'frequency' => 'bulanan',
-             'columns' => json_encode([
-                ['key' => 'kode_akun', 'name' => 'Kode Akun (*)', 'type' => 'text', 'width' => 15, 'rules' => ['required']],
-                ['key' => 'nama_akun', 'name' => 'Nama Akun', 'type' => 'text', 'width' => 30],
-                ['key' => 'kategori', 'name' => 'Kategori', 'type' => 'text', 'width' => 20],
-                ['key' => 'jumlah', 'name' => 'Jumlah (Rp) (*)', 'type' => 'number', 'width' => 20, 'rules' => ['required', 'numeric']],
-             ]),
-             'sample_data' => json_encode([
-                ['kode_akun' => '1101', 'nama_akun' => '', 'kategori' => '', 'jumlah' => 45000000],
-                ['kode_akun' => '1103', 'nama_akun' => '', 'kategori' => '', 'jumlah' => 5000000],
-                ['kode_akun' => '1203', 'nama_akun' => '', 'kategori' => '', 'jumlah' => 25000000],
-                ['kode_akun' => '2101', 'nama_akun' => '', 'kategori' => '', 'jumlah' => 8000000],
-                ['kode_akun' => '3101', 'nama_akun' => '', 'kategori' => '', 'jumlah' => 50000000],
-                ['kode_akun' => '3103', 'nama_akun' => '', 'kategori' => '', 'jumlah' => 17000000],
-             ]), 'sort_order' => 4],
-
-            ['name' => 'Arus Kas', 'slug' => 'arus-kas', 'description' => 'Laporan arus kas', 'type' => 'arus_kas', 'frequency' => 'bulanan',
-             'columns' => json_encode([
-                ['key' => 'keterangan', 'name' => 'Keterangan (*)', 'type' => 'text', 'width' => 40, 'rules' => ['required']],
-                ['key' => 'kategori', 'name' => 'Kategori (*)', 'type' => 'text', 'width' => 20, 'rules' => ['required']],
-                ['key' => 'jumlah', 'name' => 'Jumlah (Rp) (*)', 'type' => 'number', 'width' => 20, 'rules' => ['required', 'numeric']],
-             ]),
-             'sample_data' => json_encode([
-                ['keterangan' => 'Penerimaan dari penjualan produk', 'kategori' => 'Operasi', 'jumlah' => 100000000],
-                ['keterangan' => 'Pembayaran gaji karyawan', 'kategori' => 'Operasi', 'jumlah' => -15000000],
-                ['keterangan' => 'Pembelian peralatan baru', 'kategori' => 'Investasi', 'jumlah' => -25000000],
-             ]), 'sort_order' => 5],
-
-            ['name' => 'Perubahan Modal', 'slug' => 'perubahan-modal', 'description' => 'Laporan perubahan modal', 'type' => 'modal', 'frequency' => 'tahunan',
-             'columns' => json_encode([
-                ['key' => 'keterangan', 'name' => 'Keterangan (*)', 'type' => 'text', 'width' => 40, 'rules' => ['required']],
-                ['key' => 'jumlah', 'name' => 'Jumlah (Rp) (*)', 'type' => 'number', 'width' => 20, 'rules' => ['required', 'numeric']],
-             ]),
-             'sample_data' => json_encode([
-                ['keterangan' => 'Saldo Awal Modal', 'jumlah' => 50000000],
-                ['keterangan' => 'Penyertaan Modal dari Desa', 'jumlah' => 10000000],
-                ['keterangan' => 'Laba Tahun Berjalan', 'jumlah' => 35000000],
-             ]), 'sort_order' => 6],
-
-            ['name' => 'Realisasi Anggaran', 'slug' => 'realisasi-anggaran', 'description' => 'Realisasi anggaran per program', 'type' => 'realisasi_anggaran', 'frequency' => 'bulanan',
-             'columns' => json_encode([
-                ['key' => 'kode_akun', 'name' => 'Kode Akun (*)', 'type' => 'text', 'width' => 15, 'rules' => ['required']],
-                ['key' => 'nama_akun', 'name' => 'Nama Akun', 'type' => 'text', 'width' => 28],
+                ['key' => 'kode_akun', 'name' => 'Kode Akun (*)', 'type' => 'text', 'width' => 14, 'rules' => ['required']],
+                ['key' => 'nama_akun', 'name' => 'Nama Akun', 'type' => 'text', 'width' => 24],
                 ['key' => 'uraian', 'name' => 'Uraian (*)', 'type' => 'text', 'width' => 30, 'rules' => ['required']],
-                ['key' => 'anggaran', 'name' => 'Anggaran (Rp) (*)', 'type' => 'number', 'width' => 20, 'rules' => ['required', 'numeric']],
-                ['key' => 'realisasi', 'name' => 'Realisasi (Rp) (*)', 'type' => 'number', 'width' => 20, 'rules' => ['required', 'numeric']],
-                ['key' => 'persentase', 'name' => 'Persentase (%)', 'type' => 'number', 'width' => 15],
-                ['key' => 'selisih', 'name' => 'Selisih (Rp)', 'type' => 'number', 'width' => 18],
+                ['key' => 'anggaran', 'name' => 'Anggaran (Rp) (*)', 'type' => 'number', 'width' => 18, 'rules' => ['required', 'numeric']],
+                ['key' => 'realisasi', 'name' => 'Realisasi (Rp) (*)', 'type' => 'number', 'width' => 18, 'rules' => ['required', 'numeric']],
+                ['key' => 'persentase', 'name' => 'Persentase (%)', 'type' => 'number', 'width' => 12],
+                ['key' => 'selisih', 'name' => 'Selisih (Rp)', 'type' => 'number', 'width' => 16],
              ]),
              'sample_data' => json_encode([
                 ['kode_akun' => '5101', 'nama_akun' => '', 'uraian' => 'Beban gaji karyawan', 'anggaran' => 15000000, 'realisasi' => 15000000, 'persentase' => 0, 'selisih' => 0],
                 ['kode_akun' => '5103', 'nama_akun' => '', 'uraian' => 'Beban listrik', 'anggaran' => 2400000, 'realisasi' => 2000000, 'persentase' => 0, 'selisih' => 0],
                 ['kode_akun' => '5104', 'nama_akun' => '', 'uraian' => 'Beban air', 'anggaran' => 1200000, 'realisasi' => 1000000, 'persentase' => 0, 'selisih' => 0],
-             ]), 'sort_order' => 7],
+             ]), 'sort_order' => 2],
 
-            ['name' => 'CAT (Catatan Atas Laporan Keuangan)', 'slug' => 'cat-laporan', 'description' => 'Catatan atas laporan keuangan SAK EMKM', 'type' => 'cat', 'frequency' => 'tahunan',
+            // 3. CAT → catatan kaki, narasi manual
+            ['name' => 'CAT (Catatan Atas Laporan Keuangan)', 'slug' => 'cat-laporan', 'description' => 'Catatan atas laporan keuangan SAK EMKM - Input manual untuk narasi/catatan kaki.', 'type' => 'cat', 'frequency' => 'tahunan',
              'columns' => json_encode([
                 ['key' => 'no', 'name' => 'No. (*)', 'type' => 'text', 'width' => 8, 'rules' => ['required']],
                 ['key' => 'uraian', 'name' => 'Uraian (*)', 'type' => 'text', 'width' => 50, 'rules' => ['required']],
-                ['key' => 'nilai', 'name' => 'Nilai (Rp)', 'type' => 'number', 'width' => 20],
+                ['key' => 'nilai', 'name' => 'Nilai (Rp)', 'type' => 'number', 'width' => 18],
                 ['key' => 'keterangan', 'name' => 'Keterangan', 'type' => 'text', 'width' => 35],
              ]),
              'sample_data' => json_encode([
@@ -757,7 +708,7 @@ class FinancialTemplateService
                 ['no' => '2', 'uraian' => 'Kebijakan Akuntansi', 'nilai' => '', 'keterangan' => 'K basis akrual, SAK EMKM'],
                 ['no' => '3', 'uraian' => 'Aset Tetap', 'nilai' => '', 'keterangan' => 'Depresiasi garis lurus, umur ekonomis 5 tahun'],
                 ['no' => '4', 'uraian' => 'Modal Disetor', 'nilai' => 50000000, 'keterangan' => 'Dari Pemerintah Desa'],
-             ]), 'sort_order' => 8],
+             ]), 'sort_order' => 3],
         ];
         foreach ($templates as $data) {
             FinancialTemplate::updateOrCreate(['slug' => $data['slug']], $data);
