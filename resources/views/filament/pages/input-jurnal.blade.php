@@ -3,7 +3,7 @@
         .jurnal-form { max-width: 100%; }
         .jurnal-form .fi-fo-field-wrp { margin-bottom: 0.75rem !important; }
         .jurnal-form input, .jurnal-form select {
-            font-size: 16px !important; /* Prevent iOS zoom */
+            font-size: 16px !important;
             padding: 12px !important;
             min-height: 48px !important;
         }
@@ -38,12 +38,12 @@
             📊 Hari ini: <strong>{{ $this->todayCount }}</strong> transaksi tercatat
         </div>
 
-        <form wire:submit="submit">
-            {!! $this->form !!}
+        <x-filament-panels::form wire:submit="submit">
+            {{ $this->form }}
 
             <x-filament::button type="submit" class="submit-btn" icon="heroicon-o-check-circle">
                 💾 SIMPAN
             </x-filament::button>
-        </form>
+        </x-filament-panels::form>
     </div>
 </x-filament-panels::page>

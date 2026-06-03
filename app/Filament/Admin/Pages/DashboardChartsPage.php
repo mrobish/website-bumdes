@@ -153,7 +153,7 @@ class DashboardChartsPage extends Page
         $year = Carbon::parse($this->period . '-01')->year;
         $month = Carbon::parse($this->period . '-01')->month;
 
-        $this->topCategories = Transaction::where('type', 'income')
+        $this->topCategories = Transaction::where('transactions.type', 'income')
             ->where('is_void', false)
             ->whereYear('transaction_date', $year)
             ->whereMonth('transaction_date', $month)
