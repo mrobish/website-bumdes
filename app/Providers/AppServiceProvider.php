@@ -14,8 +14,12 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // Share villageInfo with all views
+        // Share BumdesSetting with all views (primary source)
         View::composer('*', function ($view) {
+            $bumdesSetting = \App\Models\BumdesSetting::first();
+            $view->with('bumdesSetting', $bumdesSetting);
+            
+            // Keep villageInfo for backward compatibility (will be removed later)
             $villageInfo = \App\Models\VillageInfo::first();
             $view->with('villageInfo', $villageInfo);
         });

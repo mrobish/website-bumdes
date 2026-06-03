@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Info Desa') - {{ $villageInfo->village_name ?? 'Desa' }}</title>
+    <title>@yield('title', 'Beranda') - {{ $bumdesSetting->bumdes_name ?? 'BUMDes' }}</title>
     
     <!-- Meta Tags -->
-    @if($villageInfo && $villageInfo->meta_title)
-        <meta name="description" content="{{ $villageInfo->meta_description }}">
-        <meta name="keywords" content="{{ $villageInfo->meta_keywords }}">
+    @if($bumdesSetting && $bumdesSetting->meta_title)
+        <meta name="description" content="{{ $bumdesSetting->meta_description }}">
+        <meta name="keywords" content="{{ $bumdesSetting->meta_keywords }}">
     @endif
     
     <!-- Tailwind CSS -->
@@ -50,9 +50,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
     
-    <!-- AOS CSS (Animate On Scroll) -->
+    <!-- AOS CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <style>
@@ -63,7 +63,14 @@
             font-family: 'Playfair Display', serif;
         }
         .hero-gradient {
-            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 50%, #1e40af 100%);
+            @if($bumdesSetting && $bumdesSetting->kantor_photo_path)
+                background: linear-gradient(rgba(30, 58, 95, 0.85), rgba(30, 58, 95, 0.90)), url('{{ $bumdesSetting->kantor_photo_url }}');
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+            @else
+                background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 50%, #1e40af 100%);
+            @endif
         }
         .card-hover {
             transition: all 0.3s ease;
@@ -81,13 +88,6 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
         .scroll-smooth {
             scroll-behavior: smooth;
         }
@@ -99,23 +99,23 @@
     <div class="bg-primary-900 text-white text-sm py-2">
         <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center">
             <div class="flex items-center space-x-4">
-                <span><i class="fas fa-map-marker-alt mr-1"></i> {{ $villageInfo->address ?? '' }}</span>
-                @if($villageInfo && $villageInfo->phone)
-                    <span class="hidden sm:inline"><i class="fas fa-phone mr-1"></i> {{ $villageInfo->phone }}</span>
+                <span><i class="fas fa-map-marker-alt mr-1"></i> {{ $bumdesSetting->bumdes_address ?? '' }}</span>
+                @if($bumdesSetting && $bumdesSetting->phone)
+                    <span class="hidden sm:inline"><i class="fas fa-phone mr-1"></i> {{ $bumdesSetting->phone }}</span>
                 @endif
             </div>
             <div class="flex items-center space-x-3">
-                @if($villageInfo && $villageInfo->facebook)
-                    <a href="{{ $villageInfo->facebook }}" target="_blank" class="hover:text-accent-400 transition"><i class="fab fa-facebook-f"></i></a>
+                @if($bumdesSetting && $bumdesSetting->facebook)
+                    <a href="{{ $bumdesSetting->facebook }}" target="_blank" class="hover:text-accent-400 transition"><i class="fab fa-facebook-f"></i></a>
                 @endif
-                @if($villageInfo && $villageInfo->instagram)
-                    <a href="{{ $villageInfo->instagram }}" target="_blank" class="hover:text-accent-400 transition"><i class="fab fa-instagram"></i></a>
+                @if($bumdesSetting && $bumdesSetting->instagram)
+                    <a href="{{ $bumdesSetting->instagram }}" target="_blank" class="hover:text-accent-400 transition"><i class="fab fa-instagram"></i></a>
                 @endif
-                @if($villageInfo && $villageInfo->youtube)
-                    <a href="{{ $villageInfo->youtube }}" target="_blank" class="hover:text-accent-400 transition"><i class="fab fa-youtube"></i></a>
+                @if($bumdesSetting && $bumdesSetting->youtube)
+                    <a href="{{ $bumdesSetting->youtube }}" target="_blank" class="hover:text-accent-400 transition"><i class="fab fa-youtube"></i></a>
                 @endif
-                @if($villageInfo && $villageInfo->tiktok)
-                    <a href="{{ $villageInfo->tiktok }}" target="_blank" class="hover:text-accent-400 transition"><i class="fab fa-tiktok"></i></a>
+                @if($bumdesSetting && $bumdesSetting->tiktok)
+                    <a href="{{ $bumdesSetting->tiktok }}" target="_blank" class="hover:text-accent-400 transition"><i class="fab fa-tiktok"></i></a>
                 @endif
             </div>
         </div>
@@ -127,28 +127,27 @@
             <div class="flex justify-between items-center py-4">
                 <!-- Logo -->
                 <a href="/" class="flex items-center space-x-3">
-                    @if($villageInfo && $villageInfo->logo_path)
-                        <img src="{{ asset('storage/' . $villageInfo->logo_path) }}" alt="Logo" class="h-12 w-12 object-contain">
+                    @if($bumdesSetting && $bumdesSetting->logo_path)
+                        <img src="{{ $bumdesSetting->logo_url }}" alt="Logo" class="h-12 w-12 object-contain">
                     @else
                         <div class="w-12 h-12 bg-primary-600 rounded-full flex items-center justify-center">
-                            <i class="fas fa-home text-white text-xl"></i>
+                            <i class="fas fa-store text-white text-xl"></i>
                         </div>
                     @endif
                     <div>
-                        <h1 class="font-bold text-xl text-primary-800">{{ $villageInfo->village_name ?? 'Desa' }}</h1>
-                        <p class="text-xs text-gray-500">{{ $villageInfo->district_name ?? '' }}, {{ $villageInfo->regency_name ?? '' }}</p>
+                        <h1 class="font-bold text-xl text-primary-800">{{ $bumdesSetting->bumdes_name ?? 'BUMDes' }}</h1>
+                        <p class="text-xs text-gray-500">{{ $bumdesSetting->village_name ?? '' }}, {{ $bumdesSetting->bumdes_district ?? '' }}</p>
                     </div>
                 </a>
                 
                 <!-- Desktop Menu -->
                 <div class="hidden lg:flex items-center space-x-1">
                     <a href="/" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">Beranda</a>
-                    <a href="/profil-desa" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">Profil Desa</a>
+                    <a href="/profil-desa" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">Profil</a>
                     <a href="/bumdes" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">BUMDes</a>
                     <a href="/unit-usaha" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">Unit Usaha</a>
-                    <a href="/potensi" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">Potensi</a>
                     <a href="/berita" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">Berita</a>
-                    <a href="/galeri" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">Galeri</a>
+                    <a href="/produk" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">Produk</a>
                     <a href="/kontak" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">Kontak</a>
                     <a href="/admin" class="ml-4 px-5 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium">
                         <i class="fas fa-lock mr-1"></i> Admin
@@ -171,7 +170,7 @@
                     <i class="fas fa-home mr-3 w-5"></i> Beranda
                 </a>
                 <a href="/profil-desa" class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">
-                    <i class="fas fa-building mr-3 w-5"></i> Profil Desa
+                    <i class="fas fa-building mr-3 w-5"></i> Profil
                 </a>
                 <a href="/bumdes" class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">
                     <i class="fas fa-store mr-3 w-5"></i> BUMDes
@@ -179,14 +178,11 @@
                 <a href="/unit-usaha" class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">
                     <i class="fas fa-building mr-3 w-5"></i> Unit Usaha
                 </a>
-                <a href="/potensi" class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">
-                    <i class="fas fa-mountain mr-3 w-5"></i> Potensi
-                </a>
                 <a href="/berita" class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">
                     <i class="fas fa-newspaper mr-3 w-5"></i> Berita
                 </a>
-                <a href="/galeri" class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">
-                    <i class="fas fa-images mr-3 w-5"></i> Galeri
+                <a href="/produk" class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">
+                    <i class="fas fa-box mr-3 w-5"></i> Produk
                 </a>
                 <a href="/kontak" class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition font-medium">
                     <i class="fas fa-envelope mr-3 w-5"></i> Kontak
@@ -205,23 +201,22 @@
 
     <!-- Footer -->
     <footer class="bg-primary-900 text-white">
-        <!-- Main Footer -->
         <div class="max-w-7xl mx-auto px-4 py-12">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <!-- About -->
                 <div>
                     <div class="flex items-center space-x-3 mb-4">
-                        @if($villageInfo && $villageInfo->logo_path)
-                            <img src="{{ asset('storage/' . $villageInfo->logo_path) }}" alt="Logo" class="h-10 w-10 object-contain">
+                        @if($bumdesSetting && $bumdesSetting->logo_path)
+                            <img src="{{ $bumdesSetting->logo_url }}" alt="Logo" class="h-10 w-10 object-contain">
                         @else
                             <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                                <i class="fas fa-home text-white"></i>
+                                <i class="fas fa-store text-white"></i>
                             </div>
                         @endif
-                        <h3 class="font-bold text-lg">{{ $villageInfo->village_name ?? 'Desa' }}</h3>
+                        <h3 class="font-bold text-lg">{{ $bumdesSetting->bumdes_name ?? 'BUMDes' }}</h3>
                     </div>
                     <p class="text-sm text-gray-300 leading-relaxed">
-                        {{ Str::limit($villageInfo->about_village ?? 'Website resmi desa.', 150) }}
+                        {{ Str::limit($bumdesSetting->about ?? 'Badan Usaha Milik Desa.', 150) }}
                     </p>
                 </div>
                 
@@ -230,9 +225,9 @@
                     <h4 class="font-bold text-lg mb-4">Tautan Cepat</h4>
                     <ul class="space-y-2 text-sm">
                         <li><a href="/" class="text-gray-300 hover:text-accent-400 transition"><i class="fas fa-chevron-right mr-2 text-xs"></i>Beranda</a></li>
-                        <li><a href="/profil-desa" class="text-gray-300 hover:text-accent-400 transition"><i class="fas fa-chevron-right mr-2 text-xs"></i>Profil Desa</a></li>
+                        <li><a href="/profil-desa" class="text-gray-300 hover:text-accent-400 transition"><i class="fas fa-chevron-right mr-2 text-xs"></i>Profil</a></li>
                         <li><a href="/bumdes" class="text-gray-300 hover:text-accent-400 transition"><i class="fas fa-chevron-right mr-2 text-xs"></i>BUMDes</a></li>
-                        <li><a href="/potensi" class="text-gray-300 hover:text-accent-400 transition"><i class="fas fa-chevron-right mr-2 text-xs"></i>Potensi Desa</a></li>
+                        <li><a href="/unit-usaha" class="text-gray-300 hover:text-accent-400 transition"><i class="fas fa-chevron-right mr-2 text-xs"></i>Unit Usaha</a></li>
                         <li><a href="/berita" class="text-gray-300 hover:text-accent-400 transition"><i class="fas fa-chevron-right mr-2 text-xs"></i>Berita</a></li>
                     </ul>
                 </div>
@@ -243,24 +238,18 @@
                     <ul class="space-y-3 text-sm">
                         <li class="flex items-start space-x-3">
                             <i class="fas fa-map-marker-alt mt-1 text-accent-400"></i>
-                            <span class="text-gray-300">{{ $villageInfo->address ?? '' }}</span>
+                            <span class="text-gray-300">{{ $bumdesSetting->bumdes_address ?? '' }}</span>
                         </li>
-                        @if($villageInfo && $villageInfo->phone)
+                        @if($bumdesSetting && $bumdesSetting->phone)
                             <li class="flex items-center space-x-3">
                                 <i class="fas fa-phone text-accent-400"></i>
-                                <span class="text-gray-300">{{ $villageInfo->phone }}</span>
+                                <span class="text-gray-300">{{ $bumdesSetting->phone }}</span>
                             </li>
                         @endif
-                        @if($villageInfo && $villageInfo->email)
+                        @if($bumdesSetting && $bumdesSetting->email)
                             <li class="flex items-center space-x-3">
                                 <i class="fas fa-envelope text-accent-400"></i>
-                                <span class="text-gray-300">{{ $villageInfo->email }}</span>
-                            </li>
-                        @endif
-                        @if($villageInfo && $villageInfo->contact_whatsapp)
-                            <li class="flex items-center space-x-3">
-                                <i class="fab fa-whatsapp text-accent-400"></i>
-                                <span class="text-gray-300">{{ $villageInfo->contact_whatsapp }}</span>
+                                <span class="text-gray-300">{{ $bumdesSetting->email }}</span>
                             </li>
                         @endif
                     </ul>
@@ -270,29 +259,19 @@
                 <div>
                     <h4 class="font-bold text-lg mb-4">Ikuti Kami</h4>
                     <div class="flex flex-wrap gap-3">
-                        @if($villageInfo && $villageInfo->facebook)
-                            <a href="{{ $villageInfo->facebook }}" target="_blank" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-blue-600 transition">
+                        @if($bumdesSetting && $bumdesSetting->facebook)
+                            <a href="{{ $bumdesSetting->facebook }}" target="_blank" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-blue-600 transition">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
                         @endif
-                        @if($villageInfo && $villageInfo->instagram)
-                            <a href="{{ $villageInfo->instagram }}" target="_blank" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-pink-600 transition">
+                        @if($bumdesSetting && $bumdesSetting->instagram)
+                            <a href="{{ $bumdesSetting->instagram }}" target="_blank" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-pink-600 transition">
                                 <i class="fab fa-instagram"></i>
                             </a>
                         @endif
-                        @if($villageInfo && $villageInfo->youtube)
-                            <a href="{{ $villageInfo->youtube }}" target="_blank" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-red-600 transition">
+                        @if($bumdesSetting && $bumdesSetting->youtube)
+                            <a href="{{ $bumdesSetting->youtube }}" target="_blank" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-red-600 transition">
                                 <i class="fab fa-youtube"></i>
-                            </a>
-                        @endif
-                        @if($villageInfo && $villageInfo->tiktok)
-                            <a href="{{ $villageInfo->tiktok }}" target="_blank" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-black transition">
-                                <i class="fab fa-tiktok"></i>
-                            </a>
-                        @endif
-                        @if($villageInfo && $villageInfo->twitter)
-                            <a href="{{ $villageInfo->twitter }}" target="_blank" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-blue-400 transition">
-                                <i class="fab fa-twitter"></i>
                             </a>
                         @endif
                     </div>
@@ -304,9 +283,9 @@
         <div class="border-t border-white/10">
             <div class="max-w-7xl mx-auto px-4 py-6">
                 <div class="flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
-                    <p>&copy; {{ date('Y') }} {{ $villageInfo->village_name ?? 'Desa' }}. Hak Cipta Dilindungi.</p>
+                    <p>&copy; {{ date('Y') }} {{ $bumdesSetting->bumdes_name ?? 'BUMDes' }}. Hak Cipta Dilindungi.</p>
                     <p class="mt-2 md:mt-0">
-                        {{ $villageInfo->district_name ?? '' }}, {{ $villageInfo->regency_name ?? '' }}, {{ $villageInfo->province_name ?? '' }}
+                        {{ $bumdesSetting->village_name ?? '' }}, {{ $bumdesSetting->bumdes_district ?? '' }}, {{ $bumdesSetting->bumdes_regency ?? '' }}
                     </p>
                 </div>
             </div>
@@ -314,8 +293,8 @@
     </footer>
 
     <!-- WhatsApp Floating Button -->
-    @if($villageInfo && $villageInfo->contact_whatsapp)
-        <a href="https://wa.me/{{ $villageInfo->contact_whatsapp }}" target="_blank" 
+    @if($bumdesSetting && $bumdesSetting->whatsapp)
+        <a href="https://wa.me/{{ $bumdesSetting->whatsapp }}" target="_blank" 
            class="fixed bottom-6 right-6 w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-lg hover:bg-green-600 transition z-50 animate-bounce">
             <i class="fab fa-whatsapp text-white text-2xl"></i>
         </a>
@@ -327,9 +306,9 @@
     </button>
 
     <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     
-    <!-- AOS JS (Animate On Scroll) -->
+    <!-- AOS JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     
     <script>
@@ -361,27 +340,6 @@
         backToTopBtn.addEventListener('click', function() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
-        
-        // Lazy loading for images
-        if ('loading' in HTMLImageElement.prototype) {
-            // Browser supports native lazy loading
-            document.querySelectorAll('img[loading="lazy"]').forEach(img => {
-                img.src = img.dataset.src;
-            });
-        } else {
-            // Fallback for browsers that don't support native lazy loading
-            const lazyImages = document.querySelectorAll('img[loading="lazy"]');
-            const imageObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const img = entry.target;
-                        img.src = img.dataset.src;
-                        observer.unobserve(img);
-                    }
-                });
-            });
-            lazyImages.forEach(img => imageObserver.observe(img));
-        }
     </script>
     @yield('scripts')
 </body>

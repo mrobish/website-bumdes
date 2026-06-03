@@ -1,14 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - BUMDes Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .login-bg {
+            @if($bumdesSetting && $bumdesSetting->kegiatan_photo_path)
+                background: linear-gradient(rgba(30, 58, 95, 0.8), rgba(30, 58, 95, 0.9)), url('{{ $bumdesSetting->kegiatan_photo_url }}');
+                background-size: cover;
+                background-position: center;
+            @else
+                background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 50%, #1e40af 100%);
+            @endif
+        }
+    </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+<body class="login-bg min-h-screen flex items-center justify-center">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 class="text-2xl font-bold text-center mb-6">Login Admin BUMDes</h1>
+        <!-- Logo -->
+        <div class="text-center mb-6">
+            @if($bumdesSetting && $bumdesSetting->logo_path)
+                <img src="{{ $bumdesSetting->logo_url }}" alt="Logo" class="h-20 mx-auto mb-4">
+            @else
+                <div class="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-store text-white text-3xl"></i>
+                </div>
+            @endif
+            <h1 class="text-2xl font-bold text-gray-800">{{ $bumdesSetting->bumdes_name ?? 'BUMDes' }}</h1>
+            <p class="text-sm text-gray-500">Admin Panel</p>
+        </div>
         
         @if($errors->any())
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -43,9 +65,10 @@
             </button>
         </form>
         
-        <div class="mt-4 text-center text-sm text-gray-600">
-            <p>Email: admin@bumdes.id</p>
-            <p>Password: admin123</p>
+        <div class="mt-4 text-center">
+            <a href="/" class="text-sm text-blue-500 hover:text-blue-700">
+                <i class="fas fa-arrow-left mr-1"></i> Kembali ke Website
+            </a>
         </div>
     </div>
 </body>
