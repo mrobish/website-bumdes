@@ -62,7 +62,7 @@ class FinancialTemplateService
             $namaOptions[] = $a->name;
             $coaRow++;
         }
-        $coaSheet->setSheetState(\PhpOffice\PhpSpreadsheet\Spreadsheet::SHEETSTATE_VERYHIDDEN);
+        $coaSheet->setSheetState(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::SHEETSTATE_VERYHIDDEN);
         $kodeList = implode(',', $kodeOptions);
         $namaList = implode(',', $namaOptions);
 
