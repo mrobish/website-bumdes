@@ -12,6 +12,8 @@ class DatabaseSeeder extends Seeder
             VillageInfoSeeder::class,
             BusinessUnitSeeder::class,
             FinancialReportTemplateSeeder::class,
+            BumdesSettingSeeder::class,
+            BumdesStructureSeeder::class,
         ]);
     }
 }
