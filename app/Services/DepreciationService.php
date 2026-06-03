@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Asset;
-use App\Models\DepreciationLog;
+use App\Models\AssetDepreciation;
 use App\Models\JournalEntry;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
@@ -47,22 +47,27 @@ class DepreciationService
 
             if ($monthlyDepreciation <= 0) continue;
 
-            DB::transaction(function () use ($asset, $monthlyDepreciation, $year, $month) {
+            $beginningBookValue = $asset->current_book_value ?? ($asset->purchase_price - $accumulated);
+            $newAccumulated = $accumulated + $monthlyDepreciation;
+            $endingBookValue = $asset->purchase_price - $newAccumulated;
+            $period = $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT);
+
+            DB::transaction(function () use ($asset, $monthlyDepreciation, $year, $month, $accumulated, $beginningBookValue, $newAccumulated, $endingBookValue, $period) {
                 // 1. Create transaction record first
                 $transaction = Transaction::create([
+                    'transaction_number' => "DEP-$period-" . substr($asset->asset_code, -3),
                     'transaction_date' => "$year-$month-28",
-                    'type' => 'expense',
+                    'type' => 'adjustment',
                     'amount' => $monthlyDepreciation,
                     'description' => "Depresiasi Aset: {$asset->name}",
-                    'reference_number' => "DEP-$year-" . str_pad($month, 2, '0', STR_PAD_LEFT) . "-" . $asset->asset_code,
+                    'reference_number' => "DEP-$period-" . $asset->asset_code,
                     'unit_id' => $asset->business_unit_id,
-                    'account_id' => 1, // Kas (simplified)
                     'category_id' => null,
-                    'status' => 'posted',
                     'created_by' => 1,
+                    'fiscal_year' => $year,
                 ]);
 
-                // 2. Create journal entries with transaction_id
+                // 2. Journal Entry: DR Beban Depresiasi
                 JournalEntry::create([
                     'transaction_id' => $transaction->id,
                     'entry_date' => "$year-$month-28",
@@ -75,6 +80,7 @@ class DepreciationService
                     'fiscal_year' => $year,
                 ]);
 
+                // 3. Journal Entry: CR Akumulasi Depresiasi
                 $contraCode = match($asset->category) {
                     'kendaraan' => '1292',
                     'peralatan' => '1293',
@@ -93,20 +99,22 @@ class DepreciationService
                     'fiscal_year' => $year,
                 ]);
 
-                // 3. Update asset accumulated depreciation
-                $newAccumulated = $accumulated + $monthlyDepreciation;
+                // 4. Update asset
                 $asset->update([
                     'accumulated_depreciation' => $newAccumulated,
-                    'current_book_value' => $asset->purchase_price - $newAccumulated,
+                    'current_book_value' => $endingBookValue,
                 ]);
 
-                // 4. Log depreciation
-                DepreciationLog::create([
+                // 5. Log depreciation
+                AssetDepreciation::create([
                     'asset_id' => $asset->id,
-                    'run_date' => "$year-$month-28",
+                    'depreciation_date' => "$year-$month-28",
+                    'period' => $period,
+                    'beginning_book_value' => $beginningBookValue,
                     'depreciation_amount' => $monthlyDepreciation,
+                    'accumulated_depreciation' => $newAccumulated,
+                    'ending_book_value' => $endingBookValue,
                     'journal_entry_id' => $transaction->id,
-                    'fiscal_year' => $year,
                 ]);
             });
 
