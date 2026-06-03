@@ -64,3 +64,8 @@ Route::get('/galeri/{id}', [GalleryController::class, 'show'])->name('gallery.sh
 // Product Routes
 Route::get('/produk', [ProductController::class, 'index'])->name('products.index');
 Route::get('/produk/{slug}', [ProductController::class, 'show'])->name('products.show');
+
+// PWA Offline Transaction
+Route::get('/offline-transaksi', function () {
+    return view('offline-transaction');
+})->name('offline.transaction');
