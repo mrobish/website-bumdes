@@ -1,6 +1,6 @@
 <x-filament-panels::page>
     <form wire:submit="loadData">
-        {!! $this->form !!}
+        <div class="fi-fo-field-wrp">{{ $this->form }}</div>
         <x-filament::button type="submit" icon="heroicon-o-magnifying-gang" class="mt-4">
             📊 Tampilkan Arus Kas
         </x-filament::button>
@@ -8,16 +8,13 @@
 
     @if(count($incomeByCategory) > 0 || count($expenseByCategory) > 0)
         <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {{-- PENDAPATAN --}}
             <x-filament::section>
                 <x-slot name="heading">💰 Kas Masuk (Pendapatan)</x-slot>
                 <table class="w-full text-sm">
-                    <thead>
-                        <tr class="border-b bg-green-50">
-                            <th class="px-3 py-2 text-left">Kategori</th>
-                            <th class="px-3 py-2 text-right">Jumlah</th>
-                        </tr>
-                    </thead>
+                    <thead><tr class="border-b bg-green-50">
+                        <th class="px-3 py-2 text-left">Kategori</th>
+                        <th class="px-3 py-2 text-right">Jumlah</th>
+                    </tr></thead>
                     <tbody>
                         @forelse($incomeByCategory as $cat => $amount)
                             <tr class="border-b">
@@ -37,16 +34,13 @@
                 </table>
             </x-filament::section>
 
-            {{-- PENGELUARAN --}}
             <x-filament::section>
                 <x-slot name="heading">💸 Kas Keluar (Pengeluaran)</x-slot>
                 <table class="w-full text-sm">
-                    <thead>
-                        <tr class="border-b bg-red-50">
-                            <th class="px-3 py-2 text-left">Kategori</th>
-                            <th class="px-3 py-2 text-right">Jumlah</th>
-                        </tr>
-                    </thead>
+                    <thead><tr class="border-b bg-red-50">
+                        <th class="px-3 py-2 text-left">Kategori</th>
+                        <th class="px-3 py-2 text-right">Jumlah</th>
+                    </tr></thead>
                     <tbody>
                         @forelse($expenseByCategory as $cat => $amount)
                             <tr class="border-b">
@@ -67,14 +61,12 @@
             </x-filament::section>
         </div>
 
-        {{-- NET CASH FLOW --}}
         <div class="mt-4">
             <x-filament::section>
                 <div class="text-center py-4">
                     <div class="text-sm text-gray-500">Arus Kas Bersih</div>
                     <div class="text-3xl font-bold {{ $netCashFlow >= 0 ? 'text-green-600' : 'text-red-600' }}">
-                        {{ $netCashFlow >= 0 ? '📈' : '📉' }}
-                        Rp {{ number_format(abs($netCashFlow), 0, ',', '.') }}
+                        {{ $netCashFlow >= 0 ? '📈' : '📉' }} Rp {{ number_format(abs($netCashFlow), 0, ',', '.') }}
                         <span class="text-lg">({{ $netCashFlow >= 0 ? 'POSITIF' : 'NEGATIF' }})</span>
                     </div>
                     <div class="text-sm text-gray-500 mt-2">

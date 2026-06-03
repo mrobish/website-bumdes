@@ -1,6 +1,6 @@
 <x-filament-panels::page>
     <form wire:submit="loadData">
-        {!! $this->form !!}
+        <div class="fi-fo-field-wrp">{{ $this->form }}</div>
         <x-filament::button type="submit" icon="heroicon-o-magnifying-gang" class="mt-4">
             📊 Tampilkan Neraca
         </x-filament::button>
@@ -8,17 +8,14 @@
 
     @if(count($assets) > 0 || count($liabilities) > 0 || count($equity) > 0)
         <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {{-- ASET --}}
             <x-filament::section>
                 <x-slot name="heading">🏢 Aset</x-slot>
                 <table class="w-full text-sm">
-                    <thead>
-                        <tr class="border-b bg-green-50">
-                            <th class="px-3 py-2 text-left">Kode</th>
-                            <th class="px-3 py-2 text-left">Nama Akun</th>
-                            <th class="px-3 py-2 text-right">Jumlah</th>
-                        </tr>
-                    </thead>
+                    <thead><tr class="border-b bg-green-50">
+                        <th class="px-3 py-2 text-left">Kode</th>
+                        <th class="px-3 py-2 text-left">Nama Akun</th>
+                        <th class="px-3 py-2 text-right">Jumlah</th>
+                    </tr></thead>
                     <tbody>
                         @forelse($assets as $asset)
                             <tr class="border-b">
@@ -42,17 +39,14 @@
             </x-filament::section>
 
             <div class="space-y-4">
-                {{-- KEWAJIBAN --}}
                 <x-filament::section>
                     <x-slot name="heading">📋 Kewajiban</x-slot>
                     <table class="w-full text-sm">
-                        <thead>
-                            <tr class="border-b bg-red-50">
-                                <th class="px-3 py-2 text-left">Kode</th>
-                                <th class="px-3 py-2 text-left">Nama Akun</th>
-                                <th class="px-3 py-2 text-right">Jumlah</th>
-                            </tr>
-                        </thead>
+                        <thead><tr class="border-b bg-red-50">
+                            <th class="px-3 py-2 text-left">Kode</th>
+                            <th class="px-3 py-2 text-left">Nama Akun</th>
+                            <th class="px-3 py-2 text-right">Jumlah</th>
+                        </tr></thead>
                         <tbody>
                             @forelse($liabilities as $lib)
                                 <tr class="border-b">
@@ -73,17 +67,14 @@
                     </table>
                 </x-filament::section>
 
-                {{-- EKUITAS --}}
                 <x-filament::section>
                     <x-slot name="heading">💎 Ekuitas</x-slot>
                     <table class="w-full text-sm">
-                        <thead>
-                            <tr class="border-b bg-blue-50">
-                                <th class="px-3 py-2 text-left">Kode</th>
-                                <th class="px-3 py-2 text-left">Nama Akun</th>
-                                <th class="px-3 py-2 text-right">Jumlah</th>
-                            </tr>
-                        </thead>
+                        <thead><tr class="border-b bg-blue-50">
+                            <th class="px-3 py-2 text-left">Kode</th>
+                            <th class="px-3 py-2 text-left">Nama Akun</th>
+                            <th class="px-3 py-2 text-right">Jumlah</th>
+                        </tr></thead>
                         <tbody>
                             @forelse($equity as $eq)
                                 <tr class="border-b">
@@ -106,7 +97,6 @@
             </div>
         </div>
 
-        {{-- TOTAL KEWAJIBAN + EKUITAS --}}
         <div class="mt-4">
             <x-filament::section>
                 <div class="text-center py-4">

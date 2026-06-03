@@ -1,6 +1,6 @@
 <x-filament-panels::page>
     <form wire:submit="loadData">
-        {!! $this->form !!}
+        <div class="fi-fo-field-wrp">{{ $this->form }}</div>
         <x-filament::button type="submit" icon="heroicon-o-magnifying-gang" class="mt-4">
             📊 Tampilkan Buku Besar
         </x-filament::button>
@@ -29,23 +29,17 @@
                         <tbody>
                             @php $runningBalance = 0; @endphp
                             @foreach($entries as $entry)
-                                @php
-                                    $runningBalance += $entry['debit'] - $entry['credit'];
-                                @endphp
+                                @php $runningBalance += $entry['debit'] - $entry['credit']; @endphp
                                 <tr class="border-b hover:bg-gray-50">
                                     <td class="px-3 py-2">{{ \Carbon\Carbon::parse($entry['entry_date'])->format('d/m/Y') }}</td>
                                     <td class="px-3 py-2">{{ $entry['transaction']['transaction_number'] ?? '-' }}</td>
                                     <td class="px-3 py-2">{{ $entry['description'] }}</td>
                                     <td class="px-3 py-2">{{ $entry['unit']['name'] ?? '-' }}</td>
                                     <td class="px-3 py-2 text-right">
-                                        @if($entry['debit'] > 0)
-                                            Rp {{ number_format($entry['debit'], 0, ',', '.') }}
-                                        @endif
+                                        @if($entry['debit'] > 0) Rp {{ number_format($entry['debit'], 0, ',', '.') }} @endif
                                     </td>
                                     <td class="px-3 py-2 text-right">
-                                        @if($entry['credit'] > 0)
-                                            Rp {{ number_format($entry['credit'], 0, ',', '.') }}
-                                        @endif
+                                        @if($entry['credit'] > 0) Rp {{ number_format($entry['credit'], 0, ',', '.') }} @endif
                                     </td>
                                     <td class="px-3 py-2 text-right font-bold {{ $runningBalance >= 0 ? 'text-green-600' : 'text-red-600' }}">
                                         Rp {{ number_format($runningBalance, 0, ',', '.') }}

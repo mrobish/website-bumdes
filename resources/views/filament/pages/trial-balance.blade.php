@@ -1,6 +1,6 @@
 <x-filament-panels::page>
     <form wire:submit="loadData">
-        {!! $this->form !!}
+        <div class="fi-fo-field-wrp">{{ $this->form }}</div>
         <x-filament::button type="submit" icon="heroicon-o-magnifying-gang" class="mt-4">
             📊 Tampilkan Neraca Saldo
         </x-filament::button>
@@ -42,7 +42,7 @@
                                                 'equity' => 'bg-blue-100 text-blue-800',
                                                 'revenue' => 'bg-yellow-100 text-yellow-800',
                                                 'expense' => 'bg-gray-100 text-gray-800',
-                                                default => 'bg-gray-100 text-gray-800',
+                                                default => 'bg-gray-100',
                                             } }}">
                                             {{ match($account['type']) {
                                                 'asset' => 'Aset',
@@ -55,14 +55,10 @@
                                         </span>
                                     </td>
                                     <td class="px-3 py-2 text-right">
-                                        @if($account['debit'] > 0)
-                                            Rp {{ number_format($account['debit'], 0, ',', '.') }}
-                                        @endif
+                                        @if($account['debit'] > 0) Rp {{ number_format($account['debit'], 0, ',', '.') }} @endif
                                     </td>
                                     <td class="px-3 py-2 text-right">
-                                        @if($account['credit'] > 0)
-                                            Rp {{ number_format($account['credit'], 0, ',', '.') }}
-                                        @endif
+                                        @if($account['credit'] > 0) Rp {{ number_format($account['credit'], 0, ',', '.') }} @endif
                                     </td>
                                 </tr>
                             @endforeach
