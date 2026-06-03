@@ -63,8 +63,8 @@ class JurnalResource extends Resource
                         Forms\Components\Select::make('type')
                             ->label('Tipe (*)')
                             ->options([
-                                'debit' => 'Debet',
-                                'credit' => 'Kredit',
+                                'pemasukan' => '💰 Pemasukan (Debet)',
+                                'pengeluaran' => '💸 Pengeluaran (Kredit)',
                             ])
                             ->required()
                             ->columnSpan(1),
@@ -132,8 +132,8 @@ class JurnalResource extends Resource
                     ->label('Tipe')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'debit' => 'success',
-                        'credit' => 'warning',
+                        'pemasukan' => 'success',
+                        'pengeluaran' => 'warning',
                         default => 'gray',
                     }),
 
@@ -169,8 +169,8 @@ class JurnalResource extends Resource
                 Tables\Filters\SelectFilter::make('type')
                     ->label('Tipe')
                     ->options([
-                        'debit' => 'Debet',
-                        'credit' => 'Kredit',
+                        'pemasukan' => 'Pemasukan',
+                        'pengeluaran' => 'Pengeluaran',
                     ]),
 
                 Tables\Filters\Filter::make('bulan')
@@ -178,11 +178,11 @@ class JurnalResource extends Resource
                     ->form([
                         Forms\Components\Select::make('month')
                             ->label('Bulan')
-                            ->options(collect(range(1, 12))->mapWithKeys(fn ($m) => [$m => Carbon\Carbon::create()->month($m)->translatedFormat('F')]))
+                            ->options(collect(range(1, 12))->mapWithKeys(fn ($m) => [$m => \Carbon\Carbon::create()->month($m)->translatedFormat('F')]))
                             ->default(now()->month),
                         Forms\Components\Select::make('year')
                             ->label('Tahun')
-                            ->options(collect(range(now()->year - 2, now()->year + 1)->reverse())
+                            ->options(collect(array_reverse(range(now()->year - 2, now()->year + 1)))
                                 ->mapWithKeys(fn ($y) => [$y => $y]))
                             ->default(now()->year),
                     ])

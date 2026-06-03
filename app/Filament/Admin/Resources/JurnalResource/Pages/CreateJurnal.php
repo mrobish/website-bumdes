@@ -4,6 +4,7 @@ namespace App\Filament\Admin\Resources\JurnalResource\Pages;
 
 use App\Filament\Admin\Resources\JurnalResource;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Auth;
 
 class CreateJurnal extends CreateRecord
 {
