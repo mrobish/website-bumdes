@@ -22,21 +22,21 @@ class InputJurnalPage extends Page implements HasForms
     protected static ?string $navigationIcon = 'heroicon-o-pencil-square';
     protected static ?string $navigationGroup = 'Keuangan';
     protected static ?string $navigationLabel = 'Input Jurnal';
-    protected static ?string $title = 'Input Jurnal Harian';
+    protected static ?string $title = 'Input Jurnal';
     protected static ?int $navigationSort = 1;
 
     public ?array $data = [];
-    public int $month;
-    public int $year;
+    public int $todayCount = 0;
 
     public function mount(): void
     {
-        $this->month = (int) now()->month;
-        $this->year = (int) now()->year;
+        $this->todayCount = FinancialTransaction::whereDate('transaction_date', today())->count();
         $this->form->fill([
-            'month' => $this->month,
-            'year' => $this->year,
-            'rows' => [],
+            'transaction_date' => now()->format('Y-m-d'),
+            'type' => 'pemasukan',
+            'account_code' => '',
+            'amount' => null,
+            'description' => '',
         ]);
     }
 
@@ -44,161 +44,101 @@ class InputJurnalPage extends Page implements HasForms
     {
         return $form
             ->schema([
-                Section::make('📅 Pengaturan Periode')
-                    ->description('Pilih bulan dan tahun transaksi jurnal')
-                    ->icon('heroicon-o-calendar')
-                    ->schema([
-                        Grid::make(2)->schema([
-                            Select::make('month')
-                                ->label('Bulan')
-                                ->options([
-                                    1 => 'Januari', 2 => 'Februari', 3 => 'Maret',
-                                    4 => 'April', 5 => 'Mei', 6 => 'Juni',
-                                    7 => 'Juli', 8 => 'Agustus', 9 => 'September',
-                                    10 => 'Oktober', 11 => 'November', 12 => 'Desember',
-                                ])
-                                ->default(now()->month)
-                                ->required(),
-                            Select::make('year')
-                                ->label('Tahun')
-                                ->options(collect(array_reverse(range(now()->year - 3, now()->year + 1)))->mapWithKeys(fn ($y) => [$y => $y]))
-                                ->default(now()->year)
-                                ->required(),
-                        ]),
-                    ])->columns(2),
+                // Tanggal
+                TextInput::make('transaction_date')
+                    ->label('📅 Tanggal')
+                    ->type('date')
+                    ->required()
+                    ->default(now()->format('Y-m-d'))
+                    ->live(),
 
-                Section::make('📝 Daftar Transaksi')
-                    ->description('Klik "+ Tambah Baris" untuk menambah transaksi. Semua baris disimpan sebagai DRAFT.')
-                    ->icon('heroicon-o-table-cells')
-                    ->schema([
-                        \Filament\Forms\Components\Repeater::make('rows')
-                            ->schema([
-                                Grid::make(6)->schema([
-                                    TextInput::make('transaction_date')
-                                        ->label('Tanggal')
-                                        ->type('date')
-                                        ->required()
-                                        ->columnSpan(1),
-                                    Select::make('account_code')
-                                        ->label('Kode Akun')
-                                        ->options(fn () => ChartOfAccount::pluck('code', 'code')->toArray())
-                                        ->searchable()
-                                        ->required()
-                                        ->reactive()
-                                        ->afterStateUpdated(fn ($state, $set) => $set('account_name', ChartOfAccount::where('code', $state)->value('name') ?? ''))
-                                        ->columnSpan(1),
-                                    TextInput::make('account_name')
-                                        ->label('Nama Akun')
-                                        ->disabled()
-                                        ->dehydrated(false)
-                                        ->columnSpan(1),
-                                    Select::make('type')
-                                        ->label('Tipe')
-                                        ->options([
-                                            'pemasukan' => '💰 Pemasukan',
-                                            'pengeluaran' => '💸 Pengeluaran',
-                                        ])
-                                        ->required()
-                                        ->columnSpan(1),
-                                    TextInput::make('amount')
-                                        ->label('Jumlah (Rp)')
-                                        ->numeric()
-                                        ->prefix('Rp')
-                                        ->required()
-                                        ->minValue(0)
-                                        ->columnSpan(1),
-                                    TextInput::make('description')
-                                        ->label('Keterangan')
-                                        ->required()
-                                        ->columnSpan(1),
-                                ])->columns(6),
-                            ])
-                            ->defaultItems(1)
-                            ->addActionLabel('+ Tambah Baris')
-                            ->removeActionLabel('✕')
-                            ->reorderable(false)
-                            ->collapsible(false)
-                            ->itemLabel(fn (array $state): ?string =>
-                                !empty($state['account_code'])
-                                    ? "{$state['account_code']} - {$state['description']}"
-                                    : null
-                            ),
-                    ]),
+                // Tipe — toggle besar
+                Select::make('type')
+                    ->label('💰 Tipe')
+                    ->options([
+                        'pemasukan' => '✅ Pemasukan (Uang Masuk)',
+                        'pengeluaran' => '❌ Pengeluaran (Uang Keluar)',
+                    ])
+                    ->required()
+                    ->default('pemasukan')
+                    ->live(),
+
+                // Kode Akun — search & pilih
+                Select::make('account_code')
+                    ->label('📋 Kode Akun')
+                    ->options(fn () => ChartOfAccount::pluck('name', 'code')->map(fn ($name, $code) => "$code — $name")->toArray())
+                    ->searchable()
+                    ->required()
+                    ->live()
+                    ->afterStateUpdated(fn ($state, $set) => $set('account_name_display', ChartOfAccount::where('code', $state)->value('name') ?? '')),
+
+                // Jumlah
+                TextInput::make('amount')
+                    ->label('💵 Jumlah (Rp)')
+                    ->numeric()
+                    ->prefix('Rp')
+                    ->placeholder('0')
+                    ->required()
+                    ->minValue(1)
+                    ->autofocus(),
+
+                // Keterangan
+                TextInput::make('description')
+                    ->label('📝 Keterangan')
+                    ->placeholder('Contoh: Beli beras 5kg')
+                    ->required()
+                    ->maxLength(255),
             ])
             ->statePath('data');
     }
 
-    public function submitJurnal(): void
+    public function submit(): void
     {
         $data = $this->form->getState();
-        $rows = $data['rows'] ?? [];
-        $month = $data['month'];
-        $year = $data['year'];
 
-        $validRows = array_filter($rows, fn ($r) =>
-            !empty($r['account_code']) && !empty($r['amount']) && (float) $r['amount'] > 0
-        );
-
-        if (empty($validRows)) {
-            Notification::make()->title('Error')->body('Tidak ada transaksi yang valid!')->danger()->send();
+        // Validasi
+        if (empty($data['account_code']) || empty($data['amount']) || $data['amount'] <= 0) {
+            Notification::make()->title('Lengkapi Data!')->danger()->send();
             return;
         }
 
-        $totalPemasukan = 0;
-        $totalPengeluaran = 0;
-        foreach ($validRows as $row) {
-            if (($row['type'] ?? '') === 'pemasukan') {
-                $totalPemasukan += (float) $row['amount'];
-            } else {
-                $totalPengeluaran += (float) $row['amount'];
-            }
-        }
+        // Generate nomor transaksi
+        $date = \Carbon\Carbon::parse($data['transaction_date']);
+        $prefix = 'J-' . $date->format('Ymd');
+        $count = FinancialTransaction::where('transaction_number', 'like', $prefix . '%')->count();
+        $number = $prefix . '-' . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
 
-        if (abs($totalPemasukan - $totalPengeluaran) > 0.01) {
-            Notification::make()
-                ->title('Jurnal Tidak Seimbang!')
-                ->body("Pemasukan Rp " . number_format($totalPemasukan, 0, ',', '.') . " ≠ Pengeluaran Rp " . number_format($totalPengeluaran, 0, ',', '.'))
-                ->danger()->send();
-            return;
-        }
+        // Simpan langsung
+        FinancialTransaction::create([
+            'transaction_number' => $number,
+            'transaction_date' => $data['transaction_date'],
+            'type' => $data['type'],
+            'amount' => $data['amount'],
+            'description' => $data['description'],
+            'account_code' => $data['account_code'],
+            'status' => 'published',
+            'created_by' => auth()->id() ?? 1,
+        ]);
 
-        $prefix = 'J-' . $year . str_pad($month, 2, '0', STR_PAD_LEFT);
-        $lastNum = FinancialTransaction::where('transaction_number', 'like', $prefix . '%')->count();
-        $counter = $lastNum;
-        $saved = 0;
+        $this->todayCount++;
 
-        foreach ($validRows as $row) {
-            $counter++;
-            $d = \Carbon\Carbon::parse($row['transaction_date']);
-            if ((int) $d->month !== $month || (int) $d->year !== $year) continue;
+        $tipe = $data['type'] === 'pemasukan' ? '💰 Pemasukan' : '💸 Pengeluaran';
+        $namaAkun = ChartOfAccount::where('code', $data['account_code'])->value('name');
 
-            FinancialTransaction::create([
-                'transaction_number' => $prefix . '-' . str_pad($counter, 4, '0', STR_PAD_LEFT),
-                'transaction_date' => $row['transaction_date'],
-                'type' => $row['type'],
-                'amount' => $row['amount'],
-                'description' => $row['description'],
-                'account_code' => $row['account_code'],
-                'status' => 'draft',
-                'created_by' => auth()->id() ?? 1,
-            ]);
-            $saved++;
-        }
+        Notification::make()
+            ->title("✅ Tersimpan!")
+            ->body("$tipe Rp " . number_format($data['amount'], 0, ',', '.') . " — $namaAkun")
+            ->success()
+            ->duration(2000)
+            ->send();
 
-        if ($saved > 0) {
-            $namaBulan = \Carbon\Carbon::create()->month($month)->translatedFormat('F');
-            Notification::make()
-                ->title("✅ $saved Transaksi Tersimpan!")
-                ->body("Jurnal bulan $namaBulan $year disimpan sebagai DRAFT.")
-                ->success()->send();
-
-            $this->form->fill([
-                'month' => $this->month,
-                'year' => $this->year,
-                'rows' => [],
-            ]);
-        } else {
-            Notification::make()->title('Error')->body('Gagal menyimpan!')->danger()->send();
-        }
+        // Reset form untuk input berikutnya
+        $this->form->fill([
+            'transaction_date' => $data['transaction_date'],
+            'type' => $data['type'],
+            'account_code' => '',
+            'amount' => null,
+            'description' => '',
+        ]);
     }
 }
