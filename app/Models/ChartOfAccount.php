@@ -104,10 +104,11 @@ class ChartOfAccount extends Model
         }
         return $this->code;
     }
+
+    // Accessor untuk code_name (code - name)
+    public function getCodeNameAttribute(): string
+    {
+        return $this->code . ' - ' . $this->name;
+    }
 }
 
-// Accessor untuk code_name (code - name)
-public function getCodeNameAttribute(): string
-{
-    return $this->code . ' - ' . $this->name;
-}
