@@ -86,6 +86,7 @@ class FinancialUploadResource extends Resource
 
                 Forms\Components\Section::make('Hasil Import')
                     ->icon('heroicon-m-information-circle')
+                    ->visible(fn ($record) => $record !== null)
                     ->schema([
                         Forms\Components\Placeholder::make('import_status')
                             ->label('Status Import')
@@ -96,7 +97,7 @@ class FinancialUploadResource extends Resource
                             }),
                         Forms\Components\Placeholder::make('imported_count')
                             ->label('Jumlah Data')
-                            ->content(fn ($record) => $record->imported_count . ' baris'),
+                            ->content(fn ($record) => ($record->imported_count ?? 0) . ' baris'),
                         Forms\Components\Textarea::make('import_error')
                             ->label('Error')
                             ->rows(3)
