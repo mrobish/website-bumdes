@@ -21,7 +21,7 @@ class FinancialTemplateService
         // ── Ambil data BUMDes dari settings ──
         $bumdes = BumdesSetting::first();
         $namaBumdes = strtoupper($bumdes->bumdes_name ?? $bumdes->village_name ?? 'BUMDes');
-        $alamat = trim(($bumdes->bumdes_address ?? '') . ', ' . ($bumdes->bumdes_village ?? '') . ', Kec. ' . ($bumdes->bumdes_district ?? '') . ', Kab. ' . ($bumdes->bumdes_regency ?? '') . ', Prov. ' . ($bumdes->bumdes_province ?? ''));
+        $alamat = trim(($bumdes->bumdes_address ?? '') . ', Kec. ' . ($bumdes->bumdes_district ?? '') . ', Kab. ' . ($bumdes->bumdes_regency ?? '') . ', Prov. ' . ($bumdes->bumdes_province ?? ''));
         $email = $bumdes->email ?? '';
         $columns = is_string($template->columns) ? json_decode($template->columns, true) : ($template->columns ?? []);
         $lastCol = $this->getColumnLetter(count($columns));
@@ -197,9 +197,9 @@ class FinancialTemplateService
 
         // ── Footer info ──
         $footerRow = $sumRow + 3;
-        $footerText = ($bumdes->bumdes_village ?? '................') . ', ' . date('d/m/Y');
+        $footerText = ($bumdes->bumdes_district ?? '................') . ', ' . date('d/m/Y');
         $footerText2 = 'Mengetahui,';
-        $footerText3 = $bumdes->pdf_footer_text ?? ($bumdes->bumdes_village ?? '................');
+        $footerText3 = $bumdes->pdf_footer_text ?? (($bumdes->bumdes_district ?? '................') . ', Kab. ' . ($bumdes->bumdes_regency ?? ''));
         $sheet->setCellValue("A{$footerRow}", $footerText);
         $sheet->getStyle("A{$footerRow}")->getAlignment()->setHorizontal('right');
         $sheet->mergeCells("A{$footerRow}:D{$footerRow}");
