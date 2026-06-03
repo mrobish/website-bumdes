@@ -45,7 +45,7 @@ class AssetResource extends Resource
                         ->options(BusinessUnit::active()->pluck('name', 'id'))->required(),
                     Forms\Components\Select::make('account_id')
                         ->label('Akun Aset')
-                        ->options(ChartOfAccount::where('code', 'like', '12%')->pluck('code_name', 'id'))
+                        ->options(ChartOfAccount::where('code', 'like', '12%')->get()->mapWithKeys(fn($a) => [$a->id => $a->code . ' - ' . $a->name]))
                         ->required(),
                 ])->columns(2),
             Forms\Components\Section::make('Nilai & Penyusutan')

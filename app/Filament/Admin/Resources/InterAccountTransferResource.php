@@ -44,7 +44,7 @@ class InterAccountTransferResource extends Resource
                             ->label('Dari Rekening')
                             ->options(fn ($get) => ChartOfAccount::where('is_group', false)
                                 ->where('code', 'like', '11%') // Aset Lancar
-                                ->pluck('code_name', 'id'))
+                                ->get()->mapWithKeys(fn($a) => [$a->id => $a->code . ' - ' . $a->name]))
                             ->required(),
                         
                         Forms\Components\Select::make('to_business_unit_id')
@@ -58,7 +58,7 @@ class InterAccountTransferResource extends Resource
                             ->label('Ke Rekening')
                             ->options(fn ($get) => ChartOfAccount::where('is_group', false)
                                 ->where('code', 'like', '11%') // Aset Lancar
-                                ->pluck('code_name', 'id'))
+                                ->get()->mapWithKeys(fn($a) => [$a->id => $a->code . ' - ' . $a->name]))
                             ->required(),
                         
                         Forms\Components\TextInput::make('amount')
