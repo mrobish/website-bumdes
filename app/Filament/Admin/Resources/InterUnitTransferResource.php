@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 class InterUnitTransferResource extends Resource
 {
     protected static ?string $model = InterUnitTransfer::class;
-    protected static ?string $navigationIcon = 'heroicon-o-arrow-right-left';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-path';
     protected static ?string $navigationGroup = '💰 Keuangan';
     protected static ?string $navigationLabel = 'Transfer Antar Unit';
     protected static ?string $pluralModelLabel = 'Transfer Antar Unit';
