@@ -14,20 +14,20 @@
             <div>
                 <div class="inline-block px-4 py-2 bg-white/10 rounded-full text-sm mb-6">
                     <i class="fas fa-map-marker-alt mr-2"></i>
-                    {{ $villageInfo->district_name ?? '' }}, {{ $villageInfo->regency_name ?? '' }}
+                    {{ $bumdesSetting->bumdes_district ?? '' }}, {{ $bumdesSetting->bumdes_regency ?? '' }}
                 </div>
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                    Desa <span class="text-accent-400">{{ $villageInfo->village_name ?? 'Desa' }}</span>
+                    {{ $bumdesSetting->bumdes_name ?? 'BUMDes' }}
                 </h1>
-                @if($villageInfo && $villageInfo->village_motto)
-                    <p class="text-xl md:text-2xl mb-6 opacity-90 italic">"{{ $villageInfo->village_motto }}"</p>
+                @if($bumdesSetting && $bumdesSetting->motto)
+                    <p class="text-xl md:text-2xl mb-6 opacity-90 italic font-display">"{{ $bumdesSetting->motto }}"</p>
                 @endif
                 <p class="text-lg mb-8 opacity-80 leading-relaxed">
-                    {{ Str::limit($villageInfo->about_village ?? 'Selamat datang di website resmi desa kami. Portal informasi dan layanan untuk seluruh warga desa.', 200) }}
+                    {{ Str::limit($bumdesSetting->about ?? 'Selamat datang di website resmi BUMDes kami. Portal informasi dan layanan untuk seluruh masyarakat desa.', 200) }}
                 </p>
                 <div class="flex flex-wrap gap-4">
                     <a href="/profil-desa" class="px-8 py-3 bg-accent-500 text-primary-900 rounded-lg font-bold hover:bg-accent-400 transition shadow-lg">
-                        <i class="fas fa-building mr-2"></i> Profil Desa
+                        <i class="fas fa-building mr-2"></i> Profil BUMDes
                     </a>
                     <a href="/bumdes" class="px-8 py-3 bg-white/10 border-2 border-white rounded-lg font-bold hover:bg-white hover:text-primary-800 transition">
                         <i class="fas fa-store mr-2"></i> Kunjungi BUMDes
@@ -82,7 +82,7 @@
     <div class="max-w-7xl mx-auto px-4">
         <div class="text-center mb-12" data-aos="fade-up">
             <h2 class="text-3xl font-bold text-gray-800 mb-4">Layanan Kami</h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">Akses informasi dan layanan desa dengan mudah</p>
+            <p class="text-gray-600 max-w-2xl mx-auto">Akses informasi dan layanan BUMDes dengan mudah</p>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -90,16 +90,16 @@
                 <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <i class="fas fa-building text-2xl text-primary-600"></i>
                 </div>
-                <h3 class="font-bold text-gray-800 mb-2">Profil Desa</h3>
-                <p class="text-sm text-gray-600">Informasi lengkap tentang desa</p>
+                <h3 class="font-bold text-gray-800 mb-2">Profil BUMDes</h3>
+                <p class="text-sm text-gray-600">Informasi lengkap tentang BUMDes</p>
             </a>
             
             <a href="/bumdes" class="bg-white rounded-xl p-6 shadow-md card-hover text-center" data-aos="fade-up" data-aos-delay="200">
                 <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <i class="fas fa-store text-2xl text-green-600"></i>
                 </div>
-                <h3 class="font-bold text-gray-800 mb-2">BUMDes</h3>
-                <p class="text-sm text-gray-600">Badan Usaha Milik Desa</p>
+                <h3 class="font-bold text-gray-800 mb-2">Unit Usaha</h3>
+                <p class="text-sm text-gray-600">Lihat unit usaha kami</p>
             </a>
             
             <a href="/potensi" class="bg-white rounded-xl p-6 shadow-md card-hover text-center">
@@ -122,19 +122,19 @@
 </section>
 
 <!-- About Section -->
-@if($villageInfo && $villageInfo->about_village)
+@if($bumdesSetting && $bumdesSetting->about)
 <section class="bg-white py-16">
     <div class="max-w-7xl mx-auto px-4">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div data-aos="fade-right">
                 <div class="inline-block px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-medium mb-4">
-                    Tentang Desa
+                    Tentang BUMDes
                 </div>
-                <h2 class="text-3xl font-bold text-gray-800 mb-6">{{ $villageInfo->village_name }}</h2>
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">{{ $bumdesSetting->bumdes_name ?? 'BUMDes' }}</h2>
                 <div class="prose prose-lg text-gray-600">
-                    {!! nl2br(e($villageInfo->about_village)) !!}
+                    {!! nl2br(e($bumdesSetting->about)) !!}
                 </div>
-                @if($villageInfo->village_history)
+                @if($villageInfo && $villageInfo->village_history)
                     <div class="mt-6 p-4 bg-gray-50 rounded-lg">
                         <h4 class="font-bold text-gray-800 mb-2"><i class="fas fa-history mr-2 text-primary-600"></i> Sejarah Singkat</h4>
                         <p class="text-sm text-gray-600">{{ Str::limit($villageInfo->village_history, 200) }}</p>
@@ -142,15 +142,57 @@
                 @endif
             </div>
             <div class="relative" data-aos="fade-left">
-                @if($villageInfo->banner_path)
-                    <img src="{{ asset('storage/' . $villageInfo->banner_path) }}" alt="{{ $villageInfo->village_name }}" class="rounded-xl shadow-lg w-full">
+                @if($bumdesSetting->kantor_photo_url)
+                    <img src="{{ $bumdesSetting->kantor_photo_url }}" alt="{{ $bumdesSetting->bumdes_name }}" class="rounded-xl shadow-lg w-full">
                 @else
                     <div class="bg-gradient-to-br from-primary-100 to-primary-200 rounded-xl p-12 text-center">
                         <i class="fas fa-image text-6xl text-primary-300 mb-4"></i>
-                        <p class="text-primary-600">Foto Desa</p>
+                        <p class="text-primary-600">Foto BUMDes</p>
                     </div>
                 @endif
             </div>
+        </div>
+    </div>
+</section>
+@endif
+
+<!-- Visi & Misi Section -->
+@if($bumdesSetting && ($bumdesSetting->vision || $bumdesSetting->mission))
+<section class="bg-gray-50 py-16">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12" data-aos="fade-up">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Visi & Misi</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Arah dan tujuan BUMDes dalam melayani masyarakat</p>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            @if($bumdesSetting->vision)
+                <div class="bg-white rounded-2xl p-8 shadow-md" data-aos="fade-right">
+                    <div class="flex items-center mb-6">
+                        <div class="w-14 h-14 bg-primary-100 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-eye text-2xl text-primary-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800">Visi</h3>
+                    </div>
+                    <div class="prose text-gray-600">
+                        {!! nl2br(e($bumdesSetting->vision)) !!}
+                    </div>
+                </div>
+            @endif
+            
+            @if($bumdesSetting->mission)
+                <div class="bg-white rounded-2xl p-8 shadow-md" data-aos="fade-left">
+                    <div class="flex items-center mb-6">
+                        <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-bullseye text-2xl text-green-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800">Misi</h3>
+                    </div>
+                    <div class="prose text-gray-600">
+                        {!! nl2br(e($bumdesSetting->mission)) !!}
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 </section>
@@ -164,12 +206,12 @@
                 <div class="inline-block px-4 py-2 bg-white/10 rounded-full text-sm mb-4">
                     <i class="fas fa-store mr-2"></i> BUMDes
                 </div>
-                <h2 class="text-3xl font-bold mb-6">{{ $villageInfo->bumdes_name ?? 'BUMDes Desa' }}</h2>
-                @if($villageInfo && $villageInfo->bumdes_vision)
-                    <p class="text-lg mb-4 opacity-90 italic">"{{ $villageInfo->bumdes_vision }}"</p>
+                <h2 class="text-3xl font-bold mb-6">{{ $bumdesSetting->bumdes_name ?? 'BUMDes' }}</h2>
+                @if($bumdesSetting && $bumdesSetting->vision)
+                    <p class="text-lg mb-4 opacity-90 italic">"{{ $bumdesSetting->vision }}"</p>
                 @endif
-                @if($villageInfo && $villageInfo->bumdes_services)
-                    <p class="mb-6 opacity-80">{{ Str::limit($villageInfo->bumdes_services, 200) }}</p>
+                @if($bumdesSetting && $bumdesSetting->about)
+                    <p class="mb-6 opacity-80">{{ Str::limit($bumdesSetting->about, 200) }}</p>
                 @endif
                 <div class="grid grid-cols-2 gap-4 mb-8">
                     <div class="bg-white/10 rounded-lg p-4 text-center">
@@ -450,7 +492,7 @@
 @endif
 
 <!-- Contact Section -->
-@if($villageInfo && ($villageInfo->phone || $villageInfo->email))
+@if($bumdesSetting && ($bumdesSetting->phone || $bumdesSetting->email))
 <section class="bg-gray-50 py-16">
     <div class="max-w-7xl mx-auto px-4">
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
@@ -486,48 +528,54 @@
                             </div>
                             <div>
                                 <h4 class="font-bold text-gray-800">Alamat</h4>
-                                <p class="text-gray-600">{{ $villageInfo->address }}</p>
+                                <p class="text-gray-600">{{ $bumdesSetting->full_address }}</p>
                             </div>
                         </div>
                         
-                        @if($villageInfo->phone)
+                        @if($bumdesSetting->phone)
                             <div class="flex items-start space-x-4">
                                 <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
                                     <i class="fas fa-phone text-green-600"></i>
                                 </div>
                                 <div>
                                     <h4 class="font-bold text-gray-800">Telepon</h4>
-                                    <p class="text-gray-600">{{ $villageInfo->phone }}</p>
+                                    <p class="text-gray-600">{{ $bumdesSetting->phone }}</p>
                                 </div>
                             </div>
                         @endif
                         
-                        @if($villageInfo->email)
+                        @if($bumdesSetting->email)
                             <div class="flex items-start space-x-4">
                                 <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
                                     <i class="fas fa-envelope text-blue-600"></i>
                                 </div>
                                 <div>
                                     <h4 class="font-bold text-gray-800">Email</h4>
-                                    <p class="text-gray-600">{{ $villageInfo->email }}</p>
+                                    <p class="text-gray-600">{{ $bumdesSetting->email }}</p>
                                 </div>
                             </div>
                         @endif
                         
-                        @if($villageInfo->contact_whatsapp)
+                        @if($bumdesSetting->whatsapp)
                             <div class="flex items-start space-x-4">
                                 <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
                                     <i class="fab fa-whatsapp text-green-600"></i>
                                 </div>
                                 <div>
                                     <h4 class="font-bold text-gray-800">WhatsApp</h4>
-                                    <p class="text-gray-600">{{ $villageInfo->contact_whatsapp }}</p>
+                                    <p class="text-gray-600">{{ $bumdesSetting->whatsapp }}</p>
                                 </div>
                             </div>
                         @endif
                     </div>
                     
-                    <a href="/kontak" class="inline-block mt-6 px-6 py-3 bg-primary-600 text-white rounded-lg font-bold hover:bg-primary-700 transition">
+                    @if($bumdesSetting->whatsapp)
+                        <a href="https://wa.me/{{ $bumdesSetting->whatsapp }}" target="_blank" class="inline-block mt-6 px-6 py-3 bg-green-500 text-white rounded-lg font-bold hover:bg-green-600 transition">
+                            <i class="fab fa-whatsapp mr-2"></i> Chat WhatsApp
+                        </a>
+                    @endif
+                    
+                    <a href="/kontak" class="inline-block mt-6 ml-4 px-6 py-3 bg-primary-600 text-white rounded-lg font-bold hover:bg-primary-700 transition">
                         Lihat Semua Kontak <i class="fas fa-arrow-right ml-2"></i>
                     </a>
                 </div>

@@ -61,11 +61,55 @@ class BumdesSetting extends Model
         'tiktok',
         'twitter',
         
+        // Motto
+        'motto',
+
+        // Informasi Bank
+        'bank_name',
+        'bank_account_number',
+        'bank_account_name',
+
+        // NPWP & Pejabat Desa
+        'npwp',
+        'kepala_desa_name',
+        'kepala_desa_nip',
+        'kaur_keuangan_name',
+        'kaur_keuangan_nip',
+        'bendahara_name',
+        'bendahara_nip',
+
+        // Warna Branding
+        'motto_color',
+        'primary_color',
+        'secondary_color',
+
         // SEO
         'meta_title',
         'meta_description',
         'meta_keywords',
         'is_active',
+
+        // Motto & Branding
+        'motto',
+        'motto_color',
+        'primary_color',
+        'secondary_color',
+
+        // Informasi Bank
+        'bank_name',
+        'bank_account_number',
+        'bank_account_name',
+
+        // NPWP
+        'npwp',
+
+        // Pejabat Desa
+        'kepala_desa_name',
+        'kepala_desa_nip',
+        'kaur_keuangan_name',
+        'kaur_keuangan_nip',
+        'bendahara_name',
+        'bendahara_nip',
     ];
 
     protected $casts = [
@@ -141,5 +185,77 @@ class BumdesSetting extends Model
             $this->pdf_header_line2,
             $this->pdf_header_line3,
         ]);
+    }
+
+    /**
+     * Get formatted full address for official use (kop surat, etc.)
+     * Format: Desa Karangmekar, Kec. Karangnunggal, Kab. Tasikmalaya, Prov. Jawa Barat 46181
+     */
+    public function getFullAddressFormattedAttribute(): string
+    {
+        $parts = array_filter([
+            'Desa ' . $this->village_name,
+            'Kec. ' . $this->bumdes_district,
+            'Kab. ' . $this->bumdes_regency,
+            'Prov. ' . $this->bumdes_province,
+            $this->bumdes_postal_code,
+        ]);
+
+        return implode(', ', $parts);
+    }
+
+    /**
+     * Get the full kop header lines for PDF generation
+     */
+    public function getKopHeaderAttribute(): array
+    {
+        return array_filter([
+            $this->pdf_header_line1,
+            $this->pdf_header_line2,
+            $this->pdf_header_line3,
+        ]);
+    }
+
+    /**
+     * Get signature lines for tanda tangan (pejabat desa)
+     * Returns array of [name, nip, title]
+     */
+    public function getSignatureLinesAttribute(): array
+    {
+        $lines = [];
+
+        if ($this->kepala_desa_name) {
+            $lines[] = [
+                'name' => $this->kepala_desa_name,
+                'nip' => $this->kepala_desa_nip,
+                'title' => 'Kepala Desa',
+            ];
+        }
+
+        if ($this->kaur_keuangan_name) {
+            $lines[] = [
+                'name' => $this->kaur_keuangan_name,
+                'nip' => $this->kaur_keuangan_nip,
+                'title' => 'Kaur Keuangan',
+            ];
+        }
+
+        if ($this->bendahara_name) {
+            $lines[] = [
+                'name' => $this->bendahara_name,
+                'nip' => $this->bendahara_nip,
+                'title' => 'Bendahara',
+            ];
+        }
+
+        return $lines;
+    }
+
+    /**
+     * Get the motto tagline
+     */
+    public function getMottoAttribute(): ?string
+    {
+        return $this->attributes['motto'] ?? null;
     }
 }

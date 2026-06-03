@@ -277,6 +277,52 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Bank Info & Official Names -->
+            @if($bumdesSetting && ($bumdesSetting->bank_name || $bumdesSetting->kepala_desa_name || $bumdesSetting->bendahara_name))
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-8 pt-8 border-t border-white/10">
+                @if($bumdesSetting && $bumdesSetting->bank_name)
+                    <div>
+                        <h4 class="font-bold text-lg mb-4"><i class="fas fa-university mr-2 text-accent-400"></i> Rekening Bank</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li class="text-gray-300"><span class="text-gray-500">Bank:</span> {{ $bumdesSetting->bank_name }}</li>
+                            <li class="text-gray-300"><span class="text-gray-500">No. Rek:</span> {{ $bumdesSetting->bank_account_number }}</li>
+                            <li class="text-gray-300"><span class="text-gray-500">Atas Nama:</span> {{ $bumdesSetting->bank_account_name }}</li>
+                        </ul>
+                    </div>
+                @endif
+
+                @if($bumdesSetting && $bumdesSetting->kepala_desa_name)
+                    <div>
+                        <h4 class="font-bold text-lg mb-4"><i class="fas fa-user-tie mr-2 text-accent-400"></i> Kepala Desa</h4>
+                        <p class="text-sm text-gray-300 font-medium">{{ $bumdesSetting->kepala_desa_name }}</p>
+                        @if($bumdesSetting->kepala_desa_nip)
+                            <p class="text-xs text-gray-500 mt-1">NIP. {{ $bumdesSetting->kepala_desa_nip }}</p>
+                        @endif
+                    </div>
+                @endif
+
+                @if($bumdesSetting && $bumdesSetting->bendahara_name)
+                    <div>
+                        <h4 class="font-bold text-lg mb-4"><i class="fas fa-calculator mr-2 text-accent-400"></i> Bendahara</h4>
+                        <p class="text-sm text-gray-300 font-medium">{{ $bumdesSetting->bendahara_name }}</p>
+                        @if($bumdesSetting->bendahara_nip)
+                            <p class="text-xs text-gray-500 mt-1">NIP. {{ $bumdesSetting->bendahara_nip }}</p>
+                        @endif
+                    </div>
+                @endif
+
+                @if($bumdesSetting && $bumdesSetting->kaur_keuangan_name)
+                    <div>
+                        <h4 class="font-bold text-lg mb-4"><i class="fas fa-receipt mr-2 text-accent-400"></i> Kaur Keuangan</h4>
+                        <p class="text-sm text-gray-300 font-medium">{{ $bumdesSetting->kaur_keuangan_name }}</p>
+                        @if($bumdesSetting->kaur_keuangan_nip)
+                            <p class="text-xs text-gray-500 mt-1">NIP. {{ $bumdesSetting->kaur_keuangan_nip }}</p>
+                        @endif
+                    </div>
+                @endif
+            </div>
+            @endif
         </div>
         
         <!-- Bottom Footer -->

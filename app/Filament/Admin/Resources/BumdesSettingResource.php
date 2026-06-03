@@ -28,6 +28,7 @@ class BumdesSettingResource extends Resource
                     ->schema([
                         // ===== TAB 1: Identitas BUMDes =====
                         Tabs\Tab::make('Identitas BUMDes')
+                            ->icon('heroicon-o-building-office-2')
                             ->schema([
                                 Forms\Components\Grid::make(2)
                                     ->schema([
@@ -37,52 +38,57 @@ class BumdesSettingResource extends Resource
                                                     ->label('Nama BUMDes')
                                                     ->required()
                                                     ->maxLength(255),
-                                                
+
                                                 Forms\Components\TextInput::make('village_name')
                                                     ->label('Nama Desa')
                                                     ->required()
                                                     ->maxLength(255),
-                                                
+
                                                 Forms\Components\TextInput::make('village_code')
                                                     ->label('Kode Desa')
                                                     ->maxLength(255),
+
+                                                Forms\Components\TextInput::make('motto')
+                                                    ->label('Motto/Slogan')
+                                                    ->maxLength(255)
+                                                    ->placeholder('Motto atau slogan BUMDes'),
+
+                                                Forms\Components\ColorPicker::make('motto_color')
+                                                    ->label('Warna Motto')
+                                                    ->default('#1e293b'),
+
+                                                Forms\Components\DatePicker::make('established_date')
+                                                    ->label('Tanggal Berdiri'),
                                             ]),
-                                        
-                                        Forms\Components\Section::make('Legalitas BUMDes')
+
+                                        Forms\Components\Section::make('Legalitas')
                                             ->schema([
                                                 Forms\Components\TextInput::make('bumdes_nib')
                                                     ->label('NIB')
                                                     ->maxLength(255),
-                                                
+
                                                 Forms\Components\TextInput::make('nomor_ahu')
                                                     ->label('Nomor AHU')
                                                     ->maxLength(255),
-                                                
-                                                Forms\Components\DatePicker::make('established_date')
-                                                    ->label('Tanggal Berdiri'),
-                                            ]),
-                                    ]),
-                                
-                                Forms\Components\Grid::make(2)
-                                    ->schema([
-                                        Forms\Components\Section::make('Legalitas Pendirian (Perdes)')
-                                            ->schema([
+
+                                                Forms\Components\TextInput::make('npwp')
+                                                    ->label('NPWP')
+                                                    ->maxLength(255)
+                                                    ->placeholder('XX.XXX.XXX.X-XXX.XXX'),
+
                                                 Forms\Components\TextInput::make('nomor_perdes')
                                                     ->label('Nomor Perdes')
                                                     ->maxLength(255),
-                                                
+
                                                 Forms\Components\DatePicker::make('tanggal_perdes')
                                                     ->label('Tanggal Perdes'),
-                                                
+
                                                 Forms\Components\FileUpload::make('file_perdes_path')
                                                     ->label('File Perdes (PDF)')
                                                     ->acceptedFileTypes(['application/pdf'])
                                                     ->maxSize(5120)
                                                     ->directory('bumdes/dokumen'),
-                                            ]),
-                                        
-                                        Forms\Components\Section::make('AD/ART BUMDes')
-                                            ->schema([
+
                                                 Forms\Components\FileUpload::make('file_adart_path')
                                                     ->label('File AD/ART (PDF)')
                                                     ->acceptedFileTypes(['application/pdf'])
@@ -90,27 +96,28 @@ class BumdesSettingResource extends Resource
                                                     ->directory('bumdes/dokumen'),
                                             ]),
                                     ]),
-                                
+
                                 Forms\Components\Section::make('Visi & Misi')
                                     ->schema([
                                         Forms\Components\Textarea::make('vision')
                                             ->label('Visi')
                                             ->rows(3),
-                                        
+
                                         Forms\Components\Textarea::make('mission')
                                             ->label('Misi')
                                             ->rows(5),
                                     ]),
-                                
+
                                 Forms\Components\Section::make('Tentang BUMDes')
                                     ->schema([
                                         Forms\Components\RichEditor::make('about')
                                             ->label('Tentang BUMDes'),
                                     ]),
                             ]),
-                        
+
                         // ===== TAB 2: Alamat & Kontak =====
                         Tabs\Tab::make('Alamat & Kontak')
+                            ->icon('heroicon-o-map-pin')
                             ->schema([
                                 Forms\Components\Grid::make(2)
                                     ->schema([
@@ -120,94 +127,177 @@ class BumdesSettingResource extends Resource
                                                     ->label('Alamat Lengkap')
                                                     ->required()
                                                     ->rows(2),
-                                                
+
+                                                Forms\Components\TextInput::make('bumdes_village')
+                                                    ->label('Desa/Kelurahan')
+                                                    ->maxLength(255),
+
                                                 Forms\Components\TextInput::make('bumdes_district')
                                                     ->label('Kecamatan')
-                                                    ->required(),
-                                                
+                                                    ->required()
+                                                    ->maxLength(255),
+
                                                 Forms\Components\TextInput::make('bumdes_regency')
                                                     ->label('Kabupaten/Kota')
-                                                    ->required(),
-                                                
+                                                    ->required()
+                                                    ->maxLength(255),
+
                                                 Forms\Components\TextInput::make('bumdes_province')
                                                     ->label('Provinsi')
-                                                    ->required(),
-                                                
+                                                    ->required()
+                                                    ->maxLength(255),
+
                                                 Forms\Components\TextInput::make('bumdes_postal_code')
                                                     ->label('Kode Pos')
                                                     ->maxLength(10),
                                             ]),
-                                        
+
                                         Forms\Components\Section::make('Kontak')
                                             ->schema([
                                                 Forms\Components\TextInput::make('phone')
                                                     ->label('Telepon/HP')
                                                     ->tel()
                                                     ->required(),
-                                                
+
                                                 Forms\Components\TextInput::make('whatsapp')
                                                     ->label('WhatsApp')
                                                     ->tel(),
-                                                
+
                                                 Forms\Components\TextInput::make('email')
                                                     ->label('Email')
                                                     ->email(),
-                                                
+
                                                 Forms\Components\TextInput::make('website')
                                                     ->label('Website')
                                                     ->url(),
                                             ]),
                                     ]),
                             ]),
-                        
+
                         // ===== TAB 3: Logo & Foto =====
                         Tabs\Tab::make('Logo & Foto')
+                            ->icon('heroicon-o-photo')
                             ->schema([
                                 Forms\Components\Grid::make(2)
                                     ->schema([
                                         Forms\Components\Section::make('Logo')
                                             ->schema([
                                                 Forms\Components\FileUpload::make('logo_path')
-                                                    ->label('Logo (Warna)')
+                                                    ->label('Logo Warna')
                                                     ->image()
                                                     ->directory('bumdes/logo')
                                                     ->maxSize(2048),
-                                                
+
                                                 Forms\Components\FileUpload::make('logo_white_path')
-                                                    ->label('Logo (Putih)')
+                                                    ->label('Logo Putih')
                                                     ->image()
                                                     ->directory('bumdes/logo')
                                                     ->maxSize(2048),
                                             ]),
-                                        
-                                        Forms\Components\Section::make('Foto Latar')
+
+                                        Forms\Components\Section::make('Foto')
                                             ->schema([
                                                 Forms\Components\FileUpload::make('kantor_photo_path')
-                                                    ->label('Foto Kantor (Background Web)')
+                                                    ->label('Foto Kantor')
                                                     ->image()
                                                     ->directory('bumdes/foto')
                                                     ->maxSize(5120),
-                                                
+
                                                 Forms\Components\FileUpload::make('kegiatan_photo_path')
-                                                    ->label('Foto Kegiatan (Background Login)')
+                                                    ->label('Foto Kegiatan')
                                                     ->image()
                                                     ->directory('bumdes/foto')
                                                     ->maxSize(5120),
                                             ]),
                                     ]),
-                                
+
                                 Forms\Components\Section::make('Tanda Tangan')
                                     ->schema([
-                                        Forms\Components\FileUpload::make('signature_photo_path')
-                                            ->label('Foto Tanda Tangan')
-                                            ->image()
-                                            ->directory('bumdes/ttd')
-                                            ->maxSize(1024),
+                                        Forms\Components\Grid::make(2)
+                                            ->schema([
+                                                Forms\Components\FileUpload::make('signature_photo_path')
+                                                    ->label('Foto Tanda Tangan')
+                                                    ->image()
+                                                    ->directory('bumdes/ttd')
+                                                    ->maxSize(1024),
+
+                                                Forms\Components\FileUpload::make('pdf_stamp_path')
+                                                    ->label('Stempel')
+                                                    ->image()
+                                                    ->directory('bumdes/stempel')
+                                                    ->maxSize(1024),
+                                            ]),
                                     ]),
                             ]),
-                        
-                        // ===== TAB 4: Kop PDF =====
-                        Tabs\Tab::make('Kop PDF')
+
+                        // ===== TAB 4: Pejabat BUMDes =====
+                        Tabs\Tab::make('Pejabat BUMDes')
+                            ->icon('heroicon-o-user-group')
+                            ->schema([
+                                Forms\Components\Grid::make(3)
+                                    ->schema([
+                                        Forms\Components\Section::make('Kepala Desa')
+                                            ->schema([
+                                                Forms\Components\TextInput::make('kepala_desa_name')
+                                                    ->label('Nama')
+                                                    ->maxLength(255),
+
+                                                Forms\Components\TextInput::make('kepala_desa_nip')
+                                                    ->label('NIP')
+                                                    ->maxLength(255),
+                                            ]),
+
+                                        Forms\Components\Section::make('Kaur Keuangan')
+                                            ->schema([
+                                                Forms\Components\TextInput::make('kaur_keuangan_name')
+                                                    ->label('Nama')
+                                                    ->maxLength(255),
+
+                                                Forms\Components\TextInput::make('kaur_keuangan_nip')
+                                                    ->label('NIP')
+                                                    ->maxLength(255),
+                                            ]),
+
+                                        Forms\Components\Section::make('Bendahara')
+                                            ->schema([
+                                                Forms\Components\TextInput::make('bendahara_name')
+                                                    ->label('Nama')
+                                                    ->maxLength(255),
+
+                                                Forms\Components\TextInput::make('bendahara_nip')
+                                                    ->label('NIP')
+                                                    ->maxLength(255),
+                                            ]),
+                                    ]),
+                            ]),
+
+                        // ===== TAB 5: Rekening Bank =====
+                        Tabs\Tab::make('Rekening Bank')
+                            ->icon('heroicon-o-banknotes')
+                            ->schema([
+                                Forms\Components\Section::make('Informasi Rekening')
+                                    ->schema([
+                                        Forms\Components\Grid::make(3)
+                                            ->schema([
+                                                Forms\Components\TextInput::make('bank_name')
+                                                    ->label('Nama Bank')
+                                                    ->maxLength(255)
+                                                    ->placeholder('Bank Jateng, BRI, BNI, dll.'),
+
+                                                Forms\Components\TextInput::make('bank_account_number')
+                                                    ->label('Nomor Rekening')
+                                                    ->maxLength(255),
+
+                                                Forms\Components\TextInput::make('bank_account_name')
+                                                    ->label('Nama Pemegang Rekening')
+                                                    ->maxLength(255),
+                                            ]),
+                                    ]),
+                            ]),
+
+                        // ===== TAB 6: Kop Surat & Branding =====
+                        Tabs\Tab::make('Kop Surat & Branding')
+                            ->icon('heroicon-o-document-text')
                             ->schema([
                                 Forms\Components\Grid::make(2)
                                     ->schema([
@@ -217,60 +307,82 @@ class BumdesSettingResource extends Resource
                                                 Forms\Components\TextInput::make('pdf_header_line1')
                                                     ->label('Baris 1')
                                                     ->placeholder('PEMERINTAH KABUPATEN...'),
-                                                
+
                                                 Forms\Components\TextInput::make('pdf_header_line2')
                                                     ->label('Baris 2')
                                                     ->placeholder('KECAMATAN...'),
-                                                
+
                                                 Forms\Components\TextInput::make('pdf_header_line3')
                                                     ->label('Baris 3')
                                                     ->placeholder('BUMDes...'),
-                                                
+
                                                 Forms\Components\TextInput::make('pdf_footer_text')
                                                     ->label('Footer'),
                                             ]),
-                                        
-                                        Forms\Components\Section::make('Stempel')
+
+                                        Forms\Components\Section::make('Warna Branding')
                                             ->schema([
-                                                Forms\Components\FileUpload::make('pdf_stamp_path')
-                                                    ->label('Stempel')
-                                                    ->image()
-                                                    ->directory('bumdes/stempel')
-                                                    ->maxSize(1024),
+                                                Forms\Components\ColorPicker::make('primary_color')
+                                                    ->label('Warna Utama')
+                                                    ->default('#1e40af'),
+
+                                                Forms\Components\ColorPicker::make('secondary_color')
+                                                    ->label('Warna Sekunder')
+                                                    ->default('#059669'),
                                             ]),
                                     ]),
                             ]),
-                        
-                        // ===== TAB 5: Media & SEO =====
+
+                        // ===== TAB 7: Media & SEO =====
                         Tabs\Tab::make('Media & SEO')
+                            ->icon('heroicon-o-globe-alt')
                             ->schema([
                                 Forms\Components\Grid::make(2)
                                     ->schema([
                                         Forms\Components\Section::make('Media Sosial')
                                             ->schema([
-                                                Forms\Components\TextInput::make('facebook')->label('Facebook'),
-                                                Forms\Components\TextInput::make('instagram')->label('Instagram'),
-                                                Forms\Components\TextInput::make('youtube')->label('YouTube'),
-                                                Forms\Components\TextInput::make('tiktok')->label('TikTok'),
-                                                Forms\Components\TextInput::make('twitter')->label('Twitter/X'),
+                                                Forms\Components\TextInput::make('facebook')
+                                                    ->label('Facebook')
+                                                    ->url()
+                                                    ->placeholder('https://facebook.com/...'),
+
+                                                Forms\Components\TextInput::make('instagram')
+                                                    ->label('Instagram')
+                                                    ->url()
+                                                    ->placeholder('https://instagram.com/...'),
+
+                                                Forms\Components\TextInput::make('youtube')
+                                                    ->label('YouTube')
+                                                    ->url()
+                                                    ->placeholder('https://youtube.com/...'),
+
+                                                Forms\Components\TextInput::make('tiktok')
+                                                    ->label('TikTok')
+                                                    ->url()
+                                                    ->placeholder('https://tiktok.com/...'),
+
+                                                Forms\Components\TextInput::make('twitter')
+                                                    ->label('Twitter/X')
+                                                    ->url()
+                                                    ->placeholder('https://x.com/...'),
                                             ]),
-                                        
+
                                         Forms\Components\Section::make('SEO')
                                             ->schema([
                                                 Forms\Components\TextInput::make('meta_title')
                                                     ->label('Meta Title')
                                                     ->maxLength(255),
-                                                
+
                                                 Forms\Components\Textarea::make('meta_description')
                                                     ->label('Meta Description')
                                                     ->rows(2),
-                                                
+
                                                 Forms\Components\Textarea::make('meta_keywords')
                                                     ->label('Meta Keywords')
                                                     ->rows(2),
                                             ]),
                                     ]),
-                                
+
                                 Forms\Components\Section::make('Pengaturan')
                                     ->schema([
                                         Forms\Components\Toggle::make('is_active')
