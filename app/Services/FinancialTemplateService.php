@@ -158,7 +158,7 @@ class FinancialTemplateService
         $filePath = storage_path('app/' . $fileName);
         $writer = new Xlsx($spreadsheet);
         $writer->save($filePath);
-        chmod($filePath, 0666);
+        @chmod($filePath, 0666);
         return $fileName;
     }
 
