@@ -173,8 +173,7 @@ class FinancialTemplateService
         $v->setShowInputMessage(true);
         $v->setPromptTitle($title);
         $v->setPrompt('Pilih dari dropdown.');
-        $sheet->addDataValidation($v);
-        $v->addCell($cell);
+        $sheet->setDataValidation($cell, $v);
     }
 
     protected function addTotalRow($sheet, array $columns, FinancialTemplate $template, int $dataStart, int $dataEnd, int $sumRow, string $fmt): void
@@ -197,7 +196,7 @@ class FinancialTemplateService
             $sheet->getStyle("{$kCol}{$sumRow}")->applyFromArray(['font' => ['bold' => true], 'fill' => ['fillType' => 'solid', 'startColor' => ['rgb' => 'D5F5E3']]]);
             $sheet->getStyle("{$kCol}{$sumRow}")->getNumberFormat()->setFormatCode($fmt);
             $selCol = $this->getColumnLetter(count($columns) + 1);
-            $sheet->setCellValue("{$selCol}{$sumRow}", "={}{$dCol}{$sumRow}-{}{$kCol}{$sumRow}");
+            $sheet->setCellValue("{$selCol}{$sumRow}", "={$dCol}{$sumRow}-{$kCol}{$sumRow}");
             $sheet->getStyle("{$selCol}{$sumRow}")->applyFromArray(['font' => ['bold' => true, 'color' => ['rgb' => 'E74C3C']]]);
             $sheet->getStyle("{$selCol}{$sumRow}")->getNumberFormat()->setFormatCode($fmt);
         }
@@ -209,7 +208,7 @@ class FinancialTemplateService
             $sheet->getStyle("A" . ($sumRow + 1))->applyFromArray(['font' => ['bold' => true]]);
             $sheet->setCellValue("A" . ($sumRow + 2), 'LABA BERSIH');
             $sheet->getStyle("A" . ($sumRow + 2))->applyFromArray(['font' => ['bold' => true, 'size' => 12, 'color' => ['rgb' => 'FFFFFF']], 'fill' => ['fillType' => 'solid', 'startColor' => ['rgb' => '27AE60']]]);
-            $sheet->setCellValue("{$jCol}" . ($sumRow + 2), "={}{$jCol}{$sumRow}-{}{$jCol}" . ($sumRow + 1));
+            $sheet->setCellValue("{$jCol}" . ($sumRow + 2), "={$jCol}{$sumRow}-{$jCol}" . ($sumRow + 1));
             $sheet->getStyle("{$jCol}" . ($sumRow + 2))->getNumberFormat()->setFormatCode($fmt);
         }
         if ($template->type === 'neraca' && $jumlahIdx !== false) {
@@ -220,7 +219,7 @@ class FinancialTemplateService
             $sheet->getStyle("A" . ($sumRow + 1))->applyFromArray(['font' => ['bold' => true]]);
             $sheet->setCellValue("A" . ($sumRow + 2), 'SELISIH (harus = 0)');
             $sheet->getStyle("A" . ($sumRow + 2))->applyFromArray(['font' => ['bold' => true, 'color' => ['rgb' => 'E74C3C']]]);
-            $sheet->setCellValue("{$jCol}" . ($sumRow + 2), "={}{$jCol}{$sumRow}-{}{$jCol}" . ($sumRow + 1));
+            $sheet->setCellValue("{$jCol}" . ($sumRow + 2), "={$jCol}{$sumRow}-{$jCol}" . ($sumRow + 1));
             $sheet->getStyle("{$jCol}" . ($sumRow + 2))->getNumberFormat()->setFormatCode($fmt);
         }
         if ($template->type === 'realisasi_anggaran' && $anggaranIdx !== false && $realisasiIdx !== false) {
