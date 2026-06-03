@@ -61,7 +61,7 @@ class FinancialTemplateService
         $sheet->mergeCells('A2:' . $this->getLastColumn($template) . '2');
 
         $sheet->setCellValue('A3', 'Isi data pada baris yang kosong. Baris berwarna abu-abu adalah contoh.');
-        $sheet->getStyle('A3')->applyAxisAlignment(['horizontal' => 'center']);
+        $sheet->getStyle('A3')->applyFromArray(['horizontal' => 'center']);
         $sheet->mergeCells('A3:' . $this->getLastColumn($template) . '3');
 
         // Set headers
