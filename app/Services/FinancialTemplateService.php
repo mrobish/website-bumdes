@@ -20,38 +20,30 @@ class FinancialTemplateService
 
         // ── Ambil data BUMDes dari settings ──
         $bumdes = BumdesSetting::first();
-        $kop1 = $bumdes->pdf_header_line1 ?? ('PEMERINTAH KABUPATEN ' . strtoupper($bumdes->bumdes_regency ?? ''));
-        $kop2 = $bumdes->pdf_header_line2 ?? ('KECAMATAN ' . strtoupper($bumdes->bumdes_district ?? ''));
-        $kop3 = $bumdes->pdf_header_line3 ?? strtoupper($bumdes->bumdes_name ?? $bumdes->village_name ?? '');
-        $alamat = trim(($bumdes->bumdes_address ?? '') . ', ' . ($bumdes->bumdes_village ?? '') . ', Kec. ' . ($bumdes->bumdes_district ?? '') . ', Kab. ' . ($bumdes->bumdes_regency ?? ''));
-        $telp = $bumdes->phone ?? '';
+        $namaBumdes = strtoupper($bumdes->bumdes_name ?? $bumdes->village_name ?? 'BUMDes');
+        $alamat = trim(($bumdes->bumdes_address ?? '') . ', ' . ($bumdes->bumdes_village ?? '') . ', Kec. ' . ($bumdes->bumdes_district ?? '') . ', Kab. ' . ($bumdes->bumdes_regency ?? '') . ', Prov. ' . ($bumdes->bumdes_province ?? ''));
+        $email = $bumdes->email ?? '';
         $columns = is_string($template->columns) ? json_decode($template->columns, true) : ($template->columns ?? []);
         $lastCol = $this->getColumnLetter(count($columns));
-        $headerRow = 6;
+        $headerRow = 5;
 
-        // ── KOP SURAT (Baris 1-4) ──
-        $kopStyle = ['font' => ['bold' => true, 'size' => 12], 'alignment' => ['horizontal' => 'center']];
-        $sheet->setCellValue('A1', $kop1);
-        $sheet->getStyle('A1')->applyFromArray($kopStyle);
+        // ── KOP SURAT: Nama BUMDes, Alamat, Email ──
+        $sheet->setCellValue('A1', $namaBumdes);
+        $sheet->getStyle('A1')->applyFromArray(['font' => ['bold' => true, 'size' => 14], 'alignment' => ['horizontal' => 'center']]);
         $sheet->mergeCells("A1:{$lastCol}1");
 
-        $sheet->setCellValue('A2', $kop2);
-        $sheet->getStyle('A2')->applyFromArray($kopStyle);
+        $sheet->setCellValue('A2', $alamat);
+        $sheet->getStyle('A2')->applyFromArray(['font' => ['size' => 10], 'alignment' => ['horizontal' => 'center']]);
         $sheet->mergeCells("A2:{$lastCol}2");
 
-        $sheet->setCellValue('A3', $kop3);
-        $sheet->getStyle('A3')->applyFromArray(array_merge($kopStyle, ['font' => ['bold' => true, 'size' => 14, 'underline' => 'single']]));
+        $sheet->setCellValue('A3', $email);
+        $sheet->getStyle('A3')->applyFromArray(['font' => ['size' => 10], 'color' => ['rgb' => '3498DB'], 'alignment' => ['horizontal' => 'center']]);
         $sheet->mergeCells("A3:{$lastCol}3");
 
-        // Alamat + Telp
-        $sheet->setCellValue('A4', $alamat . ($telp ? " Telp. {$telp}" : ''));
-        $sheet->getStyle('A4')->applyFromArray(['font' => ['size' => 9], 'alignment' => ['horizontal' => 'center']]);
-        $sheet->mergeCells("A4:{$lastCol}4");
-
         // Garis pemisah
-        $sheet->setCellValue('A5', str_repeat('═', 80));
-        $sheet->getStyle('A5')->applyFromArray(['font' => ['size' => 8], 'alignment' => ['horizontal' => 'center']]);
-        $sheet->mergeCells("A5:{$lastCol}5");
+        $sheet->setCellValue('A4', str_repeat('─', 80));
+        $sheet->getStyle('A4')->applyFromArray(['font' => ['size' => 8], 'alignment' => ['horizontal' => 'center']]);
+        $sheet->mergeCells("A4:{$lastCol}4");
 
         // ── JUDUL LAPORAN ──
         // (sebelumnya ada judul di row 1-2, sekarang row 6 jadi header kolom)
@@ -612,8 +604,8 @@ class FinancialTemplateService
         $data = [];
         $errors = [];
         $highestRow = $sheet->getHighestRow();
-        // Data mulai dari baris 7 (setelah kop + header)
-        for ($row = 7; $row <= $highestRow; $row++) {
+        // Data mulai dari baris 6 (setelah kop 4 baris + header 1 baris)
+        for ($row = 6; $row <= $highestRow; $row++) {
             $rowData = [];
             $isEmpty = true;
             foreach ($columns as $col => $header) {
