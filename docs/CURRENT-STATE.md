@@ -6,11 +6,12 @@ Status terkini project BUMDes Digital per 2026-06-03.
 
 ### Homepage (https://bumdes.ondesa.id/)
 - Hero section dengan statistik desa
-- Quick access cards (Profil, BUMDes, Potensi, Kontak)
+- Quick access cards (Profil, BUMDes, Unit Usaha, Potensi, Kontak)
 - About section
 - BUMDes highlight section
-- Potensi unggulan cards
-- Statistik desa
+- Berita terbaru (3 artikel)
+- Produk unggulan (4 produk)
+- Galeri terbaru (6 foto)
 - Contact section dengan peta
 
 ### Profil Desa (/profil-desa)
@@ -27,6 +28,14 @@ Status terkini project BUMDes Digital per 2026-06-03.
 - Layanan
 - Pencapaian
 - Keuangan BUMDes
+
+### Unit Usaha (/unit-usaha)
+- **Listing semua unit usaha** dengan grid cards
+- **Detail per unit usaha** (`/unit-usaha/{slug}`)
+  - Info unit (status, pengelola, telepon, email, alamat, jam operasional)
+  - Produk & layanan per unit
+  - Berita terkait per unit
+  - CTA WhatsApp untuk pemesanan
 
 ### Potensi (/potensi)
 - Potensi wisata
@@ -62,6 +71,13 @@ Status terkini project BUMDes Digital per 2026-06-03.
 - WhatsApp
 - Media sosial
 
+### PWA Offline Mode
+- Service Worker (sw.js)
+- IndexedDB untuk offline storage
+- Auto-sync saat online
+- Form input transaksi offline (`/offline-transaksi`)
+- Connection status bar
+
 ### Admin Panel (/admin)
 - Dashboard dengan statistik
 - Info Desa (13 tab form)
@@ -69,6 +85,17 @@ Status terkini project BUMDes Digital per 2026-06-03.
 - Galeri (CRUD)
 - Produk (CRUD)
 - Kategori Produk (CRUD)
+- **Unit Usaha (CRUD)** — dengan form lengkap (kode, slug, nama, tipe, warna, kontak, konten)
+- **COA (Chart of Accounts)** — 25 akun default
+- **Transaksi Keuangan** — dengan filtering per unit
+- **Anggaran (Budgeting)**
+- **Business Units** — Induk + 4 Unit Usaha
+- **RAK (Rekening Antar Kantor)** — transfer antar unit
+- **Laporan Konsolidasi** — laporan gabungan semua unit
+- **Template Laporan SAK EMKM** — Neraca, Laba/Rugi, Arus Kas, CALK
+- **Aset Tetap** — manajemen aset
+- **Penyusutan Aset** — kalkulasi otomatis (straight line)
+- **Penyertaan Modal** — 9 sumber, 4 jenis, 4 bentuk
 - Users (CRUD)
 - Roles & Permissions
 
@@ -92,11 +119,6 @@ Status terkini project BUMDes Digital per 2026-06-03.
 ---
 
 ## 🔴 Not Working / Not Started
-
-### Keuangan
-- Belum ada modul keuangan
-- Belum ada COA
-- Belum ada laporan
 
 ### Telegram Bot
 - Belum ada integrasi Telegram
@@ -181,10 +203,10 @@ Status terkini project BUMDes Digital per 2026-06-03.
 ## 📋 TODO List
 
 ### High Priority
-- [ ] Modul Keuangan (COA, transaksi, laporan)
-- [ ] Telegram Bot
-- [ ] Keranjang belanja
+- [ ] Telegram Bot (notifikasi, cek status, info produk)
+- [ ] Keranjang belanja & checkout
 - [ ] File upload validation
+- [ ] PDF export laporan keuangan
 
 ### Medium Priority
 - [ ] Peta interaktif (Leaflet)
@@ -203,13 +225,23 @@ Status terkini project BUMDes Digital per 2026-06-03.
 ## 🔄 Recent Changes
 
 ### 2026-06-03
-- ✅ Created development log documentation
-- ✅ Created next steps guide
-- ✅ Created architecture decisions
-- ✅ Created current state document
-- ✅ Pushed all documentation to GitHub
+- ✅ Added Unit Usaha frontend pages (index & detail)
+- ✅ Enhanced business_units table with new fields
+- ✅ Added business_unit_id to products & news tables
+- ✅ Updated Filament admin for Unit Usaha
+- ✅ Added Unit Usaha to navigation menu
+- ✅ Updated README.md with actual progress
+- ✅ Updated CURRENT-STATE.md
 
 ### 2026-06-03 (Earlier)
+- ✅ Added Penyertaan Modal module
+- ✅ Added Auto-depreciation (Penyusutan)
+- ✅ Added Consolidated Reports
+- ✅ Added RAK (Rekening Antar Kantor)
+- ✅ Added Business Units module
+- ✅ Added Financial Report Templates (SAK EMKM)
+- ✅ Added PWA Offline Mode
+- ✅ Added Modul Keuangan (COA, Transaksi, Anggaran)
 - ✅ Implemented Berita, Galeri, Produk modules
 - ✅ Updated homepage with new sections
 - ✅ Fixed ViewComposer for global data

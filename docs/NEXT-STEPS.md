@@ -4,7 +4,7 @@ File ini berisi panduan lengkap untuk agent AI lain yang mau melanjutkan project
 
 ## 📌 Status Saat Ini
 
-**Progress:** Tahap 1-5 selesai (50%)
+**Progress:** Tahap 1-8 selesai (~80%)
 **Website:** https://bumdes.ondesa.id (aktif)
 **Admin:** https://bumdes.ondesa.id/admin
 
@@ -18,84 +18,27 @@ File ini berisi panduan lengkap untuk agent AI lain yang mau melanjutkan project
 ✅ Modul Galeri (CRUD + frontend)
 ✅ Modul Produk UMKM (CRUD + frontend + WhatsApp order)
 ✅ Seeder data contoh
+✅ Modul Keuangan (COA, Transaksi, Anggaran)
+✅ Business Units (Induk + 4 Unit Usaha)
+✅ RAK (Rekening Antar Kantor)
+✅ Laporan Konsolidasi
+✅ Template Laporan SAK EMKM (Neraca, Laba/Rugi, Arus Kas, CALK)
+✅ Penyusutan Aset (Depresiasi)
+✅ Penyertaan Modal (9 sumber, 4 jenis)
+✅ PWA Offline Mode
+✅ Unit Usaha Frontend (listing & detail)
 
 ### Yang Belum Dikerjakan:
-⏳ Modul Keuangan (COA, transaksi, laporan PP 11/2021)
 ⏳ Telegram Bot (notifikasi pesanan, info produk)
-⏳ Unit Usaha management
 ⏳ Keranjang belanja & checkout
 ⏳ Peta interaktif (Leaflet)
 ⏳ RESTful API
 ⏳ Testing
+⏳ PDF export laporan keuangan
 
 ---
 
-## 🎯 Tahap 6: Modul Keuangan (Prioritas Tinggi)
-
-### Database yang Perlu Dibuat:
-
-```sql
--- COA (Chart of Accounts) - Fleksibel per BUMDes
-CREATE TABLE chart_of_accounts (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    code VARCHAR(20) NOT NULL UNIQUE,
-    name VARCHAR(255) NOT NULL,
-    type ENUM('aset', 'kewajiban', 'modal', 'pendapatan', 'beban') NOT NULL,
-    parent_id BIGINT UNSIGNED NULL,
-    is_group BOOLEAN DEFAULT FALSE,
-    description TEXT NULL,
-    created_at TIMESTAMP NULL,
-    updated_at TIMESTAMP NULL
-);
-
--- Transaksi Keuangan
-CREATE TABLE financial_transactions (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    transaction_date DATE NOT NULL,
-    type ENUM('pemasukan', 'pengeluaran') NOT NULL,
-    account_id BIGINT UNSIGNED NOT NULL,
-    counter_account_id BIGINT UNSIGNED NULL,
-    amount DECIMAL(15,2) NOT NULL,
-    description TEXT NOT NULL,
-    reference VARCHAR(100) NULL,
-    attachment VARCHAR(255) NULL,
-    created_by BIGINT UNSIGNED NOT NULL,
-    approved_by BIGINT UNSIGNED NULL,
-    status ENUM('draft', 'pending', 'approved', 'rejected') DEFAULT 'draft',
-    created_at TIMESTAMP NULL,
-    updated_at TIMESTAMP NULL,
-    deleted_at TIMESTAMP NULL
-);
-
--- Anggaran
-CREATE TABLE budgets (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    account_id BIGINT UNSIGNED NOT NULL,
-    year YEAR NOT NULL,
-    planned_amount DECIMAL(15,2) NOT NULL DEFAULT 0,
-    actual_amount DECIMAL(15,2) NOT NULL DEFAULT 0,
-    notes TEXT NULL,
-    created_at TIMESTAMP NULL,
-    updated_at TIMESTAMP NULL
-);
-```
-
-### Filament Resources yang Perlu Dibuat:
-1. `ChartOfAccountResource` - CRUD COA
-2. `FinancialTransactionResource` - CRUD transaksi
-3. `BudgetResource` - CRUD anggaran
-4. `FinanceReportPage` - Halaman laporan keuangan
-
-### Laporan yang Wajib Ada (PP 11/2021):
-1. Laporan Realisasi Anggaran
-2. Laporan Posisi Keuangan
-3. Laporan Arus Kas
-4. Laporan Perubahan Modal
-5. Catatan Atas Laporan Keuangan
-
----
-
-## 🎯 Tahap 7: Telegram Bot
+## 🎯 Tahap 9: Telegram Bot
 
 ### Database yang Perlu Dibuat:
 
@@ -155,24 +98,10 @@ composer require irazasyed/telegram-bot-sdk
 
 ---
 
-## 🎯 Tahap 8: Unit Usaha + Keranjang Belanja
+## 🎯 Tahap 10: Keranjang Belanja
 
 ### Database:
 ```sql
--- Unit Usaha
-CREATE TABLE business_units (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    slug VARCHAR(255) NOT NULL UNIQUE,
-    description TEXT NULL,
-    manager VARCHAR(255) NULL,
-    phone VARCHAR(20) NULL,
-    address TEXT NULL,
-    is_active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP NULL,
-    updated_at TIMESTAMP NULL
-);
-
 -- Keranjang Belanja
 CREATE TABLE carts (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -195,7 +124,7 @@ CREATE TABLE cart_items (
 
 ---
 
-## 🎯 Tahap 9: Frontend Enhancement
+## 🎯 Tahap 11: Frontend Enhancement
 
 ### Yang Perlu Ditambah:
 1. Peta interaktif (Leaflet + OpenStreetMap) di halaman profil
@@ -212,7 +141,7 @@ npm install leaflet aos
 
 ---
 
-## 🎯 Tahap 10: RESTful API
+## 🎯 Tahap 12: RESTful API
 
 ### Endpoint yang Perlu Dibuat:
 
@@ -224,6 +153,8 @@ GET /api/v1/galeri        - Daftar galeri
 GET /api/v1/produk        - Daftar produk
 GET /api/v1/produk/{slug} - Detail produk
 GET /api/v1/kategori      - Kategori produk
+GET /api/v1/unit-usaha    - Daftar unit usaha
+GET /api/v1/unit-usaha/{slug} - Detail unit usaha
 POST /api/v1/pesan        - Buat pesanan
 GET /api/v1/pesan/{id}    - Cek status pesanan
 ```
@@ -234,7 +165,7 @@ GET /api/v1/pesan/{id}    - Cek status pesanan
 
 ---
 
-## 🎯 Tahap 11: Testing
+## 🎯 Tahap 13: Testing
 
 ### Yang Perlu Di-Test:
 1. **Unit Testing:**
@@ -361,3 +292,11 @@ sudo service mariadb restart
 7. **Storage Link:** Harus dijalankan untuk file upload bisa diakses
 
 8. **Queue:** Belum dikonfigurasi. Untuk email/notification nanti perlu setup queue driver
+
+9. **Holding Company Architecture:** BUMDes Induk + Unit Usaha dengan RAK untuk transfer antar unit
+
+10. **SAK EMKM:** Laporan keuangan mengikuti standar akuntansi untuk UMKM
+
+11. **PWA Offline Mode:** Service Worker + IndexedDB untuk input transaksi tanpa internet
+
+12. **Penyusutan:** Menggunakan metode Straight Line (Harga Beli - Nilai Sisa) / Umur Ekonomis
