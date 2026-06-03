@@ -15,14 +15,22 @@
 
     <div class="space-y-6">
         {{-- Ringkasan --}}
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
             <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
-                <div class="text-sm text-gray-500 dark:text-gray-400">Total Pendapatan</div>
-                <div class="text-xl font-bold text-green-600">Rp {{ number_format($labaRugi['total_pendapatan'] ?? 0) }}</div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">📝 Draft (Belum Publish)</div>
+                <div class="text-xl font-bold text-yellow-600">{{ number_format($draftCount) }} transaksi</div>
             </div>
             <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
-                <div class="text-sm text-gray-500 dark:text-gray-400">Total Beban</div>
-                <div class="text-xl font-bold text-red-600">Rp {{ number_format($labaRugi['total_beban'] ?? 0) }}</div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">✅ Published</div>
+                <div class="text-xl font-bold text-green-600">{{ number_format($publishedCount) }} transaksi</div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="text-sm text-gray-500 dark:text-gray-400">Total Debet</div>
+                <div class="text-xl font-bold text-blue-600">Rp {{ number_format($totalDebet) }}</div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="text-sm text-gray-500 dark:text-gray-400">Total Kredit</div>
+                <div class="text-xl font-bold text-purple-600">Rp {{ number_format($totalKredit) }}</div>
             </div>
             <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
                 <div class="text-sm text-gray-500 dark:text-gray-400">Laba Bersih</div>
@@ -30,10 +38,6 @@
                 <div class="text-xl font-bold {{ $laba >= 0 ? 'text-green-600' : 'text-red-600' }}">
                     Rp {{ number_format($laba) }}
                 </div>
-            </div>
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
-                <div class="text-sm text-gray-500 dark:text-gray-400">Total Aset</div>
-                <div class="text-xl font-bold text-blue-600">Rp {{ number_format($neraca['total_aset'] ?? 0) }}</div>
             </div>
         </div>
 

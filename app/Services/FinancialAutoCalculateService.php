@@ -25,7 +25,7 @@ class FinancialAutoCalculateService
         $saldoAwalQuery = DB::table('financial_transactions')
             ->join('chart_of_accounts', 'financial_transactions.account_id', '=', 'chart_of_accounts.id')
             ->where('financial_transactions.transaction_date', '<', $start->toDateString())
-            ->where('financial_transactions.status', 'approved')
+            ->whereIn('financial_transactions.status', ['published', 'approved'])
             ->where('chart_of_accounts.is_group', false)
             ->select(
                 'chart_of_accounts.code as kode',
@@ -40,7 +40,7 @@ class FinancialAutoCalculateService
         $transaksiQuery = DB::table('financial_transactions')
             ->join('chart_of_accounts', 'financial_transactions.account_id', '=', 'chart_of_accounts.id')
             ->whereBetween('financial_transactions.transaction_date', [$start->toDateString(), $end->toDateString()])
-            ->where('financial_transactions.status', 'approved')
+            ->whereIn('financial_transactions.status', ['published', 'approved'])
             ->where('chart_of_accounts.is_group', false)
             ->select(
                 'chart_of_accounts.code as kode',
@@ -106,7 +106,7 @@ class FinancialAutoCalculateService
         $data = DB::table('financial_transactions')
             ->join('chart_of_accounts', 'financial_transactions.account_id', '=', 'chart_of_accounts.id')
             ->whereBetween('financial_transactions.transaction_date', [$start->toDateString(), $end->toDateString()])
-            ->where('financial_transactions.status', 'approved')
+            ->whereIn('financial_transactions.status', ['published', 'approved'])
             ->where('chart_of_accounts.is_group', false)
             ->whereIn('chart_of_accounts.type', ['pendapatan', 'beban'])
             ->select(
@@ -166,7 +166,7 @@ class FinancialAutoCalculateService
         $data = DB::table('financial_transactions')
             ->join('chart_of_accounts', 'financial_transactions.account_id', '=', 'chart_of_accounts.id')
             ->where('financial_transactions.transaction_date', '<=', $end->toDateString())
-            ->where('financial_transactions.status', 'approved')
+            ->whereIn('financial_transactions.status', ['published', 'approved'])
             ->where('chart_of_accounts.is_group', false)
             ->select(
                 'chart_of_accounts.code as kode',
@@ -237,7 +237,7 @@ class FinancialAutoCalculateService
         $data = DB::table('financial_transactions')
             ->join('chart_of_accounts', 'financial_transactions.account_id', '=', 'chart_of_accounts.id')
             ->whereBetween('financial_transactions.transaction_date', [$start->toDateString(), $end->toDateString()])
-            ->where('financial_transactions.status', 'approved')
+            ->whereIn('financial_transactions.status', ['published', 'approved'])
             ->where('chart_of_accounts.code', 'like', '11%') // Hanya akun kas
             ->select(
                 'chart_of_accounts.code as kode',
@@ -304,7 +304,7 @@ class FinancialAutoCalculateService
         $data = DB::table('financial_transactions')
             ->join('chart_of_accounts', 'financial_transactions.account_id', '=', 'chart_of_accounts.id')
             ->whereBetween('financial_transactions.transaction_date', [$start->toDateString(), $end->toDateString()])
-            ->where('financial_transactions.status', 'approved')
+            ->whereIn('financial_transactions.status', ['published', 'approved'])
             ->where('chart_of_accounts.type', 'ekuitas')
             ->select(
                 'chart_of_accounts.code as kode',

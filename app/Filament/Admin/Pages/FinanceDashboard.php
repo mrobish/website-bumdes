@@ -2,7 +2,9 @@
 
 namespace App\Filament\Admin\Pages;
 
+use App\Models\FinancialTransaction;
 use App\Services\FinancialAutoCalculateService;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
@@ -19,6 +21,10 @@ class FinanceDashboard extends Page
 
     public ?string $bulan = null;
     public array $data = [];
+    public int $draftCount = 0;
+    public int $publishedCount = 0;
+    public int $totalDebet = 0;
+    public int $totalKredit = 0;
 
     public function mount(): void
     {
@@ -30,6 +36,28 @@ class FinanceDashboard extends Page
     {
         $service = new FinancialAutoCalculateService();
         $this->data = $service->getDashboard($this->bulan);
+
+        // Hitung draft vs published
+        $start = Carbon::parse($this->bulan . '-01')->startOfMonth();
+        $end = $start->copy()->endOfMonth();
+
+        $this->draftCount = FinancialTransaction::whereBetween('transaction_date', [$start->toDateString(), $end->toDateString()])
+            ->where('status', 'draft')
+            ->count();
+
+        $this->publishedCount = FinancialTransaction::whereBetween('transaction_date', [$start->toDateString(), $end->toDateString()])
+            ->whereIn('status', ['published', 'approved'])
+            ->count();
+
+        $this->totalDebet = FinancialTransaction::whereBetween('transaction_date', [$start->toDateString(), $end->toDateString()])
+            ->whereIn('status', ['published', 'approved'])
+            ->where('type', 'debit')
+            ->sum('amount');
+
+        $this->totalKredit = FinancialTransaction::whereBetween('transaction_date', [$start->toDateString(), $end->toDateString()])
+            ->whereIn('status', ['published', 'approved'])
+            ->where('type', 'credit')
+            ->sum('amount');
     }
 
     public function form(Form $form): Form
