@@ -1,7 +1,7 @@
 <x-filament-panels::page>
     <form wire:submit="loadData">
         <div class="fi-fo-field-wrp">{{ $this->form }}</div>
-        <x-filament::button type="submit" icon="heroicon-o-magnifying-gang" class="mt-4">
+        <x-filament::button type="submit" icon="heroicon-o-magnifying-glass" class="mt-4">
             📊 Tampilkan Laba/Rugi
         </x-filament::button>
     </form>
