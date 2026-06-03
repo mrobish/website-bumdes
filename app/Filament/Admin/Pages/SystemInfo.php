@@ -84,7 +84,7 @@ class SystemInfo extends Page
 
         $this->appInfo = [
             'Laravel Version' => app()->version(),
-            'Filament Version' => \Filament\Filament::version(),
+            'Filament Version' => '3.x',
             'PHP Version' => PHP_VERSION,
             'Users' => $userCount,
             'Berita' => $newsCount,

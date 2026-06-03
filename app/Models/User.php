@@ -5,6 +5,7 @@ namespace App\Models;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -31,6 +32,7 @@ class User extends Authenticatable implements FilamentUser
         'email',
         'password',
         'role',
+        'role_id',
         'phone',
         'avatar',
         'status',
@@ -79,6 +81,54 @@ class User extends Authenticatable implements FilamentUser
     public function getFilamentAvatarUrl(): ?string
     {
         return $this->avatar ? asset('storage/' . $this->avatar) : null;
+    }
+
+    public function roleDetail(): BelongsTo
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    /**
+     * Check if user has a specific permission
+     */
+    public function hasPermission(string $permission): bool
+    {
+        // Super admin bypass
+        if ($this->role === 'super_admin') {
+            return true;
+        }
+
+        // Check via role_id -> permissions JSON
+        if ($this->roleDetail && $this->roleDetail->hasPermission($permission)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if user has ANY of the given permissions
+     */
+    public function hasAnyPermission(array $perms): bool
+    {
+        foreach ($perms as $perm) {
+            if ($this->hasPermission($perm)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Get all permissions for this user
+     */
+    public function getPermissions(): array
+    {
+        if ($this->role === 'super_admin') {
+            return ['*'];
+        }
+
+        return $this->roleDetail?->permissions ?? [];
     }
 
     public function recordLogin(): void

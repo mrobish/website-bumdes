@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\UserResource\Pages;
+use App\Models\Role;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -49,12 +50,13 @@ class UserResource extends Resource
                             ->maxLength(255)
                             ->columnSpan(2),
 
-                        Forms\Components\Select::make('role')
+                        Forms\Components\Select::make('role_id')
                             ->label('Role / Jabatan')
-                            ->options(User::ROLES)
-                            ->default('operator')
+                            ->relationship('roleDetail', 'name')
+                            ->searchable()
+                            ->preload()
                             ->required()
-                            ->searchable(),
+                            ->columnSpan(1),
 
                         Forms\Components\Select::make('status')
                             ->label('Status')
@@ -137,17 +139,17 @@ class UserResource extends Resource
                     ->label('Email')
                     ->searchable(),
 
-                Tables\Columns\TextColumn::make('role')
+                Tables\Columns\TextColumn::make('roleDetail.name')
                     ->label('Role')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn ($record): string => match ($record->roleDetail?->slug ?? '') {
                         'super_admin' => 'danger',
                         'admin' => 'warning',
                         'operator' => 'info',
                         'bendahara' => 'success',
                         'viewer' => 'gray',
-                    })
-                    ->formatStateUsing(fn (string $state): string => User::ROLES[$state] ?? $state),
+                        default => 'gray',
+                    }),
 
                 Tables\Columns\TextColumn::make('status')
                     ->label('Status')
@@ -170,9 +172,9 @@ class UserResource extends Resource
                     ->alignCenter(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('role')
+                Tables\Filters\SelectFilter::make('roleDetail.slug')
                     ->label('Role')
-                    ->options(User::ROLES),
+                    ->options(Role::pluck('name', 'slug')),
 
                 Tables\Filters\SelectFilter::make('status')
                     ->label('Status')

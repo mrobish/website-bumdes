@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -10,6 +11,8 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
+        $roles = Role::pluck('id', 'slug');
+
         // Super Admin
         User::updateOrCreate(
             ['email' => 'admin@bumdes.id'],
@@ -17,6 +20,7 @@ class UserSeeder extends Seeder
                 'name' => 'Super Admin',
                 'password' => Hash::make('password'),
                 'role' => 'super_admin',
+                'role_id' => $roles['super_admin'] ?? null,
                 'status' => 'active',
             ]
         );
@@ -28,6 +32,7 @@ class UserSeeder extends Seeder
                 'name' => 'Admin BUMDes',
                 'password' => Hash::make('password'),
                 'role' => 'admin',
+                'role_id' => $roles['admin'] ?? null,
                 'status' => 'active',
             ]
         );
@@ -39,6 +44,7 @@ class UserSeeder extends Seeder
                 'name' => 'Bendahara',
                 'password' => Hash::make('password'),
                 'role' => 'bendahara',
+                'role_id' => $roles['bendahara'] ?? null,
                 'status' => 'active',
             ]
         );
@@ -50,6 +56,7 @@ class UserSeeder extends Seeder
                 'name' => 'Operator',
                 'password' => Hash::make('password'),
                 'role' => 'operator',
+                'role_id' => $roles['operator'] ?? null,
                 'status' => 'active',
             ]
         );
@@ -61,6 +68,7 @@ class UserSeeder extends Seeder
                 'name' => 'Viewer',
                 'password' => Hash::make('password'),
                 'role' => 'viewer',
+                'role_id' => $roles['viewer'] ?? null,
                 'status' => 'active',
             ]
         );
