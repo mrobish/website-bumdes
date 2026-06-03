@@ -113,7 +113,8 @@ class FinancialTemplateService
         }
 
         // Add instructions sheet
-        $instructions = $spreadsheet->createSheet('Petunjuk');
+        $instructions = $spreadsheet->createSheet();
+        $instructions->setTitle('Petunjuk');
         $instructions->setCellValue('A1', 'PETUNJUK PENGISIAN');
         $instructions->getStyle('A1')->applyFromArray(['font' => ['bold' => true, 'size' => 14]]);
         $instructions->setCellValue('A3', '1. Download template ini');
