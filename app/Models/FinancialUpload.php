@@ -18,6 +18,10 @@ class FinancialUpload extends Model
         'notes',
         'validation_errors',
         'parsed_data',
+        'imported_data',
+        'imported_count',
+        'import_status',
+        'import_error',
         'validated_at',
         'approved_at',
     ];
@@ -25,6 +29,8 @@ class FinancialUpload extends Model
     protected $casts = [
         'validation_errors' => 'array',
         'parsed_data' => 'array',
+        'imported_data' => 'array',
+        'imported_count' => 'integer',
         'validated_at' => 'datetime',
         'approved_at' => 'datetime',
     ];

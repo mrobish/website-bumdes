@@ -6,6 +6,7 @@ use App\Filament\Admin\Resources\FinancialUploadResource\Pages;
 use App\Models\FinancialTemplate;
 use App\Models\FinancialUpload;
 use App\Services\FinancialTemplateService;
+use App\Services\FinancialImportService;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
@@ -82,6 +83,28 @@ class FinancialUploadResource extends Resource
                             ->default('pending')
                             ->required(),
                     ]),
+
+                Forms\Components\Section::make('Hasil Import')
+                    ->icon('heroicon-m-information-circle')
+                    ->schema([
+                        Forms\Components\Placeholder::make('import_status')
+                            ->label('Status Import')
+                            ->content(fn ($record) => match($record->import_status ?? 'pending') {
+                                'imported' => '✅ Berhasil diimport',
+                                'error' => '❌ Gagal import',
+                                default => '⏳ Menunggu import',
+                            }),
+                        Forms\Components\Placeholder::make('imported_count')
+                            ->label('Jumlah Data')
+                            ->content(fn ($record) => $record->imported_count . ' baris'),
+                        Forms\Components\Textarea::make('import_error')
+                            ->label('Error')
+                            ->rows(3)
+                            ->readOnly()
+                            ->visible(fn ($record) => !empty($record->import_error)),
+                    ])
+                    ->collapsible()
+                    ->collapsed(),
             ]);
     }
 
@@ -113,6 +136,19 @@ class FinancialUploadResource extends Resource
                         default => 'gray',
                     }),
 
+                Tables\Columns\TextColumn::make('import_status')
+                    ->label('Import')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'imported' => 'success',
+                        'error' => 'danger',
+                        default => 'gray',
+                    }),
+
+                Tables\Columns\TextColumn::make('imported_count')
+                    ->label('Data')
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Diupload oleh')
                     ->sortable(),
@@ -129,6 +165,33 @@ class FinancialUploadResource extends Resource
                     ->color('success')
                     ->url(fn ($record) => Storage::url($record->file_path))
                     ->openUrlInNewTab(),
+
+                Tables\Actions\Action::make('import')
+                    ->label('Import')
+                    ->icon('heroicon-o-arrow-path')
+                    ->color('primary')
+                    ->requiresConfirmation()
+                    ->modalHeading('Import Data')
+                    ->modalDescription('Data dari Excel akan diimport ke database. Untuk Jurnal Umum, data masuk ke transaksi keuangan. Untuk laporan lain, data disimpan sebagai referensi.')
+                    ->visible(fn ($record) => $record->import_status !== 'imported')
+                    ->action(function ($record) {
+                        $importService = new FinancialImportService();
+                        $result = $importService->import($record);
+
+                        if ($result['success']) {
+                            Notification::make()
+                                ->title('Import Berhasil')
+                                ->body($result['message'])
+                                ->success()
+                                ->send();
+                        } else {
+                            Notification::make()
+                                ->title('Import Gagal')
+                                ->body($result['error'] ?? 'Terjadi kesalahan')
+                                ->danger()
+                                ->send();
+                        }
+                    }),
 
                 Tables\Actions\Action::make('validate')
                     ->label('Validasi')
