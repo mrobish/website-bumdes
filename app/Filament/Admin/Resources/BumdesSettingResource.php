@@ -383,11 +383,22 @@ class BumdesSettingResource extends Resource
                                             ]),
                                     ]),
 
+
                                 Forms\Components\Section::make('Pengaturan')
                                     ->schema([
                                         Forms\Components\Toggle::make('is_active')
                                             ->label('Aktif')
                                             ->default(true),
+                                    ]),
+
+                                Forms\Components\Section::make('Custom CSS')
+                                    ->description('Tambahkan CSS kustom untuk panel admin (opsional)')
+                                    ->schema([
+                                        Forms\Components\Textarea::make('custom_css')
+                                            ->label('Custom CSS')
+                                            ->rows(8)
+                                            ->placeholder('.fi-sidebar { background: #1E3A5F; }')
+                                            ->helperText('Contoh: .fi-sidebar { background: #your-color; }'),
                                     ]),
                             ]),
                     ]),

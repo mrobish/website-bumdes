@@ -82,18 +82,13 @@ class BumdesSetting extends Model
         'motto_color',
         'primary_color',
         'secondary_color',
+        'custom_css',
 
         // SEO
         'meta_title',
         'meta_description',
         'meta_keywords',
         'is_active',
-
-        // Motto & Branding
-        'motto',
-        'motto_color',
-        'primary_color',
-        'secondary_color',
 
         // Informasi Bank
         'bank_name',
