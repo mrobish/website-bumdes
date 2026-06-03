@@ -24,6 +24,11 @@ class JurnalResource extends Resource
     protected static ?string $modelLabel = 'Transaksi';
     protected static ?int $navigationSort = 2;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false; // Hide from sidebar — use Input Jurnal page instead
+    }
+
     public static function form(Form $form): Form
     {
         return $form
