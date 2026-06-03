@@ -3,17 +3,10 @@
 namespace App\Filament\Admin\Pages;
 
 use App\Models\Transaction;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
 use Filament\Pages\Page;
 
-class CashFlowPage extends Page implements HasForms
+class CashFlowPage extends Page
 {
-    use InteractsWithForms;
-
     protected static string $view = 'filament.pages.cash-flow';
     protected static ?string $navigationIcon = 'heroicon-o-arrow-trending-up';
     protected static ?string $navigationGroup = '📊 Laporan';
@@ -21,7 +14,11 @@ class CashFlowPage extends Page implements HasForms
     protected static ?string $title = 'Laporan Arus Kas';
     protected static ?int $navigationSort = 5;
 
-    public ?array $data = [];
+    public int $year = 0;
+    public int $month = 0;
+    public ?int $unitId = null;
+    public bool $loaded = false;
+
     public array $incomeByCategory = [];
     public array $expenseByCategory = [];
     public float $totalIncome = 0;
@@ -30,50 +27,16 @@ class CashFlowPage extends Page implements HasForms
 
     public function mount(): void
     {
-        $this->form->fill([
-            'year' => now()->year,
-            'month' => now()->month,
-            'unit_id' => '',
-        ]);
-    }
-
-    public function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Grid::make(3)->schema([
-                    Select::make('year')
-                        ->label('Tahun')
-                        ->options(collect(array_reverse(range(now()->year - 3, now()->year + 1)))->mapWithKeys(fn ($y) => [$y => $y]))
-                        ->default(now()->year)
-                        ->required(),
-                    Select::make('month')
-                        ->label('Bulan')
-                        ->options([
-                            1 => 'Januari', 2 => 'Februari', 3 => 'Maret',
-                            4 => 'April', 5 => 'Mei', 6 => 'Juni',
-                            7 => 'Juli', 8 => 'Agustus', 9 => 'September',
-                            10 => 'Oktober', 11 => 'November', 12 => 'Desember',
-                        ])
-                        ->default(now()->month)
-                        ->required(),
-                    Select::make('unit_id')
-                        ->label('Unit')
-                        ->options(fn () => ['' => 'Semua Unit'] + \App\Models\BusinessUnit::pluck('name', 'id')->toArray())
-                        ->default(''),
-                ])->columns(3),
-            ])
-            ->statePath('data');
+        $this->year = (int) now()->year;
+        $this->month = (int) now()->month;
     }
 
     public function loadData(): void
     {
-        $data = $this->form->getState();
-        $year = $data['year'];
-        $month = $data['month'];
-        $unitId = !empty($data['unit_id']) ? (int) $data['unit_id'] : null;
+        $year = $this->year;
+        $month = $this->month;
+        $unitId = $this->unitId;
 
-        // Income by category
         $incomeQuery = Transaction::where('type', 'income')
             ->where('is_void', false)
             ->whereYear('transaction_date', $year)
@@ -90,7 +53,6 @@ class CashFlowPage extends Page implements HasForms
             ->sortDesc()
             ->toArray();
 
-        // Expense by category
         $expenseQuery = Transaction::where('type', 'expense')
             ->where('is_void', false)
             ->whereYear('transaction_date', $year)
@@ -110,5 +72,6 @@ class CashFlowPage extends Page implements HasForms
         $this->totalIncome = array_sum($this->incomeByCategory);
         $this->totalExpense = array_sum($this->expenseByCategory);
         $this->netCashFlow = $this->totalIncome - $this->totalExpense;
+        $this->loaded = true;
     }
 }
