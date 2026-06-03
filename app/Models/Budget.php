@@ -2,68 +2,55 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Budget extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
-        'account_id',
-        'year',
-        'planned_amount',
-        'actual_amount',
-        'notes',
+        'category_id', 'unit_id', 'year', 'month', 'amount', 'created_by'
     ];
 
     protected $casts = [
-        'year' => 'integer',
-        'planned_amount' => 'decimal:2',
-        'actual_amount' => 'decimal:2',
+        'amount' => 'decimal:2',
     ];
 
-    // Relationship: account
-    public function account(): BelongsTo
+    public function category()
     {
-        return $this->belongsTo(ChartOfAccount::class, 'account_id');
+        return $this->belongsTo(Category::class);
     }
 
-    // Scope: by year
-    public function scopeYear($query, $year)
+    public function unit()
     {
-        return $query->where('year', $year);
+        return $this->belongsTo(BusinessUnit::class, 'unit_id');
     }
 
-    // Get realization percentage
-    public function getRealizationPercentAttribute()
+    public function creator()
     {
-        if ($this->planned_amount <= 0) {
-            return 0;
-        }
-        return round(($this->actual_amount / $this->planned_amount) * 100, 2);
+        return $this->belongsTo(User::class, 'created_by');
     }
 
-    // Get remaining budget
-    public function getRemainingAttribute()
+    public function getActualSpentAttribute(): float
     {
-        return $this->planned_amount - $this->actual_amount;
+        return Transaction::where('category_id', $this->category_id)
+            ->where('unit_id', $this->unit_id)
+            ->whereMonth('transaction_date', $this->month)
+            ->whereYear('transaction_date', $this->year)
+            ->where('type', 'expense')
+            ->where('is_void', false)
+            ->sum('amount');
     }
 
-    // Get formatted values
-    public function getFormattedPlannedAttribute()
+    public function getUtilizationAttribute(): float
     {
-        return 'Rp ' . number_format($this->planned_amount, 0, ',', '.');
+        if ($this->amount <= 0) return 0;
+        return ($this->actual_spent / $this->amount) * 100;
     }
 
-    public function getFormattedActualAttribute()
+    public function getStatusAttribute(): string
     {
-        return 'Rp ' . number_format($this->actual_amount, 0, ',', '.');
-    }
-
-    public function getFormattedRemainingAttribute()
-    {
-        return 'Rp ' . number_format($this->remaining, 0, ',', '.');
+        $util = $this->utilization;
+        if ($util >= 100) return 'over';
+        if ($util >= 80) return 'warning';
+        return 'ok';
     }
 }

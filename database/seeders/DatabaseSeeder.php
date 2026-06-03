@@ -9,9 +9,17 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            VillageInfoSeeder::class,
+            // Core
+            RoleSeeder::class,
+            UserSeeder::class,
+            
+            // Master Data
+            SeedCOASeeder::class,
+            SeedCategoriesSeeder::class,
+            SeedFiscalYearSeeder::class,
+            
+            // Existing
             BusinessUnitSeeder::class,
-            FinancialReportTemplateSeeder::class,
             BumdesSettingSeeder::class,
             BumdesStructureSeeder::class,
         ]);
