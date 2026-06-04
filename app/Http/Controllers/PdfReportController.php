@@ -45,4 +45,13 @@ class PdfReportController extends Controller
             $request->month
         );
     }
+
+    public function bukuBesar(Request $request)
+    {
+        return $this->pdfService->bukuBesar(
+            $request->account_code,
+            $request->date_from,
+            $request->date_to
+        );
+    }
 }

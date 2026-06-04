@@ -82,3 +82,8 @@ Route::middleware(['auth'])->prefix('admin/pdf')->group(function () {
     Route::get('/neraca', [\App\Http\Controllers\PdfReportController::class, 'neraca'])->name('pdf.neraca');
     Route::get('/jurnal-umum', [\App\Http\Controllers\PdfReportController::class, 'jurnalUmum'])->name('pdf.jurnal-umum');
 });
+
+// Buku Besar PDF
+Route::middleware(['auth'])->prefix('admin/pdf')->group(function () {
+    Route::get('/buku-besar', [\App\Http\Controllers\PdfReportController::class, 'bukuBesar'])->name('pdf.buku-besar');
+});
