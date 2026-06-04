@@ -79,15 +79,27 @@ class BumdesSetting extends Model
         'bendahara_nip',
 
         // Pejabat PP 11/2021
+        // Penasihat
         'pengawas1_name',
         'pengawas1_nip',
         'pengawas1_position',
         'pengawas2_name',
         'pengawas2_nip',
         'pengawas2_position',
+        // Pelaksana Operasional
         'direktur_name',
         'direktur_nip',
         'direktur_phone',
+        'sekretaris_name',
+        'sekretaris_nip',
+        'bendahara_umum_name',
+        'bendahara_umum_nip',
+        'kepala_unit_name',
+        'kepala_unit_nip',
+        'kepala_unit_usaha',
+        // Pengawas
+        'pengawas1_asal',
+        'pengawas2_asal',
 
         // Warna Branding
         'motto_color',
@@ -230,16 +242,25 @@ class BumdesSetting extends Model
     {
         $lines = [];
 
-        // Pembina (PP 11/2021)
+        // Penasihat (Kepala Desa - ex officio)
         if ($this->kepala_desa_name) {
             $lines[] = [
                 'name' => $this->kepala_desa_name,
                 'nip' => $this->kepala_desa_nip,
-                'title' => 'Pembina BUMDes',
+                'title' => 'Penasihat BUMDes',
             ];
         }
 
-        // Pengawas 1 (PP 11/2021)
+        // Direktur (Kepala Pelaksana)
+        if ($this->direktur_name) {
+            $lines[] = [
+                'name' => $this->direktur_name,
+                'nip' => $this->direktur_nip,
+                'title' => 'Direktur BUMDes',
+            ];
+        }
+
+        // Pengawas 1
         if ($this->pengawas1_name) {
             $lines[] = [
                 'name' => $this->pengawas1_name,
@@ -248,21 +269,12 @@ class BumdesSetting extends Model
             ];
         }
 
-        // Pengawas 2 (PP 11/2021)
+        // Pengawas 2
         if ($this->pengawas2_name) {
             $lines[] = [
                 'name' => $this->pengawas2_name,
                 'nip' => $this->pengawas2_nip,
                 'title' => 'Pengawas BUMDes',
-            ];
-        }
-
-        // Direktur (PP 11/2021)
-        if ($this->direktur_name) {
-            $lines[] = [
-                'name' => $this->direktur_name,
-                'nip' => $this->direktur_nip,
-                'title' => 'Direktur BUMDes',
             ];
         }
 
