@@ -1,379 +1,160 @@
-![Laravel](https://img.shields.io/badge/Laravel-10-FF2D20?style=flat&logo=laravel&logoColor=white)
-![Filament](https://img.shields.io/badge/Filament-3-FFCC00?style=flat&logo=filament&logoColor=black)
-![PHP](https://img.shields.io/badge/PHP-8.1-777BB4?style=flat&logo=php&logoColor=white)
-![MySQL](https://img.shields.io/badge/MariaDB-10-003545?style=flat&logo=mariadb&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
-![PWA](https://img.shields.io/badge/PWA-Ready-5A0FC8?style=flat&logo=pwa&logoColor=white)
-![SAK ETAP](https://img.shields.io/badge/SAK--ETAP-Compliant-4CAF50?style=flat)
-![PP 11/2021](https://img.shields.io/badge/PP%2011%2F2021-Compliant-2196F3?style=flat)
-![License](https://img.shields.io/badge/License-MIT-blue.svg)
+# 🏢 BUMDes Management System
 
----
+> **Sistem Manajemen Keuangan BUMDes Berbasis Web**
+> 
+> *"Input Sederhana oleh Manusia, Perhitungan Kompleks oleh Sistem"*
 
-# 🏢 BUMDes Management System v2.0
-
-> **"Input Sederhana oleh Manusia, Perhitungan Kompleks oleh Sistem"**
-
-Sistem manajemen keuangan BUMDes berbasis web dengan **akuntansi double-entry** sesuai standar **SAK ETAP** dan **PP 11/2021**. Desa fokus input transaksi sederhana, sistem hitung jurnal, buku besar, dan laporan otomatis.
-
-🌐 **Live Demo:** [bumdes.ondesa.id](https://bumdes.ondesa.id)
-
----
-
-## 📸 Screenshots
-
-### 🏠 Halaman Utama (Beranda)
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  [Logo]  BUMDes Karya Mekar            Berita  Profil  Unit ▼  │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│            🏢 BUM DESA KARYA MEKAR KARANGMEKAR                 │
-│           Badan Usaha Milik Desa Karangmekar                    │
-│                                                                 │
-│           [📊 Tentang Kami]  [📰 Berita Terkini]               │
-│                                                                 │
-├─────────────────────────────────────────────────────────────────┤
-│  📊 Tentang BUMDes                                              │
-│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐          │
-│  │ 4 Unit   │ │ Rp 1.2M  │ │ 15+      │ │ SAK ETAP │          │
-│  │ Usaha    │ │ Aset     │ │ Produk   │ │ Standar  │          │
-│  └──────────┘ └──────────┘ └──────────┘ └──────────┘          │
-│                                                                 │
-│  🏢 Unit Usaha                                                  │
-│  ┌────────────┐ ┌────────────┐ ┌────────────┐                  │
-│  │ 🌾 Pertanian│ │ 🗑️ Sampah  │ │ 🏪 Retail  │                  │
-│  └────────────┘ └────────────┘ └────────────┘                  │
-│                                                                 │
-│  👥 Pelaksana Operasional BUMDes                                │
-│  ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐                │
-│  │ Direkt│ │ Sekre│ │ Bend │ │ Peng1│ │ Peng2│                │
-│  │ foto  │ │ taris│ │ ahara│ │ awas │ │ awas │                │
-│  └──────┘ └──────┘ └──────┘ └──────┘ └──────┘                 │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### 📊 Dashboard Admin (Filament)
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  [Logo]  BUMDes Karya Mekar                     🔔 👤 Admin    │
-├────────────┬────────────────────────────────────────────────────┤
-│ 📊 Dashboard│   Dashboard Keuangan                              │
-│ ⚙️ Master   │   ┌─────────────┬─────────────┬─────────────┐    │
-│  Data       │   │ 💰 Saldo    │ 📈 Aset     │ 📉 Bulan    │    │
-│ 💰 Keuangan │   │ Rp 1.234.567│ Rp 567.890  │ Rp 123.456  │    │
-│ 📊 Laporan  │   └─────────────┴─────────────┴─────────────┘    │
-│ 🏢 Manajemen│                                                  │
-│ 📰 Konten   │   [Chart Pemasukan/Pengeluaran Bulanan]          │
-│ 👤 User     │   ┌─────────────────────────────────────────┐    │
-│ ⚙️ Pengaturan│   │ Jan Feb Mar Apr Mei Jun Jul Aug Sep Oct │    │
-│ 🔧 Sistem   │   │ ██  ██  ██  ██  ██  ░░  ░░  ░░  ░░  ░░ │    │
-│             │   └─────────────────────────────────────────┘    │
-│             │                                                  │
-│             │   [Donut Chart Kategori]  [Top 5 Pengeluaran]    │
-│             │                                                  │
-└────────────┴────────────────────────────────────────────────────┘
-```
-
-### 📝 Input Transaksi (Mobile-First)
-```
-┌─────────────────────┐
-│ ≡  Input Transaksi  │
-├─────────────────────┤
-│                     │
-│ Jenis Transaksi *   │
-│ ┌─────────────────┐ │
-│ │ 📥 Pemasukan  ▼ │ │
-│ └─────────────────┘ │
-│                     │
-│ Kategori *          │
-│ ┌─────────────────┐ │
-│ │ Tiket Wisata  ▼ │ │
-│ └─────────────────┘ │
-│                     │
-│ Tanggal *           │
-│ ┌─────────────────┐ │
-│ │ 01/06/2025    📅│ │
-│ └─────────────────┘ │
-│                     │
-│ Jumlah (Rp) *       │
-│ ┌─────────────────┐ │
-│ │ 500.000         │ │
-│ └─────────────────┘ │
-│                     │
-│ Keterangan          │
-│ ┌─────────────────┐ │
-│ │ Penjualan tiket │ │
-│ │ hari ini        │ │
-│ └─────────────────┘ │
-│                     │
-│ 📎 Upload Bukti     │
-│ ┌─────────────────┐ │
-│ │ Pilih File...   │ │
-│ └─────────────────┘ │
-│                     │
-│ [ 💾 Simpan ]       │
-│                     │
-└─────────────────────┘
-```
-
-### 📊 Contoh PDF yang Dihasilkan
-```
-┌─────────────────────────────────────────┐
-│                                         │
-│  ┌─────┐                                │
-│  │Logo │  PEMERINTAH KABUPATEN TASIK... │
-│  └─────┘  BUM DESA KARYA MEKAR         │
-│           Desa Karangmekar, Kec. ...    │
-│  ─────────────────────────────────────  │
-│                                         │
-│        NERACA SALDO                     │
-│         Juni 2025                       │
-│                                         │
-│  ┌─────────────────────────────────┐    │
-│  │ Kode │ Nama Akun    │ D    │ K  │    │
-│  ├─────────────────────────────────┤    │
-│  │ 1101 │ Kas          │ 500K │    │    │
-│  │ 1201 │ Aset Tetap   │ 400K │    │    │
-│  │ 2101 │ Utang Usaha  │      │ 50K│    │
-│  │ 3101 │ Modal Disetor│      │ 400K│   │
-│  │ 4101 │ Pendapatan   │      │ 200K│   │
-│  │ 5101 │ Beban Gaji   │ 100K │    │    │
-│  ├─────────────────────────────────┤    │
-│  │ TOTAL│              │1000K │650K│    │
-│  └─────────────────────────────────┘    │
-│                                         │
-│  ✅ SEIMBANG                            │
-│                                         │
-│  Karangmekar, 01 Juni 2025             │
-│                                         │
-│  ┌──────────┐ ┌──────────┐ ┌────────┐  │
-│  │ Direktur │ │Sekretaris│ │Bendahara│ │
-│  │    ttd   │ │    ttd   │ │   ttd  │  │
-│  └──────────┘ └──────────┘ └────────┘  │
-│                                         │
-│  ┌───────────────┐ ┌───────────────┐    │
-│  │ Mengetahui,   │ │ Mengetahui,   │    │
-│  │  Pengawas     │ │ Kepala Desa   │    │
-│  └───────────────┘ └───────────────┘    │
-│                                         │
-└─────────────────────────────────────────┘
-```
+[![Laravel](https://img.shields.io/badge/Laravel-10-FF2D20?style=flat&logo=laravel&logoColor=white)](https://laravel.com)
+[![Filament](https://img.shields.io/badge/Filament-3-FFCC00?style=flat&logo=filament&logoColor=black)](https://filamentphp.com)
+[![PHP](https://img.shields.io/badge/PHP-8.1-777BB4?style=flat&logo=php&logoColor=white)](https://php.net)
+[![MariaDB](https://img.shields.io/badge/MariaDB-10-003545?style=flat&logo=mariadb&logoColor=white)](https://mariadb.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-06B6D4?style=flat&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ---
 
 ## ✨ Fitur Utama
 
-### 🏠 Frontend (Publik)
-- ✅ **Homepage** — Hero section, about, unit usaha, pejabat, berita, kontak
-- ✅ **Profil Desa** — Visi misi, struktur organisasi, kontak
-- ✅ **Berita** — CRUD berita dengan featured image
-- ✅ **Galeri** — Album foto dengan lightbox
-- ✅ **Produk** — Katalog produk UMKM
-- ✅ **Unit Usaha** — Halaman per unit dengan produk
-- ✅ **Custom Theme** — Warna dinamis dari pengaturan BUMDes
-- ✅ **PWA** — Install sebagai app, mode offline
-- ✅ **Mobile-First** — Responsive di semua device
+### 💰 Akuntansi Double-Entry (SAK ETAP)
+- Jurnal umum otomatis
+- Buku besar
+- Neraca saldo
+- Laba/rugi
+- Neraca (posisi keuangan)
 
-### 💰 Sistem Keuangan (SAK ETAP + PP 11/2021)
-- ✅ **Double-Entry Accounting** — Setiap transaksi = jurnal debit+kredit
-- ✅ **Input Sederhana** — Form biasa, tanpa istilah akuntansi
-- ✅ **Auto Jurnal** — Sistem generate jurnal otomatis
-- ✅ **Buku Besar (GL)** — Per akun dengan saldo berjalan
-- ✅ **Neraca Saldo** — Trial balance + status seimbang
-- ✅ **Laba/Rugi** — Income statement per periode
-- ✅ **Neraca** — Balance sheet: Aset = Kewajiban + Ekuitas
-- ✅ **Arus Kas** — Cash flow statement
-- ✅ **Input Jurnal Manual** — Untuk penyesuaian
-- ✅ **Void Transaksi** — Dengan reversing entry (audit trail)
-- ✅ **Tutup Buku** — Year-end closing wizard 5 langkah
-- ✅ **Budget per Kategori** — Tracking + alert threshold
-- ✅ **Depresiasi Aset** — Straight-line otomatis per bulan
-- ✅ **Transfer Antar Unit** — RAK + konfirmasi penerima
-- ✅ **Konsolidasi** — Laporan gabungan pusat + unit
+### 📊 Laporan Keuangan (PDF & Excel)
+- **5 Laporan PDF** profesional dengan kop surat
+- **3 Template Excel** siap import
+- Filter bulanan atau tahunan
+- Export ke PDF/Excel
 
-### 📄 Laporan PDF (Baru!)
-- ✅ **Neraca Saldo PDF** — Kop surat + tabel + tanda tangan
-- ✅ **Laba/Rugi PDF** — Format profesional
-- ✅ **Neraca PDF** — Aset = Kewajiban + Ekuitas
-- ✅ **Jurnal Umum PDF** — Semua transaksi
-- ✅ **Buku Besar PDF** — Per akun + saldo berjalan
-- ✅ **Filter Bulanan** — Per bulan atau tahunan
-- ✅ **Kop Surat** — Logo + teks dari pengaturan BUMDes
-- ✅ **Tanda Tangan** — 5 pejabat (Pengawas, Penasihat, Direktur, Sekretaris, Bendahara)
+### 🏢 Multi Unit Usaha
+- BUMDes Induk (Pusat)
+- Unit usaha dengan RAK
+- Konsolidasi otomatis
+- Transfer antar unit
 
-### 📊 Excel Templates
-- ✅ **Jurnal Umum** — Input per bulan, auto-sort tanggal
-- ✅ **Realisasi Anggaran** — 3 kolom: Realisasi, Anggaran, Selisih
-- ✅ **CAT (Cash Analysis Tool)** — Arus kas detail 7 kolom
-- ✅ **Template Otomatis** — Kop surat + logo dari pengaturan
-- ✅ **Dropdown + VLOOKUP** — Kode akun terkunci, nama auto-fill
-- ✅ **Petunjuk Pengisian** — 28 kode COA + contoh per template
+### 💸 Piutang & Hutang
+- Piutang usaha (Accounts Receivable)
+- Hutang usaha (Accounts Payable)
+- Cicilan bertahap
+- Lampiran dokumen (KTP, surat perjanjian)
 
-### ⚙️ Pengaturan BUMDes
-- ✅ **Identitas BUMDes** — Nama, alamat, kontak, NPWP, motto
-- ✅ **Pejabat BUMDes** — PP 11/2021: Penasihat, Direktur, Sekretaris, Bendahara, Pengawas
-- ✅ **Foto per Pejabat** — Upload foto per posisi jabatan
-- ✅ **Rekening Bank** — Nama bank, no rek, atas nama
-- ✅ **Custom Theme** — Warna primer/sekunder, logo, CSS kustom
-- ✅ **Kop Surat** — 3 baris teks + logo untuk PDF
-- ✅ **Dark Mode** — Toggle dark/light mode
+### 📱 Mobile-First & PWA
+- Responsif di semua device
+- Install sebagai aplikasi
+- Mode offline
 
-### 🔧 Sistem
-- ✅ **User Management** — CRUD user dengan avatar
-- ✅ **Role & Akses** — 5 role dengan permission JSON
-- ✅ **Audit Log** — Jejak semua perubahan data
-- ✅ **Backup & Restore** — Database backup manual
-- ✅ **System Info** — Server info, PHP info, storage
-- ✅ **Error Log Viewer** — Lihat log error aplikasi
-- ✅ **Auto-Sync** — Git post-commit hook ke GitHub
+### 🔐 Multi User & Role
+- **5 Role:** Admin, Bendahara Pusat, Bendahara Unit, Manajer Unit, Pengawas
+- Audit log lengkap
+- Session timeout 30 menit
 
 ---
 
-## 🏗️ Arsitektur
+## 🚀 Instalasi Cepat
 
-### Struktur Database
-```
-┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
-│  transactions   │────▶│  journal_entries  │◀────│    accounts     │
-│                 │     │                  │     │   (30 COA)     │
-│ id              │     │ id               │     │                 │
-│ transaction_no  │     │ transaction_id   │     │ code            │
-│ transaction_date│     │ entry_date       │     │ name            │
-│ unit_id         │     │ account_code     │     │ type            │
-│ type            │     │ debit            │     │ normal_balance  │
-│ category_id     │     │ credit           │     │ is_active       │
-│ amount          │     │ unit_id          │     └─────────────────┘
-│ description     │     │ description      │
-│ fiscal_year     │     │ fiscal_year      │     ┌─────────────────┐
-│ is_void         │     └──────────────────┘     │   categories    │
-└─────────────────┘                               │                 │
-                                                  │ id              │
-┌─────────────────┐     ┌──────────────────┐     │ name            │
-│ bumdes_settings │     │ business_units   │     │ type            │
-│                 │     │                  │     │ default_account │
-│ bumdes_name     │     │ id               │     └─────────────────┘
-│ logo_path       │     │ name             │
-│ primary_color   │     │ manager          │     ┌─────────────────┐
-│ direktur_name   │     │ manager_nip      │     │ fiscal_years    │
-│ direktur_photo  │     │ code             │     │                 │
-│ bendahara_name  │     │ parent_unit_id   │     │ id              │
-│ bendahara_photo │     └──────────────────┘     │ year            │
-│ ...             │                               │ status          │
-└─────────────────┘                               └─────────────────┘
-```
-
-### COA Default (SAK ETAP)
-```
-1xxx  ASET
-├── 1101  Kas
-├── 1102  Bank
-├── 1201  Aset Tetap
-├── 1202  Akumulasi Depresiasi
-└── 1301  Piutang Usaha
-
-2xxx  KEWAJIBAN
-├── 2101  Utang Usaha
-└── 2201  Utang Bank
-
-3xxx  EKUITAS
-├── 3101  Modal Disetor
-└── 3201  Laba Ditahan
-
-4xxx  PENDAPATAN
-├── 4101  Pendapatan Operasional
-└── 4201  Pendapatan Non-Operasional
-
-5xxx  BEBAN / COS
-├── 5101  Beban Gaji
-├── 5201  Beban Operasional
-└── 5301  Beban Perlengkapan
-
-6xxx  BEBAN LAIN
-├── 6101  Beban Depresiasi
-└── 6201  Beban Bunga
-```
-
-### Alur Transaksi (Double-Entry)
-```
-  Input User          Sistem                  Database
-  ──────────          ──────                  ────────
-  
-  [Pemasukan]    ──▶  Auto Journal       ──▶  journal_entries:
-  Rp 500.000          DR Kas (1101) 500K       DR 1101  500.000
-  Tiket Wisata        CR Pendapatan (4101)     CR 4101  500.000
-  
-  [Pengeluaran]  ──▶  Auto Journal       ──▶  journal_entries:
-  Rp 100.000          DR Beban (5101) 100K     DR 5101  100.000
-  Beli Pupuk          CR Kas (1101) 100K       CR 1101  100.000
-  
-  [Beli Aset]    ──▶  Auto Journal       ──▶  journal_entries:
-  Rp 5.000.000        DR Aset (1201) 5000K     DR 1201  5.000.000
-  Sepeda Motor        CR Kas (1101) 5000K      CR 1101  5.000.000
-  
-  [Void]         ──▶  Reversing Entry    ──▶  journal_entries:
-                      DR/CR kebalikan          Semua dibalik
-                      + is_void = true         is_void = true
-```
-
----
-
-## 🚀 Instalasi
-
-### Prerequisites
-- PHP 8.1+
-- MariaDB 10.6+
-- Composer 2.x
-- aaPanel (opsional)
-
-### Langkah Instalasi
+### Download & Install
 
 ```bash
-# 1. Clone repository
-git clone https://github.com/mrobish/website-bumdes.git
-cd website-bumdes
+# 1. Download package
+wget https://github.com/mrobish/website-bumdes/releases/download/v2.0.0/bumdes-v2.0.0.zip
 
-# 2. Install dependencies
-composer install
+# 2. Extract ke folder web
+unzip bumdes-v2.0.0.zip -d /var/www/bumdes/
 
-# 3. Copy .env
-cp .env.example .env
+# 3. Set permissions
+chmod -R 755 storage bootstrap/cache
 
-# 4. Generate key
-php artisan key:generate
-
-# 5. Edit .env - sesuaikan database
-nano .env
-
-# 6. Jalankan migrasi + seeder
-php artisan migrate --seed
-
-# 7. Buat symbolic link storage
-php artisan storage:link
-
-# 8. Set permissions
-chmod -R 775 storage bootstrap/cache
-chown -R www:www storage bootstrap/cache
-
-# 9. Seed data default
-php artisan db:seed --class=AccountSeeder
-php artisan db:seed --class=CategorySeeder
-php artisan db:seed --class=RoleSeeder
-php artisan db:seed --class=BumdesSettingSeeder
-php artisan db:seed --class=FinancialTemplateSeeder
-
-# 10. Clear cache
-php artisan optimize:clear
+# 4. Buka browser → wizard otomatis!
 ```
 
-### Login Default
-| Role | Email | Password |
-|------|-------|----------|
-| Super Admin | admin@bumdes.id | password |
-| Bendahara | bendahara@bumdeskeude.id | password |
-| Operator | operator@bumdeskeude.id | password |
-| Viewer | viewer@bumdeskeude.id | password |
+### Persyaratan Sistem
+
+| Komponen | Minimum | Rekomendasi |
+|----------|---------|-------------|
+| PHP | 8.1 | 8.1+ |
+| Database | MySQL 5.7 / MariaDB 10.3 | MariaDB 10.6+ |
+| RAM | 1 GB | 2 GB |
+| Storage | 2 GB | 5 GB |
+
+**PHP Extensions Wajib:**
+```
+openssl, pdo, pdo_mysql, mbstring, tokenizer, xml, 
+ctype, json, bcmath, fileinfo, gd, curl, zip
+```
+
+📖 **Panduan lengkap:** [README-INSTALL.md](README-INSTALL.md)
+
+---
+
+## 📸 Screenshot
+
+### Dashboard Admin
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  📊 Dashboard Keuangan BUMDes                                   │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐          │
+│  │ 💰 Kas   │ │ 📈 Laba  │ │ 📉 Rugi  │ │ 🏦 Bank  │          │
+│  │ Rp 50jt  │ │ Rp 25jt  │ │ Rp 10jt  │ │ Rp 100jt │          │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘          │
+│                                                                 │
+│  📊 Grafik Bulanan          📋 Transaksi Terakhir              │
+│  ┌─────────────────┐       ┌─────────────────────────┐        │
+│  │ ▆▆▆▆▆▆▆▆▆▆▆▆▆  │       │ 01/06 - Pemasukan Rp 5jt│        │
+│  │ ▆▆▆▆▆▆▆▆▆▆▆▆▆  │       │ 02/06 - Pengeluaran 2jt │        │
+│  └─────────────────┘       └─────────────────────────┘        │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Input Transaksi (Mobile)
+```
+┌─────────────────────────┐
+│  📝 Input Transaksi     │
+├─────────────────────────┤
+│                         │
+│  Tanggal                │
+│  ┌─────────────────┐   │
+│  │ 04/06/2026      │   │
+│  └─────────────────┘   │
+│                         │
+│  Tipe Transaksi         │
+│  ┌─────────────────┐   │
+│  │ Pemasukan    ▼  │   │
+│  └─────────────────┘   │
+│                         │
+│  Jumlah (Rp)            │
+│  ┌─────────────────┐   │
+│  │ 5.000.000       │   │
+│  └─────────────────┘   │
+│                         │
+│  Keterangan             │
+│  ┌─────────────────┐   │
+│  │ Sewa tempat     │   │
+│  └─────────────────┘   │
+│                         │
+│  [💾 Simpan Transaksi]  │
+│                         │
+└─────────────────────────┘
+```
+
+---
+
+## 🛠️ Tech Stack
+
+| Teknologi | Versi | Kegunaan |
+|-----------|-------|----------|
+| **Laravel** | 10 | PHP Framework |
+| **Filament** | 3 | Admin Panel |
+| **PHP** | 8.1 | Backend |
+| **MariaDB** | 10.6 | Database |
+| **Tailwind CSS** | 3 | Styling |
+| **Livewire** | 3 | Reactive UI |
+| **DomPDF** | 2 | PDF Generation |
+| **PhpSpreadsheet** | 1.29 | Excel Export |
 
 ---
 
@@ -382,185 +163,139 @@ php artisan optimize:clear
 ```
 bumdes/
 ├── app/
-│   ├── Filament/
-│   │   └── Admin/
-│   │       ├── Pages/          # Dashboard, Laporan, Settings
-│   │       ├── Resources/      # CRUD Master Data
-│   │       └── Widgets/        # Dashboard widgets
-│   ├── Http/Controllers/       # Web controllers
-│   ├── Models/                 # Eloquent models
-│   └── Services/               # Business logic
-│       ├── AutoJournalService  # Double-entry engine
-│       ├── DepreciationService # Aset depresiasi
-│       ├── PdfReportService    # Generate PDF
-│       └── FinancialTemplateService # Excel templates
+│   ├── Http/Controllers/    # Controller
+│   ├── Models/              # Eloquent Models
+│   ├── Services/            # Business Logic
+│   └── Filament/            # Admin Panel
 ├── database/
-│   ├── migrations/             # Database schema
-│   └── seeders/                # Default data
-├── resources/views/
-│   ├── filament/pages/         # Filament page views
-│   ├── pdf/                    # PDF templates
-│   └── welcome.blade.php       # Homepage
-├── storage/app/templates/      # Excel template files
-└── public/
-    └── storage/                # Uploaded files (symlink)
+│   ├── migrations/          # Database Schema
+│   └── seeders/             # Data Default
+├── resources/views/         # Blade Templates
+├── routes/                  # Route Definitions
+├── storage/                 # Logs & Cache
+└── public/                  # Public Assets
 ```
 
 ---
 
-## 📊 Progress Pengembangan
+## 🔧 Konfigurasi
 
-### ✅ Selesai (100%)
-| Modul | Status |
-|-------|--------|
-| Homepage & Frontend | ✅ 100% |
-| Profil Desa | ✅ 100% |
-| Berita & Galeri | ✅ 100% |
-| Produk & Unit Usaha | ✅ 100% |
-| PWA & Offline Mode | ✅ 100% |
-| Custom Theme | ✅ 100% |
-| Identitas BUMDes | ✅ 100% |
-| Pejabat BUMDes (PP 11/2021) | ✅ 100% |
-| User Management | ✅ 100% |
-| Role & Permission | ✅ 100% |
-| COA (Chart of Accounts) | ✅ 100% |
-| Kategori Transaksi | ✅ 100% |
-| Input Transaksi | ✅ 100% |
-| Auto Journal (Double-Entry) | ✅ 100% |
-| Buku Besar (GL) | ✅ 100% |
-| Neraca Saldo | ✅ 100% |
-| Laba/Rugi | ✅ 100% |
-| Neraca | ✅ 100% |
-| Arus Kas | ✅ 100% |
-| Void & Reversing Entry | ✅ 100% |
-| Tutup Buku (Year-End Closing) | ✅ 100% |
-| Budget per Kategori | ✅ 100% |
-| Depresiasi Aset | ✅ 100% |
-| Transfer Antar Unit (RAK) | ✅ 100% |
-| Konsolidasi Laporan | ✅ 100% |
-| Excel Templates (3 template) | ✅ 100% |
-| Import Excel | ✅ 100% |
-| Dashboard Charts | ✅ 100% |
-| Audit Log | ✅ 100% |
-| Backup & Restore | ✅ 100% |
-| PDF Reports (5 laporan) | ✅ 100% |
-| Filter Bulanan | ✅ 100% |
-| Logo & Branding | ✅ 100% |
+### Environment (.env)
+```env
+APP_NAME="BUMDes Management System"
+APP_ENV=production
+APP_KEY=base64:...
+APP_DEBUG=false
+APP_URL=https://bumdes.example.com
 
-### 🔜 Rencana Pengembangan (v2.1+)
-| Fitur | Prioritas |
-|-------|-----------|
-| 📱 Telegram Bot | ⭐⭐⭐ |
-| 🔗 RESTful API (20+ endpoints) | ⭐⭐⭐ |
-| 🛒 Keranjang Belanja / Marketplace | ⭐⭐ |
-| 🔐 RBAC per Unit Usaha | ⭐⭐ |
-| 📊 Multi-Period Comparison | ⭐⭐ |
-| 🔔 Notification System | ⭐ |
-| 🏛️ Export ke SIPD | ⭐ |
-
----
-
-## 🛠️ Tech Stack
-
-| Layer | Technology |
-|-------|------------|
-| **Backend** | Laravel 10.50 |
-| **Admin Panel** | Filament 3.3 |
-| **Frontend** | Tailwind CSS 3.x, Alpine.js |
-| **Database** | MariaDB 10.6 |
-| **PDF** | DomPDF 3.x |
-| **Excel** | PhpSpreadsheet 5.7 |
-| **Charts** | Chart.js 4.x |
-| **Maps** | Leaflet.js |
-| **Animations** | AOS.js |
-| **Server** | Ubuntu 24.04, Nginx, PHP 8.1 |
-| **Panel** | aaPanel |
-| **CDN** | Cloudflare |
-
----
-
-## 📚 Dokumentasi
-
-| Dokumen | Deskripsi |
-|---------|-----------|
-| [README-DEVELOPMENT.md](README-DEVELOPMENT.md) | Setup development & troubleshooting |
-| [README-NEW-SYSTEM.md](README-NEW-SYSTEM.md) | Arsitektur sistem keuangan baru |
-| [README-UPGRADE.md](README-UPGRADE.md) | Panduan upgrade dari sistem lama |
-| [docs/ARCHITECTURE-DECISIONS.md](docs/ARCHITECTURE-DECISIONS.md) | Keputusan arsitektur (ADR) |
-| [docs/DEVELOPMENT-LOG.md](docs/DEVELOPMENT-LOG.md) | Log pengembangan |
-| [docs/CURRENT-STATE.md](docs/CURRENT-STATE.md) | Status terkini |
-| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | Panduan deploy ke server |
-| [docs/USER-MANUAL.md](docs/USER-MANUAL.md) | Manual pengguna |
-| [bumdes-finance-prompt-v2.md](bumdes-finance-prompt-v2.md) | Spesifikasi sistem keuangan |
-
----
-
-## 👥 Struktur Organisasi BUMDes (PP 11/2021)
-
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=bumdes
+DB_USERNAME=bumdes_user
+DB_PASSWORD=password
 ```
-                    ┌─────────────┐
-                    │   MUSDES    │
-                    │(Musyawarah  │
-                    │   Desa)     │
-                    └──────┬──────┘
-                           │
-              ┌────────────┼────────────┐
-              │                         │
-     ┌────────┴────────┐     ┌─────────┴─────────┐
-     │   PENASIHAT     │     │    PENGAWAS        │
-     │ (Kepala Desa    │     │ (BPD + Tokoh       │
-     │  ex officio)    │     │  Masyarakat)       │
-     └─────────────────┘     └─────────────────────┘
 
-                    ┌─────────────┐
-                    │  PELAKSANA  │
-                    │ OPERASIONAL │
-                    └──────┬──────┘
-                           │
-        ┌──────────┬───────┴───────┬──────────┐
-        │          │               │          │
-  ┌─────┴─────┐ ┌──┴───┐ ┌───────┴──┐ ┌─────┴─────┐
-  │ DIREKTUR  │ │SEKRET│ │ BENDAHARA│ │ KEPALA    │
-  │           │ │ARIS  │ │          │ │ UNIT USAHA│
-  └───────────┘ └──────┘ └──────────┘ └───────────┘
+### Web Server (Nginx)
+```nginx
+server {
+    listen 80;
+    server_name bumdes.example.com;
+    root /var/www/bumdes/public;
+    index index.php;
+    
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+    
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+}
 ```
+
+---
+
+## 📊 Database Schema
+
+### Tabel Utama
+- `accounts` - Chart of Accounts (30 SAK ETAP)
+- `transactions` - Transaksi keuangan
+- `journal_entries` - Jurnal double-entry
+- `piutangs` - Piutang usaha
+- `hutangs` - Hutang usaha
+- `budgets` - Anggaran per kategori
+- `business_units` - Unit usaha
+- `users` - Pengguna sistem
+
+### Relasi
+```
+transactions (1) ──→ (N) journal_entries
+accounts (1) ──→ (N) journal_entries
+piutangs (1) ──→ (N) piutang_payments
+hutangs (1) ──→ (N) hutang_payments
+```
+
+---
+
+## 🎯 Roadmap
+
+### ✅ Selesai (v2.0)
+- [x] Akuntansi double-entry SAK ETAP
+- [x] 5 Laporan PDF profesional
+- [x] Piutang & Hutang
+- [x] Multi unit usaha + konsolidasi
+- [x] Multi user & role
+- [x] Install wizard
+- [x] Mobile-first PWA
+
+### 🔜 Akan Datang (v2.1+)
+- [ ] Telegram Bot notifications
+- [ ] RESTful API (20+ endpoints)
+- [ ] Marketplace produk BUMDes
+- [ ] Payroll/Gaji karyawan
+- [ ] Inventori/Stok barang
+- [ ] Bank reconciliation
+- [ ] Export ke SIPD Kemendagri
 
 ---
 
 ## 🤝 Kontribusi
 
 1. Fork repository
-2. Buat branch baru (`git checkout -b feature/xxx`)
-3. Commit perubahan (`git commit -m 'feat: add xxx'`)
-4. Push ke branch (`git push origin feature/xxx`)
+2. Buat branch (`git checkout -b feature/xxx`)
+3. Commit (`git commit -m 'feat: add xxx'`)
+4. Push (`git push origin feature/xxx`)
 5. Buat Pull Request
 
 ---
 
 ## 📄 License
 
-MIT License - Silakan gunakan dan modifikasi sesuai kebutuhan.
+**MIT License** - © 2026 mrobis
 
-**© {{ YEAR }} mrobis** - [github.com/mrobis](https://github.com/mrobis)
+Bebas digunakan, dimodifikasi, dan didistribusikan.
 
 ---
 
-## 🙏 Acknowledgments
+## 🙏 Credits
 
-- [Laravel](https://laravel.com/) - Framework PHP
-- [Filament](https://filamentphp.com/) - Admin Panel
-- [Tailwind CSS](https://tailwindcss.com/) - CSS Framework
-- [SAK ETAP](https://iaiglobal.or.id/) - Standar Akuntansi
-- [PP 11/2021](https://peraturan.bpk.go.id/) - Peraturan BUMDes
+Dibuat oleh **[mrobis](https://github.com/mrobish)**
+
+- 🌐 **Website:** [bumdes.ondesa.id](https://bumdes.ondesa.id)
+- 📧 **GitHub:** [github.com/mrobish](https://github.com/mrobish)
+- 📦 **Download:** [Releases](https://github.com/mrobish/website-bumdes/releases)
 
 ---
 
 <div align="center">
 
-**Dibuat dengan ❤️ untuk Kemajuan Desa**
+**Dibuat dengan ❤️ untuk Kemajuan Desa Indonesia**
 
-**By [mrobis](https://github.com/mrobis)**
-
-🌐 [bumdes.ondesa.id](https://bumdes.ondesa.id) | 📧 [info@bumdeskeudebakongan.id](mailto:info@bumdeskeudebakongan.id) | 📱 [WhatsApp](https://wa.me/6285157520432)
+![PHP](https://img.shields.io/badge/PHP-8.1-777BB4?style=flat&logo=php&logoColor=white)
+![Laravel](https://img.shields.io/badge/Laravel-10-FF2D20?style=flat&logo=laravel&logoColor=white)
+![Filament](https://img.shields.io/badge/Filament-3-FFCC00?style=flat&logo=filament&logoColor=black)
 
 </div>
