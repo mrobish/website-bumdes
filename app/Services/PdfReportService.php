@@ -40,7 +40,7 @@ class PdfReportService
         foreach ($accounts as $acc) {
             $query = JournalEntry::whereHas('transaction', function ($q) use ($fy) {
                 $q->where('fiscal_year', $fy->year)->where('is_void', 0);
-            })->where('account_id', $acc->id);
+            })->where('account_code', $acc->code);
 
             if ($month) {
                 $query->whereHas('transaction', function ($q) use ($fy, $month) {
@@ -98,7 +98,7 @@ class PdfReportService
         foreach ($pendapatan as $acc) {
             $query = JournalEntry::whereHas('transaction', function ($q) use ($fy) {
                 $q->where('fiscal_year', $fy->year)->where('is_void', 0);
-            })->where('account_id', $acc->id);
+            })->where('account_code', $acc->code);
 
             if ($month) {
                 $query->whereHas('transaction', function ($q) use ($fy, $month) {
@@ -117,7 +117,7 @@ class PdfReportService
         foreach ($beban as $acc) {
             $query = JournalEntry::whereHas('transaction', function ($q) use ($fy) {
                 $q->where('fiscal_year', $fy->year)->where('is_void', 0);
-            })->where('account_id', $acc->id);
+            })->where('account_code', $acc->code);
 
             if ($month) {
                 $query->whereHas('transaction', function ($q) use ($fy, $month) {
@@ -170,7 +170,7 @@ class PdfReportService
         $getBalance = function ($acc) use ($fy, $month) {
             $query = JournalEntry::whereHas('transaction', function ($q) use ($fy) {
                 $q->where('fiscal_year', $fy->year)->where('is_void', 0);
-            })->where('account_id', $acc->id);
+            })->where('account_code', $acc->code);
 
             if ($month) {
                 $query->whereHas('transaction', function ($q) use ($fy, $month) {

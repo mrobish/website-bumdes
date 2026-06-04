@@ -39,19 +39,18 @@
         .ttd-section { margin-top: 25px; page-break-inside: avoid; }
         .ttd-header { text-align: right; margin-bottom: 5px; font-size: 9px; color: #555; }
         
-        /* Baris "Mengetahui" di atas (Pengawas + Penasihat) */
+        /* Baris utama: Direktur, Sekretaris, Bendahara (atas) */
         .ttd-top { display: table; width: 100%; margin-bottom: 15px; }
-        .ttd-top .ttd-box { display: table-cell; width: 50%; text-align: center; vertical-align: top; }
+        .ttd-top .ttd-box { display: table-cell; width: 33.33%; text-align: center; vertical-align: top; }
         
-        /* Baris tanda tangan utama (Direktur, Sekretaris, Bendahara) */
-        .ttd-main { display: table; width: 100%; }
-        .ttd-main .ttd-box { display: table-cell; width: 33.33%; text-align: center; vertical-align: top; }
+        /* Baris "Mengetahui": Pengawas & Penasihat (bawah) */
+        .ttd-bottom { display: table; width: 100%; }
+        .ttd-bottom .ttd-box { display: table-cell; width: 50%; text-align: center; vertical-align: top; }
         
         .ttd-box .label { font-size: 9px; font-weight: bold; color: #333; margin-bottom: 3px; }
         .ttd-box .date { font-size: 9px; margin-bottom: 45px; }
         .ttd-box .name { font-weight: bold; font-size: 10px; border-bottom: 1px solid #333; display: inline-block; min-width: 130px; padding-bottom: 2px; }
         .ttd-box .jabatan { font-size: 9px; color: #333; margin-top: 2px; }
-        .ttd-box .nip { font-size: 8px; color: #666; }
         
         /* ===== FOOTER ===== */
         .footer { margin-top: 15px; text-align: center; font-size: 7.5px; color: #999; border-top: 1px solid #ddd; padding-top: 5px; }
@@ -88,45 +87,38 @@
         <div class="ttd-section">
             <div class="ttd-header">{{ $setting->bumdes_village ?? '' }}, {{ now()->format('d F Y') }}</div>
             
-            <!-- Baris atas: Mengetahui Pengawas & Penasihat -->
+            <!-- Baris atas: Pelaksana Operasional -->
             <div class="ttd-top">
-                @if(($setting->pengawas1_name ?? null) || ($setting->pengawas2_name ?? null))
+                <div class="ttd-box">
+                    <div class="date">&nbsp;</div>
+                    <div class="name">{{ $setting->direktur_name ?? 'Direktur BUMDes' }}</div>
+                    <div class="jabatan">Direktur BUMDes</div>
+                </div>
+                <div class="ttd-box">
+                    <div class="date">&nbsp;</div>
+                    <div class="name">{{ $setting->sekretaris_name ?? 'Sekretaris' }}</div>
+                    <div class="jabatan">Sekretaris</div>
+                </div>
+                <div class="ttd-box">
+                    <div class="date">&nbsp;</div>
+                    <div class="name">{{ $setting->bendahara_umum_name ?? 'Bendahara' }}</div>
+                    <div class="jabatan">Bendahara</div>
+                </div>
+            </div>
+            
+            <!-- Baris bawah: Mengetahui -->
+            <div class="ttd-bottom">
                 <div class="ttd-box">
                     <div class="label">Mengetahui,</div>
                     <div class="date">&nbsp;</div>
                     <div class="name">{{ $setting->pengawas1_name ?? 'Pengawas 1' }}</div>
                     <div class="jabatan">Pengawas BUMDes</div>
                 </div>
-                @endif
-                @if($setting->kepala_desa_name ?? null)
                 <div class="ttd-box">
                     <div class="label">Mengetahui,</div>
                     <div class="date">&nbsp;</div>
                     <div class="name">{{ $setting->kepala_desa_name ?? 'Penasihat' }}</div>
                     <div class="jabatan">Penasihat BUMDes<br>(Kepala Desa)</div>
-                </div>
-                @endif
-            </div>
-            
-            <!-- Baris bawah: Pelaksana Operasional -->
-            <div class="ttd-main">
-                <div class="ttd-box">
-                    <div class="label">&nbsp;</div>
-                    <div class="date">&nbsp;</div>
-                    <div class="name">{{ $setting->direktur_name ?? 'Direktur BUMDes' }}</div>
-                    <div class="jabatan">Direktur BUMDes</div>
-                </div>
-                <div class="ttd-box">
-                    <div class="label">&nbsp;</div>
-                    <div class="date">&nbsp;</div>
-                    <div class="name">{{ $setting->sekretaris_name ?? 'Sekretaris' }}</div>
-                    <div class="jabatan">Sekretaris</div>
-                </div>
-                <div class="ttd-box">
-                    <div class="label">&nbsp;</div>
-                    <div class="date">&nbsp;</div>
-                    <div class="name">{{ $setting->bendahara_umum_name ?? 'Bendahara' }}</div>
-                    <div class="jabatan">Bendahara</div>
                 </div>
             </div>
         </div>
