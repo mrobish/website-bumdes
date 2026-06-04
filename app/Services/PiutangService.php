@@ -58,7 +58,7 @@ class PiutangService
             JournalEntry::create([
                 'transaction_id' => $transaction->id,
                 'entry_date' => $data['piutang_date'],
-                'entry_type' => 'debit',
+                'entry_type' => 'normal',
                 'account_code' => '1103', // Piutang Usaha
                 'debit' => $data['amount'],
                 'credit' => 0,
@@ -79,7 +79,7 @@ class PiutangService
             JournalEntry::create([
                 'transaction_id' => $transaction->id,
                 'entry_date' => $data['piutang_date'],
-                'entry_type' => 'credit',
+                'entry_type' => 'normal',
                 'account_code' => $creditAccount,
                 'debit' => 0,
                 'credit' => $data['amount'],
@@ -137,7 +137,7 @@ class PiutangService
             JournalEntry::create([
                 'transaction_id' => $transaction->id,
                 'entry_date' => $data['payment_date'],
-                'entry_type' => 'debit',
+                'entry_type' => 'normal',
                 'account_code' => $kasAccount,
                 'debit' => $data['amount'],
                 'credit' => 0,
@@ -150,7 +150,7 @@ class PiutangService
             JournalEntry::create([
                 'transaction_id' => $transaction->id,
                 'entry_date' => $data['payment_date'],
-                'entry_type' => 'credit',
+                'entry_type' => 'normal',
                 'account_code' => '1103',
                 'debit' => 0,
                 'credit' => $data['amount'],

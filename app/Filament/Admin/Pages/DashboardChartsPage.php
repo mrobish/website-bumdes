@@ -92,7 +92,7 @@ class DashboardChartsPage extends Page
             ->whereMonth('transaction_date', $month)
             ->sum('amount');
 
-        $this->saldoKas = $this->totalPemasukan - $this->totalPengeluaran;
+        $this->saldoKas = \App\Services\AutoJournalService::getAccountBalance('1101', null, $year, $month);
 
         $this->jumlahTransaksi = Transaction::where('is_void', false)
             ->whereYear('transaction_date', $year)

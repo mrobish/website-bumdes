@@ -186,7 +186,11 @@ class FinancialAutoCalculateService
         $totalEkuitas = 0;
 
         foreach ($data as $row) {
-            $saldo = $row->total_debet - $row->total_kredit;
+            // Normal balance: aset = debit, kewajiban/ekuitas = credit
+            $saldo = in_array($row->tipe, ['kewajiban', 'ekuitas'])
+                ? $row->total_kredit - $row->total_debet
+                : $row->total_debet - $row->total_kredit;
+
             $kategori = match($row->tipe) {
                 'aset' => ($row->kode[0] == '1' && $row->kode[1] == '1') ? 'Aset Lancar' : 'Aset Tetap',
                 'kewajiban' => 'Kewajiban',

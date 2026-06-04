@@ -248,9 +248,14 @@ class PiutangResource extends Resource
                         ->requiresConfirmation()
                         ->visible(fn ($record) => $record->paid_amount == 0)
                         ->action(function ($record) {
+                            // Reverse journal entries
+                            if ($record->transaction) {
+                                \App\Services\AutoJournalService::recordVoid($record->transaction);
+                                $record->transaction->update(['is_void' => true, 'voided_by' => auth()->id(), 'voided_at' => now()]);
+                            }
                             $record->update(['status' => 'macet']);
                             Notification::make()
-                                ->title('Piutang di-void')
+                                ->title('Piutang di-void & jurnal dibalik')
                                 ->success()
                                 ->send();
                         }),

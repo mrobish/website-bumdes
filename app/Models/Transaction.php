@@ -97,21 +97,24 @@ class Transaction extends Model
     }
 
     /**
-     * Generate transaction number
+     * Generate transaction number with DB lock to prevent duplicates
      */
     public static function generateNumber(string $prefix = 'TRX'): string
     {
-        $date = date('Ymd');
-        $last = static::where('transaction_number', 'like', "{$prefix}-{$date}-%")
-            ->orderByDesc('transaction_number')
-            ->first();
+        return \Illuminate\Support\Facades\DB::transaction(function () use ($prefix) {
+            $date = date('Ymd');
+            $last = static::where('transaction_number', 'like', "{$prefix}-{$date}-%")
+                ->lockForUpdate()
+                ->orderByDesc('transaction_number')
+                ->first();
 
-        if ($last) {
-            $sequence = intval(substr($last->transaction_number, -3)) + 1;
-        } else {
-            $sequence = 1;
-        }
+            if ($last) {
+                $sequence = intval(substr($last->transaction_number, -3)) + 1;
+            } else {
+                $sequence = 1;
+            }
 
-        return "{$prefix}-{$date}-" . str_pad($sequence, 3, '0', STR_PAD_LEFT);
+            return "{$prefix}-{$date}-" . str_pad($sequence, 3, '0', STR_PAD_LEFT);
+        });
     }
 }
