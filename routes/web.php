@@ -74,3 +74,11 @@ Route::get('/unit-usaha/{slug}', [UnitController::class, 'show'])->name('units.s
 Route::get('/offline-transaksi', function () {
     return view('offline-transaction');
 })->name('offline.transaction');
+
+// PDF Report Downloads (authenticated)
+Route::middleware(['auth'])->prefix('admin/pdf')->group(function () {
+    Route::get('/neraca-saldo', [\App\Http\Controllers\PdfReportController::class, 'neracaSaldo'])->name('pdf.neraca-saldo');
+    Route::get('/laba-rugi', [\App\Http\Controllers\PdfReportController::class, 'labaRugi'])->name('pdf.laba-rugi');
+    Route::get('/neraca', [\App\Http\Controllers\PdfReportController::class, 'neraca'])->name('pdf.neraca');
+    Route::get('/jurnal-umum', [\App\Http\Controllers\PdfReportController::class, 'jurnalUmum'])->name('pdf.jurnal-umum');
+});

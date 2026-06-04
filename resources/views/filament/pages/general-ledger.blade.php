@@ -28,13 +28,23 @@
                 </select>
             </div>
         </div>
-        <x-filament::button type="submit" icon="heroicon-o-magnifying-glass">Tampilkan Buku Besar</x-filament::button>
+        <x-filament::button type="submit" icon="heroicon-o-magnifying-glass">Tampilkan Buku Besar
+
+                    @php $fy = \App\Models\FiscalYear::where('year', $year)->first(); @endphp
+                    @if($fy)
+                    <a href="{{ route('pdf.jurnal-umum', ['fiscal_year_id' => $fy->id]) }}" target="_blank" class="ml-3 text-sm text-primary-600 hover:underline">📄 Download PDF</a>
+                    @endif</x-filament::button>
     </form>
 
     @if($loaded)
         <div class="mt-6">
             <x-filament::section>
-                <x-slot name="heading">Buku Besar — {{ \App\Models\Account::where('code', $accountCode)->first()->name ?? '' }}</x-slot>
+                <x-slot name="heading">Buku Besar
+
+                    @php $fy = \App\Models\FiscalYear::where('year', $year)->first(); @endphp
+                    @if($fy)
+                    <a href="{{ route('pdf.jurnal-umum', ['fiscal_year_id' => $fy->id]) }}" target="_blank" class="ml-3 text-sm text-primary-600 hover:underline">📄 Download PDF</a>
+                    @endif — {{ \App\Models\Account::where('code', $accountCode)->first()->name ?? '' }}</x-slot>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
                         <thead><tr class="border-b bg-gray-50">

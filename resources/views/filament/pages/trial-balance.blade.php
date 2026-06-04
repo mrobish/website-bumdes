@@ -27,6 +27,11 @@
             <x-filament::section>
                 <x-slot name="heading">
                     Neraca Saldo Tahun {{ $year }}
+
+                    @php $fy = \App\Models\FiscalYear::where('year', $year)->first(); @endphp
+                    @if($fy)
+                    <a href="{{ route('pdf.neraca-saldo', ['fiscal_year_id' => $fy->id]) }}" target="_blank" class="ml-3 text-sm text-primary-600 hover:underline">📄 Download PDF</a>
+                    @endif
                     @if($isBalanced) <span class="ml-2 text-green-600">SEIMBANG</span> @else <span class="ml-2 text-red-600">TIDAK SEIMBANG</span> @endif
                 </x-slot>
                 <div class="overflow-x-auto">
