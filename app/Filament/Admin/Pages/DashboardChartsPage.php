@@ -210,4 +210,11 @@ class DashboardChartsPage extends Page
         }
         return max($max, 1);
     }
+
+    public function getHeaderWidgets(): array
+    {
+        return [
+            \App\Filament\Admin\Widgets\BudgetAlertWidget::class,
+        ];
+    }
 }
