@@ -39,7 +39,7 @@ class PdfReportService
 
         foreach ($accounts as $acc) {
             $query = JournalEntry::whereHas('transaction', function ($q) use ($fy) {
-                $q->where('fiscal_year_id', $fy->id)->where('status', 'posted');
+                $q->where('fiscal_year', $fy->year)->where('status', 'posted');
             })->where('account_id', $acc->id);
 
             if ($month) {
@@ -97,7 +97,7 @@ class PdfReportService
 
         foreach ($pendapatan as $acc) {
             $query = JournalEntry::whereHas('transaction', function ($q) use ($fy) {
-                $q->where('fiscal_year_id', $fy->id)->where('status', 'posted');
+                $q->where('fiscal_year', $fy->year)->where('status', 'posted');
             })->where('account_id', $acc->id);
 
             if ($month) {
@@ -116,7 +116,7 @@ class PdfReportService
 
         foreach ($beban as $acc) {
             $query = JournalEntry::whereHas('transaction', function ($q) use ($fy) {
-                $q->where('fiscal_year_id', $fy->id)->where('status', 'posted');
+                $q->where('fiscal_year', $fy->year)->where('status', 'posted');
             })->where('account_id', $acc->id);
 
             if ($month) {
@@ -169,7 +169,7 @@ class PdfReportService
 
         $getBalance = function ($acc) use ($fy, $month) {
             $query = JournalEntry::whereHas('transaction', function ($q) use ($fy) {
-                $q->where('fiscal_year_id', $fy->id)->where('status', 'posted');
+                $q->where('fiscal_year', $fy->year)->where('status', 'posted');
             })->where('account_id', $acc->id);
 
             if ($month) {
@@ -241,7 +241,7 @@ class PdfReportService
     {
         $fy = FiscalYear::findOrFail($fiscalYearId);
 
-        $query = \App\Models\Transaction::where('fiscal_year_id', $fy->id)
+        $query = \App\Models\Transaction::where('fiscal_year', $fy->year)
             ->where('status', 'posted')
             ->orderBy('transaction_date')
             ->orderBy('id');
