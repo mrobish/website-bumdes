@@ -248,6 +248,12 @@ class BumdesSettingResource extends Resource
                                 Forms\Components\Section::make('👤 Penasihat')
                                     ->description('Kepala Desa (ex officio)')
                                     ->schema([
+                                        Forms\Components\FileUpload::make('kepala_desa_photo')
+                                            ->label('Foto Penasihat')
+                                            ->image()
+                                            ->directory('bumdes/pejabat')
+                                            ->maxSize(2048)
+                                            ->columnSpanFull(),
                                         Forms\Components\Grid::make(2)->schema([
                                             Forms\Components\TextInput::make('kepala_desa_name')
                                                 ->label('Nama')
@@ -263,30 +269,63 @@ class BumdesSettingResource extends Resource
                                 // Pelaksana Operasional
                                 Forms\Components\Section::make('🏢 Pelaksana Operasional')
                                     ->schema([
-                                        Forms\Components\Grid::make(2)->schema([
-                                            Forms\Components\TextInput::make('direktur_name')
-                                                ->label('Direktur')
-                                                ->maxLength(255),
-                                            Forms\Components\TextInput::make('direktur_phone')
-                                                ->label('No. HP')
-                                                ->maxLength(255),
-                                        ]),
-                                        Forms\Components\Grid::make(2)->schema([
-                                            Forms\Components\TextInput::make('sekretaris_name')
-                                                ->label('Sekretaris')
-                                                ->maxLength(255),
-                                            Forms\Components\TextInput::make('sekretaris_phone')
-                                                ->label('No. HP')
-                                                ->maxLength(255),
-                                        ]),
-                                        Forms\Components\Grid::make(2)->schema([
-                                            Forms\Components\TextInput::make('bendahara_umum_name')
-                                                ->label('Bendahara')
-                                                ->maxLength(255),
-                                            Forms\Components\TextInput::make('bendahara_umum_phone')
-                                                ->label('No. HP')
-                                                ->maxLength(255),
-                                        ]),
+                                        // Direktur
+                                        Forms\Components\Group::make([
+                                            Forms\Components\Section::make('Direktur')
+                                                ->schema([
+                                                    Forms\Components\FileUpload::make('direktur_photo')
+                                                        ->label('Foto')
+                                                        ->image()
+                                                        ->directory('bumdes/pejabat')
+                                                        ->maxSize(2048),
+                                                    Forms\Components\Grid::make(2)->schema([
+                                                        Forms\Components\TextInput::make('direktur_name')
+                                                            ->label('Nama')
+                                                            ->maxLength(255),
+                                                        Forms\Components\TextInput::make('direktur_phone')
+                                                            ->label('No. HP')
+                                                            ->maxLength(255),
+                                                    ]),
+                                                ])->collapsible(),
+                                        ])->columnSpanFull(),
+                                        // Sekretaris
+                                        Forms\Components\Group::make([
+                                            Forms\Components\Section::make('Sekretaris')
+                                                ->schema([
+                                                    Forms\Components\FileUpload::make('sekretaris_photo')
+                                                        ->label('Foto')
+                                                        ->image()
+                                                        ->directory('bumdes/pejabat')
+                                                        ->maxSize(2048),
+                                                    Forms\Components\Grid::make(2)->schema([
+                                                        Forms\Components\TextInput::make('sekretaris_name')
+                                                            ->label('Nama')
+                                                            ->maxLength(255),
+                                                        Forms\Components\TextInput::make('sekretaris_phone')
+                                                            ->label('No. HP')
+                                                            ->maxLength(255),
+                                                    ]),
+                                                ])->collapsible(),
+                                        ])->columnSpanFull(),
+                                        // Bendahara
+                                        Forms\Components\Group::make([
+                                            Forms\Components\Section::make('Bendahara')
+                                                ->schema([
+                                                    Forms\Components\FileUpload::make('bendahara_photo')
+                                                        ->label('Foto')
+                                                        ->image()
+                                                        ->directory('bumdes/pejabat')
+                                                        ->maxSize(2048),
+                                                    Forms\Components\Grid::make(2)->schema([
+                                                        Forms\Components\TextInput::make('bendahara_umum_name')
+                                                            ->label('Nama')
+                                                            ->maxLength(255),
+                                                        Forms\Components\TextInput::make('bendahara_umum_phone')
+                                                            ->label('No. HP')
+                                                            ->maxLength(255),
+                                                    ]),
+                                                ])->collapsible(),
+                                        ])->columnSpanFull(),
                                         Forms\Components\Placeholder::make('info_unit')
                                             ->label('')
                                             ->content('👆 Kepala Unit Usaha dikelola di menu Master Data → Unit Usaha'),
@@ -296,22 +335,44 @@ class BumdesSettingResource extends Resource
                                 Forms\Components\Section::make('👥 Pengawas')
                                     ->description('Dari BPD atau Tokoh Masyarakat')
                                     ->schema([
-                                        Forms\Components\Grid::make(2)->schema([
-                                            Forms\Components\TextInput::make('pengawas1_name')
-                                                ->label('Pengawas 1')
-                                                ->maxLength(255),
-                                            Forms\Components\TextInput::make('pengawas1_phone')
-                                                ->label('No. HP')
-                                                ->maxLength(255),
-                                        ]),
-                                        Forms\Components\Grid::make(2)->schema([
-                                            Forms\Components\TextInput::make('pengawas2_name')
-                                                ->label('Pengawas 2')
-                                                ->maxLength(255),
-                                            Forms\Components\TextInput::make('pengawas2_phone')
-                                                ->label('No. HP')
-                                                ->maxLength(255),
-                                        ]),
+                                        // Pengawas 1
+                                        Forms\Components\Group::make([
+                                            Forms\Components\Section::make('Pengawas 1')
+                                                ->schema([
+                                                    Forms\Components\FileUpload::make('pengawas1_photo')
+                                                        ->label('Foto')
+                                                        ->image()
+                                                        ->directory('bumdes/pejabat')
+                                                        ->maxSize(2048),
+                                                    Forms\Components\Grid::make(2)->schema([
+                                                        Forms\Components\TextInput::make('pengawas1_name')
+                                                            ->label('Nama')
+                                                            ->maxLength(255),
+                                                        Forms\Components\TextInput::make('pengawas1_phone')
+                                                            ->label('No. HP')
+                                                            ->maxLength(255),
+                                                    ]),
+                                                ])->collapsible(),
+                                        ])->columnSpanFull(),
+                                        // Pengawas 2
+                                        Forms\Components\Group::make([
+                                            Forms\Components\Section::make('Pengawas 2')
+                                                ->schema([
+                                                    Forms\Components\FileUpload::make('pengawas2_photo')
+                                                        ->label('Foto')
+                                                        ->image()
+                                                        ->directory('bumdes/pejabat')
+                                                        ->maxSize(2048),
+                                                    Forms\Components\Grid::make(2)->schema([
+                                                        Forms\Components\TextInput::make('pengawas2_name')
+                                                            ->label('Nama')
+                                                            ->maxLength(255),
+                                                        Forms\Components\TextInput::make('pengawas2_phone')
+                                                            ->label('No. HP')
+                                                            ->maxLength(255),
+                                                    ]),
+                                                ])->collapsible(),
+                                        ])->columnSpanFull(),
                                     ])->collapsible(),
                             ]),
 

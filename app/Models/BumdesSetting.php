@@ -93,6 +93,12 @@ class BumdesSetting extends Model
         'bendahara_umum_phone',
         // Foto
         'pejabat_foto_path',
+        'kepala_desa_photo',
+        'direktur_photo',
+        'sekretaris_photo',
+        'bendahara_photo',
+        'pengawas1_photo',
+        'pengawas2_photo',
 
         // Warna Branding
         'motto_color',
@@ -234,43 +240,26 @@ class BumdesSetting extends Model
     public function getSignatureLinesAttribute(): array
     {
         $lines = [];
+        $pejabat = [
+            ['field' => 'kepala_desa', 'title' => 'Penasihat BUMDes'],
+            ['field' => 'direktur', 'title' => 'Direktur BUMDes'],
+            ['field' => 'sekretaris', 'title' => 'Sekretaris BUMDes'],
+            ['field' => 'bendahara_umum', 'title' => 'Bendahara BUMDes'],
+            ['field' => 'pengawas1', 'title' => 'Pengawas BUMDes'],
+            ['field' => 'pengawas2', 'title' => 'Pengawas BUMDes'],
+        ];
 
-        // Penasihat (Kepala Desa - ex officio)
-        if ($this->kepala_desa_name) {
-            $lines[] = [
-                'name' => $this->kepala_desa_name,
-                'phone' => $this->kepala_desa_phone,
-                'title' => 'Penasihat BUMDes',
-            ];
+        foreach ($pejabat as $p) {
+            $name = $this->{$p['field'] . '_name'};
+            if ($name) {
+                $lines[] = [
+                    'name' => $name,
+                    'phone' => $this->{$p['field'] . '_phone'} ?? '',
+                    'photo' => $this->{$p['field'] . '_photo'} ?? null,
+                    'title' => $p['title'],
+                ];
+            }
         }
-
-        // Direktur (Kepala Pelaksana)
-        if ($this->direktur_name) {
-            $lines[] = [
-                'name' => $this->direktur_name,
-                'phone' => $this->direktur_phone,
-                'title' => 'Direktur BUMDes',
-            ];
-        }
-
-        // Pengawas 1
-        if ($this->pengawas1_name) {
-            $lines[] = [
-                'name' => $this->pengawas1_name,
-                'phone' => $this->pengawas1_phone,
-                'title' => 'Pengawas BUMDes',
-            ];
-        }
-
-        // Pengawas 2
-        if ($this->pengawas2_name) {
-            $lines[] = [
-                'name' => $this->pengawas2_name,
-                'phone' => $this->pengawas2_phone,
-                'title' => 'Pengawas BUMDes',
-            ];
-        }
-
         return $lines;
     }
 
