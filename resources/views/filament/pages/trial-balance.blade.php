@@ -69,4 +69,22 @@
             </x-filament::section>
         </div>
     @endif
+    {{-- ===== TOMBOL DOWNLOAD PDF BESAR ===== --}}
+    @php $fy = \App\Models\FiscalYear::where('year', $year)->first(); @endphp
+    @if($fy && $loaded)
+    <div class="mt-4 p-4 bg-gradient-to-r from-red-500 to-red-600 rounded-xl shadow-lg flex items-center justify-between" style="background: linear-gradient(135deg, #dc2626, #b91c1c);">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center text-2xl">📄</div>
+            <div>
+                <h3 class="text-white font-bold text-lg">Download Laporan PDF</h3>
+                <p class="text-red-100 text-sm">File PDF profesional dengan kop surat &amp; tanda tangan</p>
+            </div>
+        </div>
+        <a href="{{ route('pdf.neraca-saldo', ['fiscal_year_id' => $fy->id]) }}" target="_blank"
+           class="inline-flex items-center gap-2 px-6 py-3 bg-white text-red-600 font-bold rounded-lg hover:bg-red-50 transition-all shadow-md text-base">
+            ⬇️ Download PDF
+        </a>
+    </div>
+    @endif
+
 </x-filament-panels::page>
