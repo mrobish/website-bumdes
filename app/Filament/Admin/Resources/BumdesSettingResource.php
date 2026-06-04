@@ -234,41 +234,64 @@ class BumdesSettingResource extends Resource
                         Tabs\Tab::make('Pejabat BUMDes')
                             ->icon('heroicon-o-user-group')
                             ->schema([
-                                Forms\Components\Grid::make(3)
+                                Forms\Components\Section::make('👤 Pembina BUMDes (PP 11/2021)')
+                                    ->description('Kepala Desa sebagai Pembina')
                                     ->schema([
-                                        Forms\Components\Section::make('Kepala Desa')
-                                            ->schema([
-                                                Forms\Components\TextInput::make('kepala_desa_name')
-                                                    ->label('Nama')
-                                                    ->maxLength(255),
+                                        Forms\Components\Grid::make(2)->schema([
+                                            Forms\Components\TextInput::make('kepala_desa_name')
+                                                ->label('Nama Pembina')
+                                                ->placeholder('H. Dadang Suhendar, S.Pd.I')
+                                                ->maxLength(255),
+                                            Forms\Components\TextInput::make('kepala_desa_nip')
+                                                ->label('NIP')
+                                                ->maxLength(255),
+                                        ]),
+                                    ])->collapsible(),
 
-                                                Forms\Components\TextInput::make('kepala_desa_nip')
-                                                    ->label('NIP')
-                                                    ->maxLength(255),
-                                            ]),
+                                Forms\Components\Section::make('👥 Pengawas BUMDes (PP 11/2021)')
+                                    ->description('Minimal 2 orang pengawas')
+                                    ->schema([
+                                        Forms\Components\Grid::make(3)->schema([
+                                            Forms\Components\TextInput::make('pengawas1_name')
+                                                ->label('Nama Pengawas 1')
+                                                ->maxLength(255),
+                                            Forms\Components\TextInput::make('pengawas1_nip')
+                                                ->label('NIP')
+                                                ->maxLength(255),
+                                            Forms\Components\TextInput::make('pengawas1_position')
+                                                ->label('Jabatan Asal')
+                                                ->placeholder('Sekretaris Desa')
+                                                ->maxLength(255),
+                                        ]),
+                                        Forms\Components\Grid::make(3)->schema([
+                                            Forms\Components\TextInput::make('pengawas2_name')
+                                                ->label('Nama Pengawas 2')
+                                                ->maxLength(255),
+                                            Forms\Components\TextInput::make('pengawas2_nip')
+                                                ->label('NIP')
+                                                ->maxLength(255),
+                                            Forms\Components\TextInput::make('pengawas2_position')
+                                                ->label('Jabatan Asal')
+                                                ->placeholder('Kaur Keuangan')
+                                                ->maxLength(255),
+                                        ]),
+                                    ])->collapsible(),
 
-                                        Forms\Components\Section::make('Kaur Keuangan')
-                                            ->schema([
-                                                Forms\Components\TextInput::make('kaur_keuangan_name')
-                                                    ->label('Nama')
-                                                    ->maxLength(255),
-
-                                                Forms\Components\TextInput::make('kaur_keuangan_nip')
-                                                    ->label('NIP')
-                                                    ->maxLength(255),
-                                            ]),
-
-                                        Forms\Components\Section::make('Bendahara')
-                                            ->schema([
-                                                Forms\Components\TextInput::make('bendahara_name')
-                                                    ->label('Nama')
-                                                    ->maxLength(255),
-
-                                                Forms\Components\TextInput::make('bendahara_nip')
-                                                    ->label('NIP')
-                                                    ->maxLength(255),
-                                            ]),
-                                    ]),
+                                Forms\Components\Section::make('🏢 Direktur BUMDes (PP 11/2021)')
+                                    ->description('Pengurus harian BUMDes')
+                                    ->schema([
+                                        Forms\Components\Grid::make(3)->schema([
+                                            Forms\Components\TextInput::make('direktur_name')
+                                                ->label('Nama Direktur')
+                                                ->maxLength(255),
+                                            Forms\Components\TextInput::make('direktur_nip')
+                                                ->label('NIP / No. Identitas')
+                                                ->maxLength(255),
+                                            Forms\Components\TextInput::make('direktur_phone')
+                                                ->label('No. HP')
+                                                ->maxLength(255),
+                                        ]),
+                                    ])->collapsible(),
                             ]),
 
                         // ===== TAB 5: Rekening Bank =====

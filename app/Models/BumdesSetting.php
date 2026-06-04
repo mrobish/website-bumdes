@@ -78,6 +78,17 @@ class BumdesSetting extends Model
         'bendahara_name',
         'bendahara_nip',
 
+        // Pejabat PP 11/2021
+        'pengawas1_name',
+        'pengawas1_nip',
+        'pengawas1_position',
+        'pengawas2_name',
+        'pengawas2_nip',
+        'pengawas2_position',
+        'direktur_name',
+        'direktur_nip',
+        'direktur_phone',
+
         // Warna Branding
         'motto_color',
         'primary_color',
@@ -219,27 +230,39 @@ class BumdesSetting extends Model
     {
         $lines = [];
 
+        // Pembina (PP 11/2021)
         if ($this->kepala_desa_name) {
             $lines[] = [
                 'name' => $this->kepala_desa_name,
                 'nip' => $this->kepala_desa_nip,
-                'title' => 'Kepala Desa',
+                'title' => 'Pembina BUMDes',
             ];
         }
 
-        if ($this->kaur_keuangan_name) {
+        // Pengawas 1 (PP 11/2021)
+        if ($this->pengawas1_name) {
             $lines[] = [
-                'name' => $this->kaur_keuangan_name,
-                'nip' => $this->kaur_keuangan_nip,
-                'title' => 'Kaur Keuangan',
+                'name' => $this->pengawas1_name,
+                'nip' => $this->pengawas1_nip,
+                'title' => 'Pengawas BUMDes',
             ];
         }
 
-        if ($this->bendahara_name) {
+        // Pengawas 2 (PP 11/2021)
+        if ($this->pengawas2_name) {
             $lines[] = [
-                'name' => $this->bendahara_name,
-                'nip' => $this->bendahara_nip,
-                'title' => 'Bendahara',
+                'name' => $this->pengawas2_name,
+                'nip' => $this->pengawas2_nip,
+                'title' => 'Pengawas BUMDes',
+            ];
+        }
+
+        // Direktur (PP 11/2021)
+        if ($this->direktur_name) {
+            $lines[] = [
+                'name' => $this->direktur_name,
+                'nip' => $this->direktur_nip,
+                'title' => 'Direktur BUMDes',
             ];
         }
 
