@@ -2,8 +2,11 @@
 
 namespace App\Filament\Admin\Pages;
 
-use App\Models\ChartOfAccount;
-use App\Models\FinancialTransaction;
+use App\Models\Transaction;
+use App\Models\Category;
+use App\Models\BusinessUnit;
+use App\Models\FiscalYear;
+use App\Services\AutoJournalService;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -13,6 +16,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Illuminate\Support\Facades\DB;
 
 class InputJurnalPage extends Page implements HasForms
 {
@@ -30,11 +34,12 @@ class InputJurnalPage extends Page implements HasForms
 
     public function mount(): void
     {
-        $this->todayCount = FinancialTransaction::whereDate('transaction_date', today())->count();
+        $this->todayCount = Transaction::whereDate('transaction_date', today())->where('is_void', false)->count();
         $this->form->fill([
             'transaction_date' => now()->format('Y-m-d'),
-            'type' => 'pemasukan',
-            'account_code' => '',
+            'type' => 'income',
+            'category_id' => null,
+            'unit_id' => null,
             'amount' => null,
             'description' => '',
         ]);
@@ -52,25 +57,31 @@ class InputJurnalPage extends Page implements HasForms
                     ->default(now()->format('Y-m-d'))
                     ->live(),
 
-                // Tipe — toggle besar
+                // Tipe
                 Select::make('type')
                     ->label('💰 Tipe')
                     ->options([
-                        'pemasukan' => '✅ Pemasukan (Uang Masuk)',
-                        'pengeluaran' => '❌ Pengeluaran (Uang Keluar)',
+                        'income' => '✅ Pemasukan (Uang Masuk)',
+                        'expense' => '❌ Pengeluaran (Uang Keluar)',
                     ])
                     ->required()
-                    ->default('pemasukan')
+                    ->default('income')
                     ->live(),
 
-                // Kode Akun — search & pilih
-                Select::make('account_code')
-                    ->label('📋 Kode Akun')
-                    ->options(fn () => ChartOfAccount::pluck('name', 'code')->map(fn ($name, $code) => "$code — $name")->toArray())
+                // Kategori (berdasarkan tipe)
+                Select::make('category_id')
+                    ->label('📋 Kategori')
+                    ->options(fn (callable $get) => Category::where('type', $get('type') ?? 'income')
+                        ->pluck('name', 'id'))
                     ->searchable()
-                    ->required()
-                    ->live()
-                    ->afterStateUpdated(fn ($state, $set) => $set('account_name_display', ChartOfAccount::where('code', $state)->value('name') ?? '')),
+                    ->required(),
+
+                // Unit Usaha (opsional)
+                Select::make('unit_id')
+                    ->label('🏢 Unit Usaha (opsional)')
+                    ->options(BusinessUnit::pluck('name', 'id'))
+                    ->searchable()
+                    ->nullable(),
 
                 // Jumlah
                 TextInput::make('amount')
@@ -97,37 +108,51 @@ class InputJurnalPage extends Page implements HasForms
         $data = $this->form->getState();
 
         // Validasi
-        if (empty($data['account_code']) || empty($data['amount']) || $data['amount'] <= 0) {
+        if (empty($data['category_id']) || empty($data['amount']) || $data['amount'] <= 0) {
             Notification::make()->title('Lengkapi Data!')->danger()->send();
             return;
         }
 
-        // Generate nomor transaksi
-        $date = \Carbon\Carbon::parse($data['transaction_date']);
-        $prefix = 'J-' . $date->format('Ymd');
-        $count = FinancialTransaction::where('transaction_number', 'like', $prefix . '%')->count();
-        $number = $prefix . '-' . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
+        DB::transaction(function () use ($data) {
+            // Generate transaction number
+            $date = \Carbon\Carbon::parse($data['transaction_date']);
+            $prefix = strtoupper(substr($data['type'], 0, 3)) . '-' . $date->format('Ymd');
+            $count = Transaction::where('transaction_number', 'like', $prefix . '%')->count();
+            $number = $prefix . '-' . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
 
-        // Simpan langsung
-        FinancialTransaction::create([
-            'transaction_number' => $number,
-            'transaction_date' => $data['transaction_date'],
-            'type' => $data['type'],
-            'amount' => $data['amount'],
-            'description' => $data['description'],
-            'account_code' => $data['account_code'],
-            'status' => 'published',
-            'created_by' => auth()->id() ?? 1,
-        ]);
+            // Create transaction (new system)
+            $transaction = Transaction::create([
+                'transaction_number' => $number,
+                'transaction_date' => $data['transaction_date'],
+                'type' => $data['type'],
+                'category_id' => $data['category_id'],
+                'unit_id' => $data['unit_id'],
+                'amount' => $data['amount'],
+                'description' => $data['description'],
+                'fiscal_year' => $date->year,
+                'created_by' => auth()->id() ?? 1,
+            ]);
+
+            // Auto journal (double-entry)
+            match ($data['type']) {
+                'income' => AutoJournalService::recordIncome($transaction),
+                'expense' => AutoJournalService::recordExpense($transaction),
+            };
+
+            // Verify balance
+            if (!AutoJournalService::verifyBalance($transaction)) {
+                throw new \Exception('Jurnal tidak seimbang!');
+            }
+        });
 
         $this->todayCount++;
 
-        $tipe = $data['type'] === 'pemasukan' ? '💰 Pemasukan' : '💸 Pengeluaran';
-        $namaAkun = ChartOfAccount::where('code', $data['account_code'])->value('name');
+        $tipe = $data['type'] === 'income' ? '💰 Pemasukan' : '💸 Pengeluaran';
+        $kategori = Category::find($data['category_id'])?->name ?? '-';
 
         Notification::make()
             ->title("✅ Tersimpan!")
-            ->body("$tipe Rp " . number_format($data['amount'], 0, ',', '.') . " — $namaAkun")
+            ->body("$tipe Rp " . number_format($data['amount'], 0, ',', '.') . " — $kategori")
             ->success()
             ->duration(2000)
             ->send();
@@ -136,7 +161,8 @@ class InputJurnalPage extends Page implements HasForms
         $this->form->fill([
             'transaction_date' => $data['transaction_date'],
             'type' => $data['type'],
-            'account_code' => '',
+            'category_id' => null,
+            'unit_id' => null,
             'amount' => null,
             'description' => '',
         ]);

@@ -40,12 +40,12 @@ class ConsolidationDashboard extends Page
         
         foreach ($units as $unit) {
             $transactions = FinancialTransaction::where('business_unit_id', $unit->id)
-                ->where('status', 'posted')
+                ->whereIn('status', ['published', 'approved'])
                 ->whereYear('transaction_date', now()->year)
                 ->get();
 
-            $revenue = $transactions->where('type', 'income')->sum('amount');
-            $expenses = $transactions->where('type', 'expense')->sum('amount');
+            $revenue = $transactions->where('type', 'pemasukan')->sum('amount');
+            $expenses = $transactions->where('type', 'pengeluaran')->sum('amount');
             
             $this->units[] = [
                 'id' => $unit->id,

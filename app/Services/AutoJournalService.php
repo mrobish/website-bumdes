@@ -140,8 +140,70 @@ class AutoJournalService
     }
 
     /**
-     * Record opening balance
-     * DEBIT or CREDIT based on normal balance
+     * Record adjustment transaction
+     * Similar to income/expense but for corrections/adjustments
+     */
+    public static function recordAdjustment(Transaction $transaction): void
+    {
+        $category = $transaction->category;
+        if (!$category) return;
+
+        $accountCode = $category->getAccountCodeForUnit($transaction->unit_id);
+
+        if ($category->type === 'income') {
+            // Adjustment income: DR Kas, CR Pendapatan
+            JournalEntry::create([
+                'transaction_id' => $transaction->id,
+                'entry_date' => $transaction->transaction_date,
+                'entry_type' => 'adjustment',
+                'account_code' => '1101',
+                'debit' => $transaction->amount,
+                'credit' => 0,
+                'unit_id' => $transaction->unit_id,
+                'description' => 'Penyesuaian: ' . $transaction->description,
+                'fiscal_year' => $transaction->fiscal_year,
+            ]);
+            JournalEntry::create([
+                'transaction_id' => $transaction->id,
+                'entry_date' => $transaction->transaction_date,
+                'entry_type' => 'adjustment',
+                'account_code' => $accountCode,
+                'debit' => 0,
+                'credit' => $transaction->amount,
+                'unit_id' => $transaction->unit_id,
+                'description' => 'Penyesuaian: ' . $transaction->description,
+                'fiscal_year' => $transaction->fiscal_year,
+            ]);
+        } else {
+            // Adjustment expense: DR Beban, CR Kas
+            JournalEntry::create([
+                'transaction_id' => $transaction->id,
+                'entry_date' => $transaction->transaction_date,
+                'entry_type' => 'adjustment',
+                'account_code' => $accountCode,
+                'debit' => $transaction->amount,
+                'credit' => 0,
+                'unit_id' => $transaction->unit_id,
+                'description' => 'Penyesuaian: ' . $transaction->description,
+                'fiscal_year' => $transaction->fiscal_year,
+            ]);
+            JournalEntry::create([
+                'transaction_id' => $transaction->id,
+                'entry_date' => $transaction->transaction_date,
+                'entry_type' => 'adjustment',
+                'account_code' => '1101',
+                'debit' => 0,
+                'credit' => $transaction->amount,
+                'unit_id' => $transaction->unit_id,
+                'description' => 'Penyesuaian: ' . $transaction->description,
+                'fiscal_year' => $transaction->fiscal_year,
+            ]);
+        }
+    }
+
+    /**
+     * Record opening balance with contra entry
+     * DEBIT or CREDIT based on normal balance + contra to equity (3200)
      */
     public static function recordOpeningBalance(Transaction $transaction, string $accountCode, float $amount): void
     {
@@ -149,6 +211,7 @@ class AutoJournalService
         if (!$account) return;
 
         if ($account->normal_balance === 'debit') {
+            // Asset/Expense: DR Account, CR Saldo Awal (3200)
             JournalEntry::create([
                 'transaction_id' => $transaction->id,
                 'entry_date' => $transaction->transaction_date,
@@ -160,7 +223,30 @@ class AutoJournalService
                 'description' => 'Saldo Awal: ' . $account->name,
                 'fiscal_year' => $transaction->fiscal_year,
             ]);
+            JournalEntry::create([
+                'transaction_id' => $transaction->id,
+                'entry_date' => $transaction->transaction_date,
+                'entry_type' => 'opening_balance',
+                'account_code' => '3200', // Saldo Awal / Ekuitas
+                'debit' => 0,
+                'credit' => $amount,
+                'unit_id' => $transaction->unit_id,
+                'description' => 'Saldo Awal: ' . $account->name,
+                'fiscal_year' => $transaction->fiscal_year,
+            ]);
         } else {
+            // Liability/Equity/Revenue: CR Account, DR Saldo Awal (3200)
+            JournalEntry::create([
+                'transaction_id' => $transaction->id,
+                'entry_date' => $transaction->transaction_date,
+                'entry_type' => 'opening_balance',
+                'account_code' => '3200', // Saldo Awal / Ekuitas
+                'debit' => $amount,
+                'credit' => 0,
+                'unit_id' => $transaction->unit_id,
+                'description' => 'Saldo Awal: ' . $account->name,
+                'fiscal_year' => $transaction->fiscal_year,
+            ]);
             JournalEntry::create([
                 'transaction_id' => $transaction->id,
                 'entry_date' => $transaction->transaction_date,

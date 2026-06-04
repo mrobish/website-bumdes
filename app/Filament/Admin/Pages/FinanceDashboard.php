@@ -56,12 +56,12 @@ class FinanceDashboard extends Page
 
         $this->totalDebet = FinancialTransaction::whereBetween('transaction_date', [$start->toDateString(), $end->toDateString()])
             ->whereIn('status', ['published', 'approved'])
-            ->where('type', 'debit')
+            ->where('type', 'pemasukan')
             ->sum('amount');
 
         $this->totalKredit = FinancialTransaction::whereBetween('transaction_date', [$start->toDateString(), $end->toDateString()])
             ->whereIn('status', ['published', 'approved'])
-            ->where('type', 'credit')
+            ->where('type', 'pengeluaran')
             ->sum('amount');
     }
 

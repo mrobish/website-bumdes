@@ -41,6 +41,7 @@ class CreateTransaction extends CreateRecord
             match ($transaction->type) {
                 'income' => AutoJournalService::recordIncome($transaction),
                 'expense' => AutoJournalService::recordExpense($transaction),
+                'adjustment' => AutoJournalService::recordAdjustment($transaction),
                 default => null,
             };
 

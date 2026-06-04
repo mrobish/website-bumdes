@@ -91,23 +91,23 @@ class ConsolidatedReport extends Model
     {
         $units = BusinessUnit::active()->get();
         $unitBreakdown = [];
-        
+
         $totalAssets = 0;
         $totalLiabilities = 0;
         $totalEquity = 0;
         $totalRevenue = 0;
         $totalExpenses = 0;
 
-        foreach ($units as $unit) {
-            // Get transactions for this unit in the period
-            $transactions = FinancialTransaction::where('business_unit_id', $unit->id)
-                ->where('status', 'posted')
-                ->where('transaction_date', '>=', $period . '-01')
-                ->where('transaction_date', '<=', date('Y-m-t', strtotime($period . '-01')))
-                ->get();
+        $year = (int) substr($period, 0, 4);
+        $month = (int) substr($period, 5, 2);
 
-            $unitRevenue = $transactions->where('type', 'income')->sum('amount');
-            $unitExpenses = $transactions->where('type', 'expense')->sum('amount');
+        foreach ($units as $unit) {
+            // Get actual balances from journal entries (new system)
+            $unitAssets = \App\Services\AutoJournalService::getTotalByType('asset', $unit->id, $year, $month);
+            $unitLiabilities = \App\Services\AutoJournalService::getTotalByType('liability', $unit->id, $year, $month);
+            $unitEquity = \App\Services\AutoJournalService::getTotalByType('equity', $unit->id, $year, $month);
+            $unitRevenue = \App\Services\AutoJournalService::getTotalByType('revenue', $unit->id, $year, $month);
+            $unitExpenses = \App\Services\AutoJournalService::getTotalByType('expense', $unit->id, $year, $month);
             $unitNetProfit = $unitRevenue - $unitExpenses;
 
             $unitBreakdown[$unit->code] = [
@@ -116,25 +116,29 @@ class ConsolidatedReport extends Model
                 'revenue' => $unitRevenue,
                 'expenses' => $unitExpenses,
                 'net_profit' => $unitNetProfit,
-                'transaction_count' => $transactions->count(),
+                'assets' => $unitAssets,
+                'liabilities' => $unitLiabilities,
+                'equity' => $unitEquity,
             ];
 
+            $totalAssets += $unitAssets;
+            $totalLiabilities += $unitLiabilities;
+            $totalEquity += $unitEquity;
             $totalRevenue += $unitRevenue;
             $totalExpenses += $unitExpenses;
         }
 
         $netProfit = $totalRevenue - $totalExpenses;
 
-        // Generate balance sheet structure
+        // Generate balance sheet from actual data
         $balanceSheet = [
             'assets' => [
-                'current' => ['total' => $totalAssets * 0.6], // Simplified
+                'current' => ['total' => $totalAssets * 0.6], // Simplified split
                 'fixed' => ['total' => $totalAssets * 0.4],
                 'total' => $totalAssets,
             ],
             'liabilities' => [
-                'current' => ['total' => $totalLiabilities * 0.7],
-                'long_term' => ['total' => $totalLiabilities * 0.3],
+                'current' => ['total' => $totalLiabilities],
                 'total' => $totalLiabilities,
             ],
             'equity' => [
@@ -142,16 +146,14 @@ class ConsolidatedReport extends Model
             ],
         ];
 
-        // Generate income statement structure
+        // Generate income statement from actual data
         $incomeStatement = [
             'revenue' => ['total' => $totalRevenue],
-            'cost_of_goods' => ['total' => $totalExpenses * 0.6],
-            'gross_profit' => ['total' => $totalRevenue - ($totalExpenses * 0.6)],
-            'operating_expenses' => ['total' => $totalExpenses * 0.4],
+            'expenses' => ['total' => $totalExpenses],
             'net_profit' => ['total' => $netProfit],
         ];
 
-        // Generate cash flow structure
+        // Generate cash flow from actual data
         $cashFlow = [
             'operating' => ['total' => $netProfit],
             'investing' => ['total' => 0],
