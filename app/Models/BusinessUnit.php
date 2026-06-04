@@ -24,6 +24,8 @@ class BusinessUnit extends Model
         'image',
         'about',
         'manager',
+        'manager_nip',
+        'manager_phone',
         'operating_hours',
         'status',
     ];

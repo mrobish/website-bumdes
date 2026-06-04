@@ -94,9 +94,6 @@ class BumdesSetting extends Model
         'sekretaris_nip',
         'bendahara_umum_name',
         'bendahara_umum_nip',
-        'kepala_unit_name',
-        'kepala_unit_nip',
-        'kepala_unit_usaha',
         // Pengawas
         'pengawas1_asal',
         'pengawas2_asal',

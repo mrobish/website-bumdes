@@ -279,21 +279,14 @@ class BumdesSettingResource extends Resource
                                                 ->label('Bendahara')
                                                 ->maxLength(255),
                                         ]),
-                                        Forms\Components\Grid::make(3)->schema([
+                                        Forms\Components\Grid::make(2)->schema([
                                             Forms\Components\TextInput::make('bendahara_umum_nip')
                                                 ->label('NIP Bendahara')
                                                 ->maxLength(255),
-                                            Forms\Components\TextInput::make('kepala_unit_name')
-                                                ->label('Kepala Unit Usaha')
-                                                ->maxLength(255),
-                                            Forms\Components\TextInput::make('kepala_unit_nip')
-                                                ->label('NIP')
-                                                ->maxLength(255),
+                                            Forms\Components\Placeholder::make('info_unit')
+                                                ->label('')
+                                                ->content('👆 Kepala Unit Usaha dikelola di menu Master Data → Unit Usaha'),
                                         ]),
-                                        Forms\Components\TextInput::make('kepala_unit_usaha')
-                                            ->label('Nama Unit Usaha yang Dipimpin')
-                                            ->placeholder('Contoh: Unit Pertanian')
-                                            ->maxLength(255),
                                     ])->collapsible(),
 
                                 // Pengawas
