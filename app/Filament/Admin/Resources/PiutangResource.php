@@ -22,7 +22,7 @@ class PiutangResource extends Resource
     protected static ?string $navigationGroup = '💰 Keuangan';
     protected static ?string $navigationLabel = 'Piutang';
     protected static ?string $title = 'Piutang Masyarakat';
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 6;
 
     public static function form(Form $form): Form
     {
