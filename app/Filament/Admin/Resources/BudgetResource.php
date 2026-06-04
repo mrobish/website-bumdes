@@ -89,6 +89,19 @@ class BudgetResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function ($query) {
+                // Subquery to calculate actual_spent in one query (avoids N+1)
+                return $query->selectRaw('budgets.*, (
+                    SELECT COALESCE(SUM(t.amount), 0)
+                    FROM transactions t
+                    WHERE t.category_id = budgets.category_id
+                    AND t.unit_id = budgets.unit_id
+                    AND MONTH(t.transaction_date) = budgets.month
+                    AND YEAR(t.transaction_date) = budgets.year
+                    AND t.type = "expense"
+                    AND t.is_void = 0
+                ) as actual_spent');
+            })
             ->columns([
                 Tables\Columns\TextColumn::make('category.name')
                     ->label('Kategori')

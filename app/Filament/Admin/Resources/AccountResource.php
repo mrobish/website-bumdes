@@ -69,6 +69,10 @@ class AccountResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn ($query) => $query
+                ->withSum('journalEntries', 'debit')
+                ->withSum('journalEntries', 'credit')
+            )
             ->columns([
                 Tables\Columns\TextColumn::make('code')
                     ->label('Kode')

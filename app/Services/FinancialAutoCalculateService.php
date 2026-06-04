@@ -237,17 +237,17 @@ class FinancialAutoCalculateService
         $start = Carbon::parse($bulan . '-01')->startOfMonth();
         $end = $start->copy()->endOfMonth();
 
-        // Kelompokkan berdasarkan jenis akun
+        // Kelompokkan berdasarkan jenis akun (kas & bank)
         $data = DB::table('financial_transactions')
             ->join('chart_of_accounts', 'financial_transactions.account_id', '=', 'chart_of_accounts.id')
             ->whereBetween('financial_transactions.transaction_date', [$start->toDateString(), $end->toDateString()])
             ->whereIn('financial_transactions.status', ['published', 'approved'])
-            ->where('chart_of_accounts.code', 'like', '11%') // Hanya akun kas
+            ->whereIn('chart_of_accounts.code', ['1101', '1102']) // Kas & Bank
             ->select(
                 'chart_of_accounts.code as kode',
                 'chart_of_accounts.name as nama',
-                DB::raw("SUM(CASE WHEN financial_transactions.type = 'debit' THEN financial_transactions.amount ELSE 0 END) as penerimaan"),
-                DB::raw("SUM(CASE WHEN financial_transactions.type = 'credit' THEN financial_transactions.amount ELSE 0 END) as pengeluaran")
+                DB::raw("SUM(CASE WHEN financial_transactions.type = 'pemasukan' THEN financial_transactions.amount ELSE 0 END) as penerimaan"),
+                DB::raw("SUM(CASE WHEN financial_transactions.type = 'pengeluaran' THEN financial_transactions.amount ELSE 0 END) as pengeluaran")
             )
             ->groupBy('chart_of_accounts.code', 'chart_of_accounts.name')
             ->get();

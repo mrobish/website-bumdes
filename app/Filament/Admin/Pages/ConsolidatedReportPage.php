@@ -38,7 +38,8 @@ class ConsolidatedReportPage extends Page
         $result = [];
 
         foreach ($units as $unit) {
-            $cash = AutoJournalService::getAccountBalance('1101', $unit->id, $year);
+            $cash = AutoJournalService::getAccountBalance('1101', $unit->id, $year)
+                  + AutoJournalService::getAccountBalance('1102', $unit->id, $year);
             $revenue = 0;
             $expense = 0;
 

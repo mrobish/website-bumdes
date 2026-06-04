@@ -43,6 +43,17 @@ class Account extends Model
 
     public function getBalanceAttribute(): float
     {
+        // If pre-calculated via withAggregate, use that
+        if (isset($this->attributes['journal_debit_sum'])) {
+            $debit = (float) ($this->attributes['journal_debit_sum'] ?? 0);
+            $credit = (float) ($this->attributes['journal_credit_sum'] ?? 0);
+            if ($this->normal_balance === 'debit') {
+                return $debit - $credit;
+            }
+            return $credit - $debit;
+        }
+
+        // Fallback: query individually
         $debit = $this->journalEntries()->sum('debit');
         $credit = $this->journalEntries()->sum('credit');
         

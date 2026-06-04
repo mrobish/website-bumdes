@@ -191,7 +191,7 @@ class PiutangService
     }
 
     /**
-     * Get piutang summary by status
+     * Get piutang summary by status (single query)
      */
     public static function getSummary(?int $unitId = null): array
     {
@@ -200,16 +200,26 @@ class PiutangService
             $query->where('unit_id', $unitId);
         }
 
+        $result = $query->selectRaw("
+            COALESCE(SUM(amount), 0) as total,
+            COALESCE(SUM(paid_amount), 0) as dibayar,
+            COALESCE(SUM(CASE WHEN status IN ('belum_lunas', 'sebagian') THEN remaining ELSE 0 END), 0) as sisa,
+            COUNT(CASE WHEN status = 'lunas' THEN 1 END) as lunas,
+            COUNT(CASE WHEN status = 'belum_lunas' THEN 1 END) as belum_lunas,
+            COUNT(CASE WHEN status = 'sebagian' THEN 1 END) as sebagian,
+            COUNT(CASE WHEN status = 'macet' THEN 1 END) as macet,
+            COALESCE(SUM(CASE WHEN status IN ('belum_lunas', 'sebagian') AND due_date < NOW() THEN remaining ELSE 0 END), 0) as jatuh_tempo
+        ")->first();
+
         return [
-            'total' => $query->sum('amount'),
-            'dibayar' => $query->sum('paid_amount'),
-            'sisa' => $query->whereIn('status', ['belum_lunas', 'sebagian'])->sum('remaining'),
-            'lunas' => $query->where('status', 'lunas')->count(),
-            'belum_lunas' => $query->where('status', 'belum_lunas')->count(),
-            'sebagian' => $query->where('status', 'sebagian')->count(),
-            'macet' => $query->where('status', 'macet')->count(),
-            'jatuh_tempo' => $query->whereIn('status', ['belum_lunas', 'sebagian'])
-                ->where('due_date', '<', now())->sum('remaining'),
+            'total' => (float) $result->total,
+            'dibayar' => (float) $result->dibayar,
+            'sisa' => (float) $result->sisa,
+            'lunas' => (int) $result->lunas,
+            'belum_lunas' => (int) $result->belum_lunas,
+            'sebagian' => (int) $result->sebagian,
+            'macet' => (int) $result->macet,
+            'jatuh_tempo' => (float) $result->jatuh_tempo,
         ];
     }
 }
