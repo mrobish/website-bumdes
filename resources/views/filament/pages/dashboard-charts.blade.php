@@ -141,7 +141,7 @@
         </x-slot>
 
         @php
-            $maxAmount = $getMaxMonthlyAmount();
+            $maxAmount = $this->getMaxMonthlyAmount();
         @endphp
 
         <div class="chart-container">
