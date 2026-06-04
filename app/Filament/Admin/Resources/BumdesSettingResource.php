@@ -244,7 +244,7 @@ class BumdesSettingResource extends Resource
                                                 ->placeholder('H. Dadang Suhendar, S.Pd.I')
                                                 ->maxLength(255),
                                             Forms\Components\TextInput::make('kepala_desa_nip')
-                                                ->label('NIP')
+                                                ->label('No. Induk BUMDes')
                                                 ->maxLength(255),
                                         ]),
                                     ])->collapsible(),
@@ -260,7 +260,7 @@ class BumdesSettingResource extends Resource
                                                         ->label('Nama Direktur')
                                                         ->maxLength(255),
                                                     Forms\Components\TextInput::make('direktur_nip')
-                                                        ->label('NIP / No. Identitas')
+                                                        ->label('No. Induk BUMDes')
                                                         ->maxLength(255),
                                                     Forms\Components\TextInput::make('direktur_phone')
                                                         ->label('No. HP')
@@ -273,7 +273,7 @@ class BumdesSettingResource extends Resource
                                                 ->label('Sekretaris')
                                                 ->maxLength(255),
                                             Forms\Components\TextInput::make('sekretaris_nip')
-                                                ->label('NIP')
+                                                ->label('No. Induk BUMDes')
                                                 ->maxLength(255),
                                             Forms\Components\TextInput::make('bendahara_umum_name')
                                                 ->label('Bendahara')
@@ -281,7 +281,7 @@ class BumdesSettingResource extends Resource
                                         ]),
                                         Forms\Components\Grid::make(2)->schema([
                                             Forms\Components\TextInput::make('bendahara_umum_nip')
-                                                ->label('NIP Bendahara')
+                                                ->label('No. Induk BUMDes')
                                                 ->maxLength(255),
                                             Forms\Components\Placeholder::make('info_unit')
                                                 ->label('')
@@ -300,7 +300,7 @@ class BumdesSettingResource extends Resource
                                                         ->label('Nama')
                                                         ->maxLength(255),
                                                     Forms\Components\TextInput::make('pengawas1_nip')
-                                                        ->label('NIP / No. Identitas')
+                                                        ->label('No. Induk BUMDes')
                                                         ->maxLength(255),
                                                     Forms\Components\TextInput::make('pengawas1_asal')
                                                         ->label('Asal')
@@ -315,7 +315,7 @@ class BumdesSettingResource extends Resource
                                                         ->label('Nama')
                                                         ->maxLength(255),
                                                     Forms\Components\TextInput::make('pengawas2_nip')
-                                                        ->label('NIP / No. Identitas')
+                                                        ->label('No. Induk BUMDes')
                                                         ->maxLength(255),
                                                     Forms\Components\TextInput::make('pengawas2_asal')
                                                         ->label('Asal')

@@ -90,8 +90,8 @@ class BusinessUnitResource extends Resource
                             ->placeholder('Nama kepala unit'),
                         
                         Forms\Components\TextInput::make('manager_nip')
-                            ->label('NIP Kepala Unit')
-                            ->placeholder('NIP / No. Identitas'),
+                            ->label('No. Induk BUMDes')
+                            ->placeholder('No. Induk BUMDes'),
                         
                         Forms\Components\TextInput::make('manager_phone')
                             ->label('HP Kepala Unit')

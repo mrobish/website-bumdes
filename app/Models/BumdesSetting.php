@@ -233,7 +233,7 @@ class BumdesSetting extends Model
 
     /**
      * Get signature lines for tanda tangan (pejabat desa)
-     * Returns array of [name, nip, title]
+     * Returns array of [name, id_number, title]
      */
     public function getSignatureLinesAttribute(): array
     {
