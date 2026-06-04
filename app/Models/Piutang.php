@@ -26,6 +26,8 @@ class Piutang extends Model
         'description',
         'reference_number',
         'attachment_path',
+        'agreement_letter_path',
+        'ktp_photo_path',
         'transaction_id',
         'created_by',
         'notes',

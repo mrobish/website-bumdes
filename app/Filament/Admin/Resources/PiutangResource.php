@@ -81,13 +81,25 @@ class PiutangResource extends Resource
                         ->rows(2),
                 ])->columns(1),
 
-            Forms\Components\Section::make('Lampiran')
+            Forms\Components\Section::make('Lampiran & Kelengkapan Administrasi')
                 ->schema([
                     Forms\Components\FileUpload::make('attachment_path')
                         ->label('Foto Nota/Kwitansi')
                         ->image()
                         ->directory('bumdes/piutang')
                         ->maxSize(2048),
+                    Forms\Components\FileUpload::make('agreement_letter_path')
+                        ->label('Surat Perjanjian (opsional)')
+                        ->directory('bumdes/piutang/dokumen')
+                        ->maxSize(5120)
+                        ->acceptedFileTypes(['application/pdf', 'image/*'])
+                        ->helperText('PDF atau foto surat perjanjian'),
+                    Forms\Components\FileUpload::make('ktp_photo_path')
+                        ->label('Foto KTP Debitur (opsional)')
+                        ->image()
+                        ->directory('bumdes/piutang/ktp')
+                        ->maxSize(2048)
+                        ->helperText('Foto KTP untuk verifikasi identitas'),
                     Forms\Components\Textarea::make('notes')
                         ->label('Catatan Internal')
                         ->rows(2),
@@ -147,6 +159,20 @@ class PiutangResource extends Resource
                 Tables\Columns\TextColumn::make('unit.name')
                     ->label('Unit')
                     ->sortable(),
+                Tables\Columns\IconColumn::make('agreement_letter_path')
+                    ->label('Surat Perjanjian')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-document-check')
+                    ->falseIcon('heroicon-o-document-minus')
+                    ->trueColor('success')
+                    ->falseColor('gray'),
+                Tables\Columns\IconColumn::make('ktp_photo_path')
+                    ->label('KTP')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-identification')
+                    ->falseIcon('heroicon-o-user')
+                    ->trueColor('success')
+                    ->falseColor('gray'),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
