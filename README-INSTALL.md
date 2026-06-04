@@ -48,25 +48,38 @@ php -v
 
 ### PHP Extensions yang Dibutuhkan
 
-| Extension | Fungsi | Wajib? |
-|-----------|--------|--------|
-| `openssl` | Enkripsi & security | ✅ Ya |
-| `pdo` | Database connection | ✅ Ya |
-| `pdo_mysql` | MySQL driver | ✅ Ya |
-| `mbstring` | Multi-byte string | ✅ Ya |
-| `tokenizer` | Token parsing | ✅ Ya |
-| `xml` | XML processing | ✅ Ya |
-| `ctype` | Character type | ✅ Ya |
-| `json` | JSON handling | ✅ Ya |
-| `bcmath` | Math precision | ✅ Ya |
-| `fileinfo` | File detection | ✅ Ya |
-| `gd` | Image processing | ✅ Ya |
-| `curl` | HTTP requests | ✅ Ya |
-| `zip` | ZIP compression | ✅ Ya |
-| `intl` | Internationalization | ⚪ Opsional |
-| `exif` | Image metadata | ⚪ Opsional |
+#### ✅ Extensions Wajib (Harus Ada)
 
-**Cek extensions yang sudah terinstall:**
+| Extension | Fungsi Teknis | Kegunaan di BUMDes |
+|-----------|---------------|---------------------|
+| `openssl` | Enkripsi SSL/TLS | Mengamankan koneksi HTTPS, enkripsi password, generate API key |
+| `pdo` | PHP Data Objects | Database abstraction layer untuk koneksi ke MySQL/MariaDB |
+| `pdo_mysql` | MySQL PDO driver | Driver khusus untuk koneksi ke database MySQL/MariaDB |
+| `mbstring` | Multi-byte string | Memproses karakter UTF-8 (huruf Indonesia: é, ü, ñ), validasi input |
+| `tokenizer` | Token parsing | Memparse kode PHP, dibutuhkan oleh Laravel framework |
+| `xml` | XML processing | Memproses data XML, parsing response API, generate laporan |
+| `ctype` | Character type checking | Validasi input (cek huruf, angka, alphanumeric) |
+| `json` | JSON encode/decode | API responses, AJAX requests, konfigurasi sistem |
+| `bcmath` | Arbitrary precision math | Perhitungan keuangan presisi tinggi (mata uang Rupiah tanpa pembulatan error) |
+| `fileinfo` | File type detection | Deteksi tipe file upload (foto, PDF, Excel), keamanan upload |
+| `gd` | Image processing | Resize foto pejabat, generate thumbnail, watermark laporan |
+| `curl` | HTTP client | Kirim data ke API eksternal, download file, integrasi pihak ketiga |
+| `zip` | ZIP compression | Export laporan ZIP, backup database, packaging file |
+
+#### ⚪ Extensions Opsional (Nice to Have)
+
+| Extension | Fungsi Teknis | Kegunaan di BUMDes |
+|-----------|---------------|---------------------|
+| `intl` | Internationalization | Format angka Indonesia (1.000.000), format tanggal lokal |
+| `exif` | Image metadata | Baca metadata foto (orientasi, GPS), auto-rotate foto upload |
+| `opcache` | PHP bytecode cache | **PERFORMANCE:** Percepat loading 50-70%, sangat direkomendasikan untuk production |
+| `redis` | Redis client | **PERFORMANCE:** Cache database queries, session storage untuk traffic tinggi |
+| `memcached` | Memcached client | **PERFORMANCE:** Alternatif Redis untuk caching |
+| `imagick` | ImageMagick binding | **QUALITY:** Resize foto lebih berkualitas dari GD, support PDF thumbnail |
+
+#### 🔍 Cek Extensions
+
+**Cek semua extensions yang terinstall:**
 ```bash
 php -m
 ```
@@ -75,6 +88,45 @@ php -m
 ```bash
 php -m | grep -E "openssl|pdo|mbstring|gd|curl|zip"
 ```
+
+**Cek detail extension:**
+```bash
+php -i | grep -A5 "openssl"
+```
+
+**Cek extension yang belum terinstall:**
+```bash
+php -m | grep -vE "^(openssl|pdo|pdo_mysql|mbstring|tokenizer|xml|ctype|json|bcmath|fileinfo|gd|curl|zip)$"
+```
+
+#### 📦 Instalasi Extensions yang Kurang
+
+**Ubuntu/Debian:**
+```bash
+# Install semua extension wajib sekaligus
+sudo apt install php8.1-mysql php8.1-mbstring php8.1-xml php8.1-curl \
+    php8.1-zip php8.1-gd php8.1-bcmath php8.1-fileinfo php8.1-opcache
+
+# Restart PHP-FPM
+sudo systemctl restart php8.1-fpm
+```
+
+**CentOS/RHEL:**
+```bash
+# Install semua extension wajib sekaligus
+sudo dnf install php-mysqlnd php-mbstring php-xml php-curl \
+    php-zip php-gd php-bcmath php-fileinfo php-opcache
+
+# Restart PHP-FPM
+sudo systemctl restart php-fpm
+```
+
+**aaPanel:**
+1. Login aaPanel
+2. Menu: **App Store** → **Installed** → **PHP 8.1**
+3. Klik **Settings** → **Install Extensions**
+4. Centang extensions yang dibutuhkan
+5. Klik **Submit**
 
 ---
 
