@@ -198,6 +198,49 @@
 </section>
 @endif
 
+<!-- Pelaksana Operasional BUMDes -->
+<section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12" data-aos="fade-up">
+            <div class="inline-block px-4 py-2 bg-primary-100 rounded-full text-primary-700 text-sm mb-4">
+                <i class="fas fa-users mr-2"></i> Struktur Organisasi
+            </div>
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Pelaksana Operasional BUMDes</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Berdasarkan PP 11/2021 tentang Badan Usaha Milik Desa</p>
+        </div>
+
+        @php
+            $pejabat = [
+                ['field' => 'kepala_desa_name', 'phone' => 'kepala_desa_phone', 'title' => 'Penasihat', 'icon' => 'fa-user-tie', 'color' => 'primary'],
+                ['field' => 'direktur_name', 'phone' => 'direktur_phone', 'title' => 'Direktur', 'icon' => 'fa-user-crown', 'color' => 'amber'],
+                ['field' => 'sekretaris_name', 'phone' => 'sekretaris_phone', 'title' => 'Sekretaris', 'icon' => 'fa-user-pen', 'color' => 'blue'],
+                ['field' => 'bendahara_umum_name', 'phone' => 'bendahara_umum_phone', 'title' => 'Bendahara', 'icon' => 'fa-coins', 'color' => 'green'],
+                ['field' => 'pengawas1_name', 'phone' => 'pengawas1_phone', 'title' => 'Pengawas 1', 'icon' => 'fa-eye', 'color' => 'purple'],
+                ['field' => 'pengawas2_name', 'phone' => 'pengawas2_phone', 'title' => 'Pengawas 2', 'icon' => 'fa-eye', 'color' => 'purple'],
+            ];
+        @endphp
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            @foreach($pejabat as $p)
+                @if($bumdesSetting && $bumdesSetting->{$p['field']})
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center hover:shadow-md transition" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                        <div class="w-20 h-20 bg-{{ $p['color'] }}-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas {{ $p['icon'] }} text-2xl text-{{ $p['color'] }}-600"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-800 text-sm mb-1">{{ $bumdesSetting->{$p['field']} }}</h4>
+                        <p class="text-xs text-{{ $p['color'] }}-600 font-semibold mb-2">{{ $p['title'] }}</p>
+                        @if($bumdesSetting->{$p['phone']})
+                            <p class="text-xs text-gray-500">
+                                <i class="fas fa-phone mr-1"></i>{{ $bumdesSetting->{$p['phone']} }}
+                            </p>
+                        @endif
+                    </div>
+                @endif
+            @endforeach
+        </div>
+    </div>
+</section>
+
 <!-- BUMDes Highlight -->
 <section class="bg-gradient-to-r from-primary-800 to-primary-600 py-16">
     <div class="max-w-7xl mx-auto px-4">

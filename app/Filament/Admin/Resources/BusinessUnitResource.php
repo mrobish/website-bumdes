@@ -86,15 +86,11 @@ class BusinessUnitResource extends Resource
                             ->placeholder('Contoh: info@bumdes.id'),
                         
                         Forms\Components\TextInput::make('manager')
-                            ->label('Kepala Unit / Manager')
+                            ->label('Kepala Unit')
                             ->placeholder('Nama kepala unit'),
                         
-                        Forms\Components\TextInput::make('manager_nip')
-                            ->label('No. Induk BUMDes')
-                            ->placeholder('No. Induk BUMDes'),
-                        
                         Forms\Components\TextInput::make('manager_phone')
-                            ->label('HP Kepala Unit')
+                            ->label('No. HP Kepala Unit')
                             ->placeholder('No. HP'),
                         
                         Forms\Components\TextInput::make('operating_hours')

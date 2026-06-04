@@ -72,7 +72,7 @@ class BumdesSetting extends Model
         // NPWP & Pejabat Desa
         'npwp',
         'kepala_desa_name',
-        'kepala_desa_nip',
+        'kepala_desa_phone',
         'kaur_keuangan_name',
         'kaur_keuangan_nip',
         'bendahara_name',
@@ -81,22 +81,18 @@ class BumdesSetting extends Model
         // Pejabat PP 11/2021
         // Penasihat
         'pengawas1_name',
-        'pengawas1_nip',
-        'pengawas1_position',
+        'pengawas1_phone',
         'pengawas2_name',
-        'pengawas2_nip',
-        'pengawas2_position',
+        'pengawas2_phone',
         // Pelaksana Operasional
         'direktur_name',
-        'direktur_nip',
         'direktur_phone',
         'sekretaris_name',
-        'sekretaris_nip',
+        'sekretaris_phone',
         'bendahara_umum_name',
-        'bendahara_umum_nip',
-        // Pengawas
-        'pengawas1_asal',
-        'pengawas2_asal',
+        'bendahara_umum_phone',
+        // Foto
+        'pejabat_foto_path',
 
         // Warna Branding
         'motto_color',
@@ -232,8 +228,8 @@ class BumdesSetting extends Model
     }
 
     /**
-     * Get signature lines for tanda tangan (pejabat desa)
-     * Returns array of [name, id_number, title]
+     * Get signature lines for tanda tangan (pejabat BUMDes)
+     * Returns array of [name, phone, title]
      */
     public function getSignatureLinesAttribute(): array
     {
@@ -243,7 +239,7 @@ class BumdesSetting extends Model
         if ($this->kepala_desa_name) {
             $lines[] = [
                 'name' => $this->kepala_desa_name,
-                'nip' => $this->kepala_desa_nip,
+                'phone' => $this->kepala_desa_phone,
                 'title' => 'Penasihat BUMDes',
             ];
         }
@@ -252,7 +248,7 @@ class BumdesSetting extends Model
         if ($this->direktur_name) {
             $lines[] = [
                 'name' => $this->direktur_name,
-                'nip' => $this->direktur_nip,
+                'phone' => $this->direktur_phone,
                 'title' => 'Direktur BUMDes',
             ];
         }
@@ -261,7 +257,7 @@ class BumdesSetting extends Model
         if ($this->pengawas1_name) {
             $lines[] = [
                 'name' => $this->pengawas1_name,
-                'nip' => $this->pengawas1_nip,
+                'phone' => $this->pengawas1_phone,
                 'title' => 'Pengawas BUMDes',
             ];
         }
@@ -270,7 +266,7 @@ class BumdesSetting extends Model
         if ($this->pengawas2_name) {
             $lines[] = [
                 'name' => $this->pengawas2_name,
-                'nip' => $this->pengawas2_nip,
+                'phone' => $this->pengawas2_phone,
                 'title' => 'Pengawas BUMDes',
             ];
         }
