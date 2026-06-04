@@ -16,6 +16,7 @@ class BalanceSheetPage extends Page
     protected static ?int $navigationSort = 4;
 
     public int $year = 0;
+    public int $month = 0;
     public ?int $unitId = null;
     public bool $loaded = false;
 
@@ -29,17 +30,19 @@ class BalanceSheetPage extends Page
     public function mount(): void
     {
         $this->year = (int) now()->year;
+        $this->month = (int) now()->month;
     }
 
     public function loadData(): void
     {
         $year = $this->year;
+        $month = $this->month > 0 ? $this->month : null;
         $unitId = $this->unitId;
 
         $assetAccounts = Account::where('type', 'asset')->active()->orderBy('code')->get();
         $this->assets = [];
         foreach ($assetAccounts as $account) {
-            $balance = AutoJournalService::getAccountBalance($account->code, $unitId, $year);
+            $balance = AutoJournalService::getAccountBalance($account->code, $unitId, $year, $month);
             if (abs($balance) > 0.01) {
                 $this->assets[] = ['code' => $account->code, 'name' => $account->name, 'amount' => abs($balance)];
             }
@@ -48,7 +51,7 @@ class BalanceSheetPage extends Page
         $liabilityAccounts = Account::where('type', 'liability')->active()->orderBy('code')->get();
         $this->liabilities = [];
         foreach ($liabilityAccounts as $account) {
-            $balance = AutoJournalService::getAccountBalance($account->code, $unitId, $year);
+            $balance = AutoJournalService::getAccountBalance($account->code, $unitId, $year, $month);
             if (abs($balance) > 0.01) {
                 $this->liabilities[] = ['code' => $account->code, 'name' => $account->name, 'amount' => abs($balance)];
             }
@@ -57,7 +60,7 @@ class BalanceSheetPage extends Page
         $equityAccounts = Account::where('type', 'equity')->active()->orderBy('code')->get();
         $this->equity = [];
         foreach ($equityAccounts as $account) {
-            $balance = AutoJournalService::getAccountBalance($account->code, $unitId, $year);
+            $balance = AutoJournalService::getAccountBalance($account->code, $unitId, $year, $month);
             if (abs($balance) > 0.01) {
                 $this->equity[] = ['code' => $account->code, 'name' => $account->name, 'amount' => abs($balance)];
             }

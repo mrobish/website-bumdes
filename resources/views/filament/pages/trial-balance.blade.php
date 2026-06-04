@@ -1,12 +1,21 @@
 <x-filament-panels::page>
     <form wire:submit.prevent="loadData">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
                 <label class="block text-sm font-medium mb-1">Tahun</label>
                 <select wire:model="year" class="w-full rounded-lg border-gray-300 shadow-sm">
                     @for($y = now()->year + 1; $y >= now()->year - 3; $y--)
                         <option value="{{ $y }}">{{ $y }}</option>
                     @endfor
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Bulan</label>
+                <select wire:model="month" class="w-full rounded-lg border-gray-300 shadow-sm">
+                    <option value="0">📅 Semua Bulan (Tahun Penuh)</option>
+                    @foreach([1=>'Januari',2=>'Februari',3=>'Maret',4=>'April',5=>'Mei',6=>'Juni',7=>'Juli',8=>'Agustus',9=>'September',10=>'Oktober',11=>'November',12=>'Desember'] as $m => $nama)
+                        <option value="{{ $m }}">{{ $nama }}</option>
+                    @endforeach
                 </select>
             </div>
             <div>
@@ -19,25 +28,23 @@
                 </select>
             </div>
         </div>
-        <div class="flex gap-2">
-            <x-filament::button type="submit" icon="heroicon-o-magnifying-glass">Tampilkan Neraca Saldo</x-filament::button>
-            @if($loaded)
-                @php $fy = \App\Models\FiscalYear::where('year', $year)->first(); @endphp
-                @if($fy)
-                <a href="{{ route('pdf.neraca-saldo', ['fiscal_year_id' => $fy->id]) }}" target="_blank" class="inline-flex items-center gap-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium">📄 Download PDF</a>
-                @endif
-            @endif
-        </div>
+        <x-filament::button type="submit" icon="heroicon-o-magnifying-glass">Tampilkan Neraca Saldo</x-filament::button>
     </form>
 
     @if($loaded)
+        @php
+            $bulanNama = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            $periode = $month > 0 ? $bulanNama[$month] . ' ' . $year : 'Tahun ' . $year;
+        @endphp
         <div class="mt-6">
             <x-filament::section>
                 <x-slot name="heading">
-                    Neraca Saldo Tahun {{ $year }}
-
-
-                    @if($isBalanced) <span class="ml-2 text-green-600">SEIMBANG</span> @else <span class="ml-2 text-red-600">TIDAK SEIMBANG</span> @endif
+                    Neraca Saldo — {{ $periode }}
+                    @if($isBalanced) <span class="ml-2 text-green-600">✅ SEIMBANG</span> @else <span class="ml-2 text-red-600">❌ TIDAK SEIMBANG</span> @endif
+                    @php $fy = \App\Models\FiscalYear::where('year', $year)->first(); @endphp
+                    @if($fy)
+                    <a href="{{ route('pdf.neraca-saldo', ['fiscal_year_id' => $fy->id, 'month' => $month > 0 ? $month : null]) }}" target="_blank" class="ml-3 inline-flex items-center gap-1 px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium">📄 Download PDF</a>
+                    @endif
                 </x-slot>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
@@ -69,22 +76,4 @@
             </x-filament::section>
         </div>
     @endif
-    {{-- ===== TOMBOL DOWNLOAD PDF BESAR ===== --}}
-    @php $fy = \App\Models\FiscalYear::where('year', $year)->first(); @endphp
-    @if($fy && $loaded)
-    <div class="mt-4 p-4 bg-gradient-to-r from-red-500 to-red-600 rounded-xl shadow-lg flex items-center justify-between" style="background: linear-gradient(135deg, #dc2626, #b91c1c);">
-        <div class="flex items-center gap-3">
-            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center text-2xl">📄</div>
-            <div>
-                <h3 class="text-white font-bold text-lg">Download Laporan PDF</h3>
-                <p class="text-red-100 text-sm">File PDF profesional dengan kop surat &amp; tanda tangan</p>
-            </div>
-        </div>
-        <a href="{{ route('pdf.neraca-saldo', ['fiscal_year_id' => $fy->id]) }}" target="_blank"
-           class="inline-flex items-center gap-2 px-6 py-3 bg-white text-red-600 font-bold rounded-lg hover:bg-red-50 transition-all shadow-md text-base">
-            ⬇️ Download PDF
-        </a>
-    </div>
-    @endif
-
 </x-filament-panels::page>

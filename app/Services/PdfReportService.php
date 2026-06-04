@@ -20,17 +20,26 @@ class PdfReportService
         $this->accentColor = $this->setting->secondary_color ?? '#D4A843';
     }
 
-    private function getAccountBalance($account, $fy)
+    private function getAccountBalance($account, $fy, $month = null)
     {
-        $debit = JournalEntry::where('account_code', $account->code)
+        $debitQuery = JournalEntry::where('account_code', $account->code)
             ->whereHas('transaction', function ($q) use ($fy) {
                 $q->where('fiscal_year', $fy->year)->where('is_void', 0);
-            })->sum('debit');
+            });
+        $creditQuery = JournalEntry::where('account_code', $account->code)
+            ->whereHas('transaction', function ($q) use ($fy) {
+                $q->where('fiscal_year', $fy->year)->where('is_void', 0);
+            });
         
-        $credit = JournalEntry::where('account_code', $account->code)
-            ->whereHas('transaction', function ($q) use ($fy) {
-                $q->where('fiscal_year', $fy->year)->where('is_void', 0);
-            })->sum('credit');
+        if ($month) {
+            $start = $fy->year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-01';
+            $end = date('Y-m-t', strtotime($start));
+            $debitQuery->whereBetween('entry_date', [$start, $end]);
+            $creditQuery->whereBetween('entry_date', [$start, $end]);
+        }
+        
+        $debit = $debitQuery->sum('debit');
+        $credit = $creditQuery->sum('credit');
         
         return ['debit' => $debit, 'credit' => $credit, 'balance' => $debit - $credit];
     }
@@ -38,7 +47,7 @@ class PdfReportService
     /**
      * Generate Neraca Saldo PDF
      */
-    public function neracaSaldo($fiscalYearId)
+    public function neracaSaldo($fiscalYearId, $month = null)
     {
         $fy = FiscalYear::findOrFail($fiscalYearId);
         $accounts = Account::active()->orderBy('code')->get();
@@ -48,7 +57,7 @@ class PdfReportService
         $totalCredit = 0;
 
         foreach ($accounts as $acc) {
-            $bal = $this->getAccountBalance($acc, $fy);
+            $bal = $this->getAccountBalance($acc, $fy, $month);
             if ($bal['debit'] != 0 || $bal['credit'] != 0) {
                 $data[] = ['code' => $acc->code, 'name' => $acc->name, 'debit' => $bal['debit'], 'credit' => $bal['credit']];
                 $totalDebit += $bal['debit'];
@@ -60,7 +69,7 @@ class PdfReportService
             'data' => $data,
             'totalDebit' => $totalDebit,
             'totalCredit' => $totalCredit,
-            'period' => 'Tahun ' . $fy->year,
+            'period' => $month ? ($this->bulanNama($month) . ' ' . $fy->year) : ('Tahun ' . $fy->year),
             'setting' => $this->setting,
             'primaryColor' => $this->primaryColor,
             'accentColor' => $this->accentColor,
@@ -70,7 +79,7 @@ class PdfReportService
     /**
      * Generate Laba Rugi PDF
      */
-    public function labaRugi($fiscalYearId)
+    public function labaRugi($fiscalYearId, $month = null)
     {
         $fy = FiscalYear::findOrFail($fiscalYearId);
         $pendapatan = Account::where('code', 'like', '4%')->active()->orderBy('code')->get();
@@ -81,7 +90,7 @@ class PdfReportService
         $pendapatanData = [];
         $totalPendapatan = 0;
         foreach ($pendapatan as $acc) {
-            $bal = $this->getAccountBalance($acc, $fy);
+            $bal = $this->getAccountBalance($acc, $fy, $month);
             if ($bal['balance'] != 0) {
                 $pendapatanData[] = ['code' => $acc->code, 'name' => $acc->name, 'amount' => $bal['credit'] - $bal['debit']];
                 $totalPendapatan += $bal['credit'] - $bal['debit'];
@@ -91,7 +100,7 @@ class PdfReportService
         $bebanData = [];
         $totalBeban = 0;
         foreach ($beban as $acc) {
-            $bal = $this->getAccountBalance($acc, $fy);
+            $bal = $this->getAccountBalance($acc, $fy, $month);
             if ($bal['balance'] != 0) {
                 $bebanData[] = ['code' => $acc->code, 'name' => $acc->name, 'amount' => $bal['debit'] - $bal['credit']];
                 $totalBeban += $bal['debit'] - $bal['credit'];
@@ -106,7 +115,7 @@ class PdfReportService
             'totalPendapatan' => $totalPendapatan,
             'totalBeban' => $totalBeban,
             'labaBersih' => $labaBersih,
-            'period' => 'Tahun ' . $fy->year,
+            'period' => $month ? ($this->bulanNama($month) . ' ' . $fy->year) : ('Tahun ' . $fy->year),
             'setting' => $this->setting,
             'primaryColor' => $this->primaryColor,
             'accentColor' => $this->accentColor,
@@ -116,7 +125,7 @@ class PdfReportService
     /**
      * Generate Neraca PDF
      */
-    public function neraca($fiscalYearId)
+    public function neraca($fiscalYearId, $month = null)
     {
         $fy = FiscalYear::findOrFail($fiscalYearId);
         
@@ -127,7 +136,7 @@ class PdfReportService
         $asetData = [];
         $totalAset = 0;
         foreach ($aset as $acc) {
-            $bal = $this->getAccountBalance($acc, $fy);
+            $bal = $this->getAccountBalance($acc, $fy, $month);
             if ($bal['balance'] != 0) {
                 $asetData[] = ['code' => $acc->code, 'name' => $acc->name, 'amount' => $bal['balance']];
                 $totalAset += $bal['balance'];
@@ -137,7 +146,7 @@ class PdfReportService
         $kewajibanData = [];
         $totalKewajiban = 0;
         foreach ($kewajiban as $acc) {
-            $bal = $this->getAccountBalance($acc, $fy);
+            $bal = $this->getAccountBalance($acc, $fy, $month);
             if ($bal['balance'] != 0) {
                 $kewajibanData[] = ['code' => $acc->code, 'name' => $acc->name, 'amount' => $bal['credit'] - $bal['debit']];
                 $totalKewajiban += $bal['credit'] - $bal['debit'];
@@ -147,7 +156,7 @@ class PdfReportService
         $ekuitasData = [];
         $totalEkuitas = 0;
         foreach ($ekuitas as $acc) {
-            $bal = $this->getAccountBalance($acc, $fy);
+            $bal = $this->getAccountBalance($acc, $fy, $month);
             if ($bal['balance'] != 0) {
                 $ekuitasData[] = ['code' => $acc->code, 'name' => $acc->name, 'amount' => $bal['credit'] - $bal['debit']];
                 $totalEkuitas += $bal['credit'] - $bal['debit'];
@@ -169,7 +178,7 @@ class PdfReportService
             'totalKewajiban' => $totalKewajiban,
             'totalEkuitas' => $totalEkuitas,
             'labaDitahan' => $labaDitahan,
-            'period' => 'Tahun ' . $fy->year,
+            'period' => $month ? ($this->bulanNama($month) . ' ' . $fy->year) : ('Tahun ' . $fy->year),
             'setting' => $this->setting,
             'primaryColor' => $this->primaryColor,
             'accentColor' => $this->accentColor,
@@ -179,20 +188,27 @@ class PdfReportService
     /**
      * Generate Jurnal Umum PDF
      */
-    public function jurnalUmum($fiscalYearId)
+    public function jurnalUmum($fiscalYearId, $month = null)
     {
         $fy = FiscalYear::findOrFail($fiscalYearId);
 
-        $transactions = \App\Models\Transaction::where('fiscal_year', $fy->year)
-            ->where('is_void', 0)
-            ->orderBy('transaction_date')
+        $query = \App\Models\Transaction::where('fiscal_year', $fy->year)
+            ->where('is_void', 0);
+        
+        if ($month) {
+            $start = $fy->year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-01';
+            $end = date('Y-m-t', strtotime($start));
+            $query->whereBetween('transaction_date', [$start, $end]);
+        }
+        
+        $transactions = $query->orderBy('transaction_date')
             ->orderBy('id')
             ->with('journalEntries.account', 'category')
             ->get();
 
         return Pdf::loadView('pdf.jurnal-umum', [
             'transactions' => $transactions,
-            'period' => 'Tahun ' . $fy->year,
+            'period' => $month ? ($this->bulanNama($month) . ' ' . $fy->year) : ('Tahun ' . $fy->year),
             'setting' => $this->setting,
             'primaryColor' => $this->primaryColor,
             'accentColor' => $this->accentColor,
@@ -257,6 +273,12 @@ class PdfReportService
     /**
      * Format currency
      */
+    private function bulanNama($month)
+    {
+        $names = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        return $names[$month] ?? '';
+    }
+
     public static function formatRupiah($amount)
     {
         return 'Rp ' . number_format($amount, 0, ',', '.');

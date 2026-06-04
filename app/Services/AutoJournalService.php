@@ -190,7 +190,7 @@ class AutoJournalService
     /**
      * Get account balance for a specific period
      */
-    public static function getAccountBalance(string $accountCode, ?int $unitId = null, ?int $year = null): float
+    public static function getAccountBalance(string $accountCode, ?int $unitId = null, ?int $year = null, ?int $month = null): float
     {
         $query = JournalEntry::where('account_code', $accountCode);
         
@@ -199,6 +199,11 @@ class AutoJournalService
         }
         if ($year) {
             $query->where('fiscal_year', $year);
+        }
+        if ($month) {
+            $start = "$year-" . str_pad($month, 2, '0', STR_PAD_LEFT) . "-01";
+            $end = date('Y-m-t', strtotime($start));
+            $query->whereBetween('entry_date', [$start, $end]);
         }
 
         $account = Account::where('code', $accountCode)->first();
@@ -214,13 +219,13 @@ class AutoJournalService
     /**
      * Get total balance for account type (for balance sheet)
      */
-    public static function getTotalByType(string $type, ?int $unitId = null, ?int $year = null): float
+    public static function getTotalByType(string $type, ?int $unitId = null, ?int $year = null, ?int $month = null): float
     {
         $accounts = Account::where('type', $type)->pluck('code');
         $total = 0;
 
         foreach ($accounts as $code) {
-            $total += self::getAccountBalance($code, $unitId, $year);
+            $total += self::getAccountBalance($code, $unitId, $year, $month);
         }
 
         return $total;

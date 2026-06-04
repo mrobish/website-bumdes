@@ -16,6 +16,7 @@ class IncomeStatementPage extends Page
     protected static ?int $navigationSort = 3;
 
     public int $year = 0;
+    public int $month = 0;
     public ?int $unitId = null;
     public bool $loaded = false;
 
@@ -28,17 +29,19 @@ class IncomeStatementPage extends Page
     public function mount(): void
     {
         $this->year = (int) now()->year;
+        $this->month = (int) now()->month;
     }
 
     public function loadData(): void
     {
         $year = $this->year;
+        $month = $this->month > 0 ? $this->month : null;
         $unitId = $this->unitId;
 
         $revenueAccounts = Account::where('type', 'revenue')->active()->orderBy('code')->get();
         $this->revenues = [];
         foreach ($revenueAccounts as $account) {
-            $balance = AutoJournalService::getAccountBalance($account->code, $unitId, $year);
+            $balance = AutoJournalService::getAccountBalance($account->code, $unitId, $year, $month);
             if (abs($balance) > 0.01) {
                 $this->revenues[] = ['code' => $account->code, 'name' => $account->name, 'amount' => abs($balance)];
             }
@@ -47,7 +50,7 @@ class IncomeStatementPage extends Page
         $expenseAccounts = Account::where('type', 'expense')->active()->orderBy('code')->get();
         $this->expenses = [];
         foreach ($expenseAccounts as $account) {
-            $balance = AutoJournalService::getAccountBalance($account->code, $unitId, $year);
+            $balance = AutoJournalService::getAccountBalance($account->code, $unitId, $year, $month);
             if (abs($balance) > 0.01) {
                 $this->expenses[] = ['code' => $account->code, 'name' => $account->name, 'amount' => abs($balance)];
             }

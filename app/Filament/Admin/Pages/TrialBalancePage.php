@@ -16,6 +16,7 @@ class TrialBalancePage extends Page
     protected static ?int $navigationSort = 2;
 
     public int $year = 0;
+    public int $month = 0;
     public ?int $unitId = null;
     public bool $loaded = false;
 
@@ -27,18 +28,20 @@ class TrialBalancePage extends Page
     public function mount(): void
     {
         $this->year = (int) now()->year;
+        $this->month = (int) now()->month;
     }
 
     public function loadData(): void
     {
         $year = $this->year;
+        $month = $this->month > 0 ? $this->month : null;
         $unitId = $this->unitId;
 
         $accounts = Account::active()->orderBy('code')->get();
         $result = [];
 
         foreach ($accounts as $account) {
-            $balance = AutoJournalService::getAccountBalance($account->code, $unitId, $year);
+            $balance = AutoJournalService::getAccountBalance($account->code, $unitId, $year, $month);
             if (abs($balance) > 0.01) {
                 $result[] = [
                     'code' => $account->code,
