@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\InstallWizardController;
 use App\Http\Controllers\VillageInfoController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\GalleryController;
@@ -86,4 +87,19 @@ Route::middleware(['auth'])->prefix('admin/pdf')->group(function () {
 // Buku Besar PDF
 Route::middleware(['auth'])->prefix('admin/pdf')->group(function () {
     Route::get('/buku-besar', [\App\Http\Controllers\PdfReportController::class, 'bukuBesar'])->name('pdf.buku-besar');
+});
+
+// Install Wizard Routes
+Route::prefix('install')->group(function () {
+    Route::get('/', [InstallWizardController::class, 'index'])->name('install.index');
+    Route::get('/step-1', [InstallWizardController::class, 'step1'])->name('install.step1');
+    Route::get('/step-2', [InstallWizardController::class, 'step2'])->name('install.step2');
+    Route::post('/step-2', [InstallWizardController::class, 'processStep2'])->name('install.processStep2');
+    Route::post('/test-database', [InstallWizardController::class, 'testDatabase'])->name('install.testDatabase');
+    Route::get('/step-3', [InstallWizardController::class, 'step3'])->name('install.step3');
+    Route::post('/step-3', [InstallWizardController::class, 'processStep3'])->name('install.processStep3');
+    Route::get('/step-4', [InstallWizardController::class, 'step4'])->name('install.step4');
+    Route::post('/step-4', [InstallWizardController::class, 'processStep4'])->name('install.processStep4');
+    Route::get('/step-5', [InstallWizardController::class, 'step5'])->name('install.step5');
+    Route::post('/process', [InstallWizardController::class, 'processInstall'])->name('install.processInstall');
 });
