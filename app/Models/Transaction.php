@@ -95,4 +95,23 @@ class Transaction extends Model
     {
         return $this->attachment_path ? asset('storage/' . $this->attachment_path) : null;
     }
+
+    /**
+     * Generate transaction number
+     */
+    public static function generateNumber(string $prefix = 'TRX'): string
+    {
+        $date = date('Ymd');
+        $last = static::where('transaction_number', 'like', "{$prefix}-{$date}-%")
+            ->orderByDesc('transaction_number')
+            ->first();
+
+        if ($last) {
+            $sequence = intval(substr($last->transaction_number, -3)) + 1;
+        } else {
+            $sequence = 1;
+        }
+
+        return "{$prefix}-{$date}-" . str_pad($sequence, 3, '0', STR_PAD_LEFT);
+    }
 }
