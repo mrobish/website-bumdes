@@ -28,23 +28,23 @@
                 </select>
             </div>
         </div>
-        <x-filament::button type="submit" icon="heroicon-o-magnifying-glass">Tampilkan Buku Besar
-
-                    @php $fy = \App\Models\FiscalYear::where('year', $year)->first(); @endphp
-                    @if($fy)
-                    <a href="{{ route('pdf.jurnal-umum', ['fiscal_year_id' => $fy->id]) }}" target="_blank" class="ml-3 text-sm text-primary-600 hover:underline">📄 Download PDF</a>
-                    @endif</x-filament::button>
+        <div class="flex gap-2">
+            <x-filament::button type="submit" icon="heroicon-o-magnifying-glass">Tampilkan Buku Besar</x-filament::button>
+            @if($loaded && $accountCode)
+                @php $fy = \App\Models\FiscalYear::where('year', \Carbon\Carbon::parse($dateFrom)->year)->first(); @endphp
+                @if($fy)
+                <a href="{{ route('pdf.jurnal-umum', ['fiscal_year_id' => $fy->id]) }}" target="_blank" class="inline-flex items-center gap-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm">
+                    📄 Download PDF
+                </a>
+                @endif
+            @endif
+        </div>
     </form>
 
-    @if($loaded)
+    @if($loaded && $accountCode)
         <div class="mt-6">
             <x-filament::section>
-                <x-slot name="heading">Buku Besar
-
-                    @php $fy = \App\Models\FiscalYear::where('year', $year)->first(); @endphp
-                    @if($fy)
-                    <a href="{{ route('pdf.jurnal-umum', ['fiscal_year_id' => $fy->id]) }}" target="_blank" class="ml-3 text-sm text-primary-600 hover:underline">📄 Download PDF</a>
-                    @endif — {{ \App\Models\Account::where('code', $accountCode)->first()->name ?? '' }}</x-slot>
+                <x-slot name="heading">Buku Besar — {{ \App\Models\Account::where('code', $accountCode)->first()->name ?? '' }}</x-slot>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
                         <thead><tr class="border-b bg-gray-50">
