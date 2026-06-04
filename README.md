@@ -541,6 +541,8 @@ bumdes/
 
 MIT License - Silakan gunakan dan modifikasi sesuai kebutuhan.
 
+**© {{ YEAR }} mrobis** - [github.com/mrobis](https://github.com/mrobis)
+
 ---
 
 ## 🙏 Acknowledgments
@@ -556,6 +558,8 @@ MIT License - Silakan gunakan dan modifikasi sesuai kebutuhan.
 <div align="center">
 
 **Dibuat dengan ❤️ untuk Kemajuan Desa**
+
+**By [mrobis](https://github.com/mrobis)**
 
 🌐 [bumdes.ondesa.id](https://bumdes.ondesa.id) | 📧 [info@bumdeskeudebakongan.id](mailto:info@bumdeskeudebakongan.id) | 📱 [WhatsApp](https://wa.me/6285157520432)
 

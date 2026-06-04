@@ -129,11 +129,9 @@ HTML;
 
     protected function getFooterHtml(?BumdesSetting $settings): string
     {
-        if (!$settings) return '';
-
-        $name = htmlspecialchars($settings->bumdes_name ?? 'BUMDes');
-        $village = htmlspecialchars($settings->village_name ?? '');
-        $address = htmlspecialchars($settings->bumdes_address ?? '');
+        $name = $settings ? htmlspecialchars($settings->bumdes_name ?? 'BUMDes') : 'BUMDes';
+        $village = $settings ? htmlspecialchars($settings->village_name ?? '') : '';
+        $address = $settings ? htmlspecialchars($settings->bumdes_address ?? '') : '';
 
         return <<<HTML
 <div class="py-3 px-6 border-t border-gray-200 dark:border-gray-700 text-center text-sm text-gray-500 dark:text-gray-400">
@@ -141,6 +139,10 @@ HTML;
         <span>{$name}</span><span>•</span><span>{$village}</span>
     </div>
     <div class="text-xs mt-1 opacity-75">{$address}</div>
+    <div class="text-xs mt-2 opacity-60">
+        &copy; {$name} &middot; Dibuat oleh <strong>mrobis</strong> &middot; 
+        <a href="https://github.com/mrobis/website-bumdes" target="_blank" class="hover:opacity-100">GitHub</a>
+    </div>
 </div>
 HTML;
     }

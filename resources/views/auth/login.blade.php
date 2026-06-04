@@ -71,5 +71,13 @@
             </a>
         </div>
     </div>
+    
+    <!-- Credit Footer -->
+    <div class="absolute bottom-4 left-0 right-0 text-center">
+        <p class="text-white text-xs opacity-70">
+            &copy; {{ date('Y') }} &middot; Dibuat oleh <strong>mrobis</strong> &middot; 
+            <a href="https://github.com/mrobis/website-bumdes" target="_blank" class="hover:opacity-100">GitHub</a>
+        </p>
+    </div>
 </body>
 </html>
