@@ -41,25 +41,21 @@ class PeriodComparisonPage extends Page implements HasForms
     {
         return $form
             ->schema([
-                Forms\Components\Grid::make(3)->schema([
+                Forms\Components\Grid::make(2)->schema([
                     Forms\Components\Select::make('period1')
                         ->label('Periode 1')
                         ->options($this->getPeriodOptions())
                         ->required()
-                        ->default(now()->subMonth()->format('Y-m')),
+                        ->default(now()->subMonth()->format('Y-m'))
+                        ->live()
+                        ->afterStateUpdated(fn () => $this->loadData()),
                     Forms\Components\Select::make('period2')
                         ->label('Periode 2')
                         ->options($this->getPeriodOptions())
                         ->required()
-                        ->default(now()->format('Y-m')),
-                    Forms\Components\Placeholder::make('')
-                        ->label(' ')
-                        ->content(fn () => \Filament\Forms\Components\Actions::make([
-                            \Filament\Forms\Components\Actions\Action::make('compare')
-                                ->label('📊 Bandingkan')
-                                ->color('primary')
-                                ->action(fn () => $this->loadData()),
-                        ])),
+                        ->default(now()->format('Y-m'))
+                        ->live()
+                        ->afterStateUpdated(fn () => $this->loadData()),
                 ]),
             ])
             ->statePath('data');
@@ -77,10 +73,13 @@ class PeriodComparisonPage extends Page implements HasForms
 
     public function loadData(): void
     {
-        $p1 = $this->period1;
-        $p2 = $this->period2;
+        $p1 = $this->form->getState()['period1'] ?? $this->period1;
+        $p2 = $this->form->getState()['period2'] ?? $this->period2;
 
         if (!$p1 || !$p2) return;
+
+        $this->period1 = $p1;
+        $this->period2 = $p2;
 
         $year1 = (int) substr($p1, 0, 4);
         $month1 = (int) substr($p1, 5, 2);
