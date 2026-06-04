@@ -18,7 +18,7 @@ class PdfReportController extends Controller
     {
         return $this->pdfService->neracaSaldo(
             $request->fiscal_year_id,
-            $request->month
+            $request->month ? (int) $request->month : null
         );
     }
 
@@ -26,7 +26,7 @@ class PdfReportController extends Controller
     {
         return $this->pdfService->labaRugi(
             $request->fiscal_year_id,
-            $request->month
+            $request->month ? (int) $request->month : null
         );
     }
 
@@ -34,7 +34,7 @@ class PdfReportController extends Controller
     {
         return $this->pdfService->neraca(
             $request->fiscal_year_id,
-            $request->month
+            $request->month ? (int) $request->month : null
         );
     }
 
@@ -42,7 +42,7 @@ class PdfReportController extends Controller
     {
         return $this->pdfService->jurnalUmum(
             $request->fiscal_year_id,
-            $request->month
+            $request->month ? (int) $request->month : null
         );
     }
 
