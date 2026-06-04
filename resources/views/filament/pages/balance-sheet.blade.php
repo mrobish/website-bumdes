@@ -19,7 +19,15 @@
                 </select>
             </div>
         </div>
-        <x-filament::button type="submit" icon="heroicon-o-magnifying-glass">Tampilkan Neraca</x-filament::button>
+        <div class="flex gap-2">
+            <x-filament::button type="submit" icon="heroicon-o-magnifying-glass">Tampilkan Neraca</x-filament::button>
+            @if($loaded)
+                @php $fy = \App\Models\FiscalYear::where('year', $year)->first(); @endphp
+                @if($fy)
+                <a href="{{ route('pdf.neraca', ['fiscal_year_id' => $fy->id]) }}" target="_blank" class="inline-flex items-center gap-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium">📄 Download PDF</a>
+                @endif
+            @endif
+        </div>
     </form>
 
     @if($loaded)
