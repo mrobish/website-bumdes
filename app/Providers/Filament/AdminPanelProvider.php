@@ -62,6 +62,9 @@ class AdminPanelProvider extends PanelProvider
             ->darkMode(true)
             ->favicon($settings && $settings->logo_path ? asset('storage/' . $settings->logo_path) : null)
             ->maxContentWidth('full')
+            ->middleware([
+                \App\Http\Middleware\EnsureBumdesConfigured::class,
+            ])
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
             ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
             ->pages([
