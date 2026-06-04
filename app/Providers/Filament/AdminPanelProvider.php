@@ -46,7 +46,7 @@ class AdminPanelProvider extends PanelProvider
         // Brand logo
         $brandLogo = null;
         if ($settings && $settings->logo_path) {
-            $brandLogo = '<img src="' . asset('storage/' . $settings->logo_path) . '" alt="Logo" class="h-10 w-auto">';
+            $brandLogo = asset('storage/' . $settings->logo_path);
         }
 
         return $panel
