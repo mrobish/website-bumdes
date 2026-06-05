@@ -8,16 +8,31 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\User;
+use App\Models\BumdesSetting;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\InvalidStateException;
 
 class SocialLoginController extends Controller
 {
     /**
-     * Redirect ke provider OAuth (Google/Facebook)
+     * Redirect ke provider OAuth (Google)
      */
     public function redirect(string $driver)
     {
         $this->validateDriver($driver);
+        
+        $settings = BumdesSetting::first();
+        
+        // Cek apakah Google Login aktif
+        if ($driver === 'google' && (!$settings || !$settings->google_login_enabled)) {
+            return redirect('/login')->withErrors([
+                'email' => 'Google Login belum dikonfigurasi.'
+            ]);
+        }
+
+        // Set config dari database
+        $this->setProviderConfig($driver, $settings);
+
         return Socialite::driver($driver)->redirect();
     }
 
@@ -29,6 +44,11 @@ class SocialLoginController extends Controller
         $this->validateDriver($driver);
 
         try {
+            $settings = BumdesSetting::first();
+            
+            // Set config dari database
+            $this->setProviderConfig($driver, $settings);
+
             $socialUser = Socialite::driver($driver)->user();
             
             // Cari user berdasarkan email
@@ -60,9 +80,27 @@ class SocialLoginController extends Controller
 
             return redirect()->intended('/admin');
 
+        } catch (InvalidStateException $e) {
+            return redirect('/login')->withErrors([
+                'email' => 'Terjadi kesalahan saat login. Silakan coba lagi.'
+            ]);
         } catch (\Exception $e) {
             return redirect('/login')->withErrors([
                 'email' => 'Gagal login dengan ' . ucfirst($driver) . ': ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * Set provider config dari database
+     */
+    protected function setProviderConfig(string $driver, ?BumdesSetting $settings): void
+    {
+        if ($driver === 'google' && $settings) {
+            config([
+                'services.google.client_id' => $settings->google_client_id,
+                'services.google.client_secret' => $settings->google_client_secret,
+                'services.google.redirect' => $settings->google_redirect_uri ?? url('/auth/google/callback'),
             ]);
         }
     }
@@ -72,7 +110,7 @@ class SocialLoginController extends Controller
      */
     protected function validateDriver(string $driver): void
     {
-        if (!in_array($driver, ['google', 'facebook'])) {
+        if (!in_array($driver, ['google'])) {
             abort(404);
         }
     }
