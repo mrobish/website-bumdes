@@ -119,7 +119,7 @@ class GoogleOAuthSettingsPage extends Page
             'google_login_enabled' => $data['google_login_enabled'],
             'google_client_id' => $data['google_login_enabled'] ? $data['google_client_id'] : null,
             'google_client_secret' => $data['google_login_enabled'] ? $data['google_client_secret'] : null,
-            'google_redirect_uri' => $data['google_redirect_uri'],
+            'google_redirect_uri' => url('/auth/google/callback'),
         ]);
 
         Notification::make()
