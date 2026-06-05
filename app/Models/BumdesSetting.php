@@ -112,6 +112,12 @@ class BumdesSetting extends Model
         'meta_keywords',
         'is_active',
 
+        // Google OAuth
+        'google_login_enabled',
+        'google_client_id',
+        'google_client_secret',
+        'google_redirect_uri',
+
         // Informasi Bank
         'bank_name',
         'bank_account_number',
@@ -133,6 +139,7 @@ class BumdesSetting extends Model
         'established_date' => 'date',
         'tanggal_perdes' => 'date',
         'is_active' => 'boolean',
+        'google_login_enabled' => 'boolean',
     ];
 
     /**
