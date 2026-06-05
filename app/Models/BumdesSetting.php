@@ -118,6 +118,11 @@ class BumdesSetting extends Model
         'google_client_secret',
         'google_redirect_uri',
 
+        // reCAPTCHA
+        'recaptcha_enabled',
+        'recaptcha_site_key',
+        'recaptcha_secret_key',
+
         // Informasi Bank
         'bank_name',
         'bank_account_number',
@@ -140,6 +145,7 @@ class BumdesSetting extends Model
         'tanggal_perdes' => 'date',
         'is_active' => 'boolean',
         'google_login_enabled' => 'boolean',
+        'recaptcha_enabled' => 'boolean',
     ];
 
     /**

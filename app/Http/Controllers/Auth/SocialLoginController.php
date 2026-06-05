@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\BumdesSetting;
+use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\InvalidStateException;
 
@@ -39,7 +40,7 @@ class SocialLoginController extends Controller
     /**
      * Callback dari provider OAuth
      */
-    public function callback(string $driver)
+    public function callback(Request $request, string $driver)
     {
         $this->validateDriver($driver);
 
@@ -48,6 +49,23 @@ class SocialLoginController extends Controller
             
             // Set config dari database
             $this->setProviderConfig($driver, $settings);
+
+            // Verifikasi reCAPTCHA jika aktif
+            if ($settings && $settings->recaptcha_enabled && $driver === 'google') {
+                $recaptchaResponse = $request->input('g-recaptcha-response');
+                if (!$recaptchaResponse) {
+                    return redirect('/login')->withErrors([
+                        'email' => 'Silakan selesaikan verifikasi reCAPTCHA.'
+                    ]);
+                }
+                
+                $recaptchaVerified = $this->verifyRecaptcha($recaptchaResponse, $settings->recaptcha_secret_key);
+                if (!$recaptchaVerified) {
+                    return redirect('/login')->withErrors([
+                        'email' => 'Verifikasi reCAPTCHA gagal. Silakan coba lagi.'
+                    ]);
+                }
+            }
 
             $socialUser = Socialite::driver($driver)->user();
             
@@ -113,5 +131,19 @@ class SocialLoginController extends Controller
         if (!in_array($driver, ['google'])) {
             abort(404);
         }
+    }
+
+    /**
+     * Verifikasi reCAPTCHA response ke Google
+     */
+    protected function verifyRecaptcha(string $response, string $secretKey): bool
+    {
+        $verify = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => $secretKey,
+            'response' => $response,
+            'remoteip' => request()->ip(),
+        ]);
+        
+        return $verify->json('success', false);
     }
 }

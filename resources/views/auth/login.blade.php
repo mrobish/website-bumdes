@@ -63,6 +63,14 @@
                 class="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition">
                 Login
             </button>
+            @if($bumdesSetting && $bumdesSetting->recaptcha_enabled)
+                <div class="mt-4 flex justify-center">
+                    <div class="g-recaptcha" data-sitekey="{{ $bumdesSetting->recaptcha_site_key }}"></div>
+                </div>
+                @error('g-recaptcha-response')
+                    <p class="text-red-500 text-xs mt-1 text-center">{{ $message }}</p>
+                @enderror
+            @endif
         </form>
         
         @if($bumdesSetting && $bumdesSetting->google_login_enabled)
@@ -84,6 +92,10 @@
                 Google
             </a>
         </div>
+        @endif
+        
+        @if($bumdesSetting && $bumdesSetting->recaptcha_enabled)
+            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         @endif
         
         <div class="mt-4 text-center">
