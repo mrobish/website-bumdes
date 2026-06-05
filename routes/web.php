@@ -103,3 +103,7 @@ Route::prefix('install')->group(function () {
     Route::get('/step-5', [InstallWizardController::class, 'step5'])->name('install.step5');
     Route::post('/process', [InstallWizardController::class, 'processInstall'])->name('install.processInstall');
 });
+
+// Social Login Routes
+Route::get('/auth/{driver}', [\App\Http\Controllers\Auth\SocialLoginController::class, 'redirect'])->name('social.redirect');
+Route::get('/auth/{driver}/callback', [\App\Http\Controllers\Auth\SocialLoginController::class, 'callback'])->name('social.callback');
