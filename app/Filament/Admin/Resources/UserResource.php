@@ -42,6 +42,13 @@ class UserResource extends Resource
                             ->maxLength(255)
                             ->columnSpan(2),
 
+                        Forms\Components\TextInput::make('nik')
+                            ->label('NIK (Nomor Induk Kependudukan)')
+                            ->numeric()
+                            ->maxLength(16)
+                            ->unique(ignoreRecord: true)
+                            ->columnSpan(2),
+
                         Forms\Components\TextInput::make('email')
                             ->label('Email')
                             ->email()

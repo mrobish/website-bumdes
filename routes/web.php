@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\InstallWizardController;
 use App\Http\Controllers\VillageInfoController;
 use App\Http\Controllers\NewsController;
@@ -44,6 +45,17 @@ Route::get('/', function () {
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+// Account Recovery Routes
+Route::get('/masalah-akun', [ForgotPasswordController::class, 'showMenu'])->name('password.menu');
+Route::get('/forgot-username', [ForgotPasswordController::class, 'showForgotUsernameForm'])->name('password.forgot-username.form');
+Route::post('/forgot-username', [ForgotPasswordController::class, 'sendUsername'])->name('password.forgot-username');
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showRequestForm'])->name('password.request.form');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendOtp'])->name('password.request');
+Route::get('/verify-otp', [ForgotPasswordController::class, 'showVerifyOtpForm'])->name('password.verify-otp.form');
+Route::post('/verify-otp', [ForgotPasswordController::class, 'verifyOtp'])->name('password.verify-otp');
+Route::get('/reset-password', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset.form');
+Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.reset');
 
 // Village Info Routes
 Route::get('/profil-desa', [VillageInfoController::class, 'profile'])->name('village.profile');

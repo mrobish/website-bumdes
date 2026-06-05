@@ -117,6 +117,16 @@ class BumdesSetting extends Model
         'recaptcha_site_key',
         'recaptcha_secret_key',
 
+        // Mail Settings
+        'mail_mailer',
+        'mail_host',
+        'mail_port',
+        'mail_username',
+        'mail_password',
+        'mail_encryption',
+        'mail_from_address',
+        'mail_from_name',
+
         // Informasi Bank
         'bank_name',
         'bank_account_number',

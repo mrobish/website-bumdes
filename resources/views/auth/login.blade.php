@@ -50,6 +50,11 @@
                 <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
                 <input type="password" name="password" required
                     class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500">
+                <div class="text-right mt-1">
+                    <a href="{{ route('password.menu') }}" class="text-sm text-blue-500 hover:text-blue-700">
+                        Masalah Masuk Akun?
+                    </a>
+                </div>
             </div>
             
             <div class="mb-6">
