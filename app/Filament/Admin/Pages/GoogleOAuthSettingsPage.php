@@ -10,6 +10,8 @@ use Filament\Notifications\Notification;
 
 class GoogleOAuthSettingsPage extends Page
 {
+    protected static string $view = 'filament.admin.pages.google-oauth-settings';
+
     protected static ?string $navigationIcon = 'heroicon-o-key';
     protected static ?string $navigationGroup = '⚙️ Pengaturan';
     protected static ?string $navigationLabel = 'Google Login';
